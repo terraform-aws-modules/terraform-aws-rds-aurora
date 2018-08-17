@@ -1,3 +1,23 @@
+resource "aws_cloudwatch_metric_alarm" "alarm_rds_DiskQueueDepth_writer" {
+  count               = "${var.cw_alarms ? 1 : 0}"
+  alarm_name          = "${aws_rds_cluster.default.id}-alarm-rds-writer-DiskQueueDepth"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "DiskQueueDepth"
+  namespace           = "AWS/RDS"
+  period              = "60"
+  statistic           = "Maximum"
+  threshold           = "${var.cw_max_disk_queue_depth}"
+  alarm_description   = "RDS Maximum DiskQueueDepth Alarm for ${aws_rds_cluster.default.id} writer"
+  alarm_actions       = ["${var.cw_sns_topic}"]
+  ok_actions          = ["${var.cw_sns_topic}"]
+
+  dimensions {
+    DBClusterIdentifier = "${aws_rds_cluster.default.id}"
+    Role                = "WRITER"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "alarm_rds_DatabaseConnections_writer" {
   count               = "${var.cw_alarms ? 1 : 0}"
   alarm_name          = "${aws_rds_cluster.default.id}-alarm-rds-writer-DatabaseConnections"

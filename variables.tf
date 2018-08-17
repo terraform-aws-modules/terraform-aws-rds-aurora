@@ -1,21 +1,11 @@
 variable "name" {
   type        = "string"
-  description = "Name given to DB subnet group"
+  description = "Name given resources"
 }
 
 variable "subnets" {
   type        = "list"
   description = "List of subnet IDs to use"
-}
-
-variable "envname" {
-  type        = "string"
-  description = "Environment name (eg,test, stage or prod)"
-}
-
-variable "envtype" {
-  type        = "string"
-  description = "Environment type (eg,prod or nonprod)"
 }
 
 variable "identifier_prefix" {
@@ -24,25 +14,31 @@ variable "identifier_prefix" {
   description = "Prefix for cluster and instance identifier"
 }
 
-variable "azs" {
-  type        = "list"
-  description = "List of AZs to use"
-}
-
 variable "replica_count" {
   type        = "string"
-  default     = "0"
+  default     = 1
   description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
 }
 
-variable "security_groups" {
+variable "allowed_security_groups" {
   type        = "list"
-  description = "VPC Security Group IDs"
+  default     = []
+  description = "A list of Security Group ID's to allow access to."
+}
+
+variable "vpc_id" {
+  description = "VPC ID"
+}
+
+variable "availability_zones" {
+  type        = "list"
+  default     = []
+  description = "Availability zones for the cluster. Must 3 or less"
 }
 
 variable "instance_type" {
   type        = "string"
-  default     = "db.t2.small"
+  default     = "db.r4.large"
   description = "Instance type to use"
 }
 
@@ -63,10 +59,10 @@ variable "password" {
   description = "Master DB password"
 }
 
-variable "final_snapshot_identifier" {
+variable "final_snapshot_identifier_prefix" {
   type        = "string"
   default     = "final"
-  description = "The name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too."
+  description = "The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too."
 }
 
 variable "skip_final_snapshot" {
@@ -141,6 +137,12 @@ variable "storage_encrypted" {
   description = "Specifies whether the underlying storage layer should be encrypted"
 }
 
+variable "kms_key_id" {
+  type        = "string"
+  default     = ""
+  description = "The ARN for the KMS encryption key if one is set to the cluster."
+}
+
 variable "cw_alarms" {
   type        = "string"
   default     = false
@@ -163,6 +165,12 @@ variable "cw_max_cpu" {
   type        = "string"
   default     = "85"
   description = "CPU threshold above which to alarm"
+}
+
+variable "cw_max_disk_queue_depth" {
+  type        = "string"
+  default     = "20"
+  description = "Disk queue threshold above which to alarm"
 }
 
 variable "cw_max_replica_lag" {
@@ -217,4 +225,40 @@ variable "replica_scale_out_cooldown" {
   type        = "string"
   default     = "300"
   description = "Cooldown in seconds before allowing further scaling operations after a scale out"
+}
+
+variable "route53_zone_id" {
+  type        = "string"
+  default     = ""
+  description = "If specified a route53 record will be created"
+}
+
+variable "route53_record_appendix" {
+  type        = "string"
+  default     = ".rds"
+  description = "Will be appended to the route53 record. Only used if route53_zone_id is passed also"
+}
+
+variable "route53_record_ttl" {
+  type        = "string"
+  default     = 60
+  description = "TTL of route53 record. Only used if route53_zone_id is passed also"
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources."
+  type        = "map"
+  default     = {}
+}
+
+variable "performance_insights_enabled" {
+  type        = "string"
+  default     = "false"
+  description = "Specifies whether Performance Insights is enabled or not."
+}
+
+variable "performance_insights_kms_key_id" {
+  type        = "string"
+  default     = ""
+  description = "The ARN for the KMS key to encrypt Performance Insights data."
 }
