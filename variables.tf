@@ -143,42 +143,6 @@ variable "kms_key_id" {
   description = "The ARN for the KMS encryption key if one is set to the cluster."
 }
 
-variable "cw_alarms" {
-  type        = "string"
-  default     = false
-  description = "Whether to enable CloudWatch alarms - requires `cw_sns_topic` is specified"
-}
-
-variable "cw_sns_topic" {
-  type        = "string"
-  default     = "false"
-  description = "An SNS topic to publish CloudWatch alarms to"
-}
-
-variable "cw_max_conns" {
-  type        = "string"
-  default     = "500"
-  description = "Connection count beyond which to trigger a CloudWatch alarm"
-}
-
-variable "cw_max_cpu" {
-  type        = "string"
-  default     = "85"
-  description = "CPU threshold above which to alarm"
-}
-
-variable "cw_max_disk_queue_depth" {
-  type        = "string"
-  default     = "20"
-  description = "Disk queue threshold above which to alarm"
-}
-
-variable "cw_max_replica_lag" {
-  type        = "string"
-  default     = "2000"
-  description = "Maximum Aurora replica lag in milliseconds above which to alarm"
-}
-
 variable "engine" {
   type        = "string"
   default     = "aurora"
@@ -225,24 +189,6 @@ variable "replica_scale_out_cooldown" {
   type        = "string"
   default     = "300"
   description = "Cooldown in seconds before allowing further scaling operations after a scale out"
-}
-
-variable "route53_zone_id" {
-  type        = "string"
-  default     = ""
-  description = "If specified a route53 record will be created"
-}
-
-variable "route53_record_appendix" {
-  type        = "string"
-  default     = ".rds"
-  description = "Will be appended to the route53 record. Only used if route53_zone_id is passed also"
-}
-
-variable "route53_record_ttl" {
-  type        = "string"
-  default     = 60
-  description = "TTL of route53 record. Only used if route53_zone_id is passed also"
 }
 
 variable "tags" {

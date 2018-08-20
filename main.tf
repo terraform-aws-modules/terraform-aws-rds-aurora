@@ -1,11 +1,12 @@
 /**
 # terraform-aws-rds-aurora
 
-Creates a AWS Aurora RDS cluster, instances, DB subnet group and optionally:
+Creates a AWS Aurora RDS cluster, cluster instances and DB subnet group.
 
- - RDS Enhanced Monitoring and associated required IAM role/policy
- - Cloudwatch alarms and SNS topic
- - Autoscaling for read replicas (MySQL)
+Optional Aurora features can also be enabled:
+
+- Autoscaling of replicas
+- Enhanced Monitoring
 
 ### Aurora PostgreSQL
 
@@ -28,8 +29,6 @@ Creates a AWS Aurora RDS cluster, instances, DB subnet group and optionally:
 *   storage_encrypted               = "true"
 *   apply_immediately               = "true"
 *   monitoring_interval             = "10"
-*   cw_alarms                       = true
-*   cw_sns_topic                    = "${aws_sns_topic.db_alarms_postgres96.id}"
 *   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_postgres96_parameter_group.id}"
 *   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id}"
 *   tags                            = {
@@ -69,7 +68,6 @@ Creates a AWS Aurora RDS cluster, instances, DB subnet group and optionally:
 *   replica_count                   = "1"
 *   allowed_security_groups         = ["${aws_security_group.my_application.id}"]
 *   instance_type                   = "db.t2.medium"
-*   cw_sns_topic                    = "${aws_sns_topic.db_alarms_56.id}"
 *   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_56_parameter_group.id}"
 *   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_56_parameter_group.id}"
 * }
@@ -102,7 +100,7 @@ Creates a AWS Aurora RDS cluster, instances, DB subnet group and optionally:
 *   subnets                         = ["${module.vpc.database_subnets}"]
 *   azs                             = ["${module.vpc.availability_zones}"]
 *   vpc_id                          = "${module.vpc.vpc_id}"
-*   replica_count                   = "1"
+*   replica_count                   = "3"
 *   allowed_security_groups         = ["${aws_security_group.my_application.id}"]
 *   instance_type                   = "db.t2.medium"
 *   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_57_parameter_group.id}"

@@ -1,10 +1,11 @@
 # terraform-aws-rds-aurora
 
-Creates a AWS Aurora RDS cluster, instances, DB subnet group and optionally:
+Creates a AWS Aurora RDS cluster, cluster instances and DB subnet group.
 
-- RDS Enhanced Monitoring and associated required IAM role/policy
-- Cloudwatch alarms and SNS topic
-- Autoscaling for read replicas (MySQL)
+Optional Aurora features can also be enabled:
+
+- Autoscaling of replicas
+- Enhanced Monitoring
 
 ### Aurora PostgreSQL
 
@@ -27,8 +28,6 @@ module "aurora_db_postgres96" {
   storage_encrypted               = "true"
   apply_immediately               = "true"
   monitoring_interval             = "10"
-  cw_alarms                       = true
-  cw_sns_topic                    = "${aws_sns_topic.db_alarms_postgres96.id}"
   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_postgres96_parameter_group.id}"
   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id}"
   tags                            = {
@@ -68,7 +67,6 @@ module "aurora_db_56" {
   replica_count                   = "1"
   allowed_security_groups         = ["${aws_security_group.my_application.id}"]
   instance_type                   = "db.t2.medium"
-  cw_sns_topic                    = "${aws_sns_topic.db_alarms_56.id}"
   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_56_parameter_group.id}"
   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_56_parameter_group.id}"
 }
@@ -101,7 +99,7 @@ module "aurora_db_57" {
   subnets                         = ["${module.vpc.database_subnets}"]
   azs                             = ["${module.vpc.availability_zones}"]
   vpc_id                          = "${module.vpc.vpc_id}"
-  replica_count                   = "1"
+  replica_count                   = "3"
   allowed_security_groups         = ["${aws_security_group.my_application.id}"]
   instance_type                   = "db.t2.medium"
   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_57_parameter_group.id}"
@@ -142,12 +140,6 @@ MIT Licensed. See [LICENSE](https://github.com/deliveryhero/tf-ssh-bastion/tree/
 | auto_minor_version_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `true` | no |
 | availability_zones | Availability zones for the cluster. Must 3 or less | list | `<list>` | no |
 | backup_retention_period | How long to keep backups for (in days) | string | `7` | no |
-| cw_alarms | Whether to enable CloudWatch alarms - requires `cw_sns_topic` is specified | string | `false` | no |
-| cw_max_conns | Connection count beyond which to trigger a CloudWatch alarm | string | `500` | no |
-| cw_max_cpu | CPU threshold above which to alarm | string | `85` | no |
-| cw_max_disk_queue_depth | Disk queue threshold above which to alarm | string | `20` | no |
-| cw_max_replica_lag | Maximum Aurora replica lag in milliseconds above which to alarm | string | `2000` | no |
-| cw_sns_topic | An SNS topic to publish CloudWatch alarms to | string | `false` | no |
 | db_cluster_parameter_group_name | The name of a DB Cluster parameter group to use | string | `default.aurora5.6` | no |
 | db_parameter_group_name | The name of a DB parameter group to use | string | `default.aurora5.6` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `aurora` | no |
@@ -172,9 +164,6 @@ MIT Licensed. See [LICENSE](https://github.com/deliveryhero/tf-ssh-bastion/tree/
 | replica_scale_max | Maximum number of replicas to allow scaling for | string | `0` | no |
 | replica_scale_min | Maximum number of replicas to allow scaling for | string | `2` | no |
 | replica_scale_out_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | string | `300` | no |
-| route53_record_appendix | Will be appended to the route53 record. Only used if route53_zone_id is passed also | string | `.rds` | no |
-| route53_record_ttl | TTL of route53 record. Only used if route53_zone_id is passed also | string | `60` | no |
-| route53_zone_id | If specified a route53 record will be created | string | `` | no |
 | skip_final_snapshot | Should a final snapshot be created on cluster destroy | string | `false` | no |
 | snapshot_identifier | DB snapshot to create this database from | string | `` | no |
 | storage_encrypted | Specifies whether the underlying storage layer should be encrypted | string | `true` | no |
