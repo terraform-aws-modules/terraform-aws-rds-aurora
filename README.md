@@ -7,13 +7,9 @@ Optional Aurora features can also be enabled:
 - Autoscaling of replicas
 - Enhanced Monitoring
 
-### Aurora PostgreSQL
+### Usage
 
 ```hcl
-resource "aws_sns_topic" "db_alarms_postgres96" {
-  name = "aurora-db-alarms-postgres96"
-}
-
 module "aurora_db_postgres96" {
   source                          = "path/to/module"
   name                            = "test-aurora-db-postgres96"
@@ -35,89 +31,13 @@ module "aurora_db_postgres96" {
     "terraform"   = "true"
   }
 }
-
-resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora-db-postgres96-parameter-group"
-  family      = "aurora-postgresql9.6"
-  description = "test-aurora-db-postgres96-parameter-group"
-}
-
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora-postgres96-cluster-parameter-group"
-  family      = "aurora-postgresql9.6"
-  description = "test-aurora-postgres96-cluster-parameter-group"
-}
 ```
 
-### MySQL 5.6 example
+### Full examples
 
-```hcl
-resource "aws_sns_topic" "db_alarms_56" {
-  name = "aurora-db-alarms-56"
-}
-
-module "aurora_db_56" {
-  source                          = "path/to/module"
-  name                            = "test-aurora-db-56"
-  engine                          = "aurora-mysql"
-  engine-version                  = "5.6.10a"
-  subnets                         = ["${module.vpc.database_subnets}"]
-  azs                             = ["${module.vpc.availability_zones}"]
-  vpc_id                          = "${module.vpc.vpc_id}"
-  replica_count                   = "1"
-  allowed_security_groups         = ["${aws_security_group.my_application.id}"]
-  instance_type                   = "db.t2.medium"
-  db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_56_parameter_group.id}"
-  db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_56_parameter_group.id}"
-}
-
-resource "aws_db_parameter_group" "aurora_db_56_parameter_group" {
-  name        = "test-aurora-db-56-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora-db-56-parameter-group"
-}
-
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_56_parameter_group" {
-  name        = "test-aurora-56-cluster-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora-56-cluster-parameter-group"
-}
-```
-
-### MySQL 5.7 example
-
-```hcl
-resource "aws_sns_topic" "db_alarms" {
-  name = "aurora-db-alarms"
-}
-
-module "aurora_db_57" {
-  source                          = "path/to/module"
-  name                            = "test-aurora-db-57"
-  engine                          = "aurora-mysql"
-  engine-version                  = "5.7.12"
-  subnets                         = ["${module.vpc.database_subnets}"]
-  azs                             = ["${module.vpc.availability_zones}"]
-  vpc_id                          = "${module.vpc.vpc_id}"
-  replica_count                   = "3"
-  allowed_security_groups         = ["${aws_security_group.my_application.id}"]
-  instance_type                   = "db.t2.medium"
-  db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_57_parameter_group.id}"
-  db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_57_cluster_parameter_group.id}"
-}
-
-resource "aws_db_parameter_group" "aurora_db_57_parameter_group" {
-  name        = "test-aurora-db-57-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "test-aurora-db-57-parameter-group"
-}
-
-resource "aws_rds_cluster_parameter_group" "aurora_57_cluster_parameter_group" {
-  name        = "test-aurora-57-cluster-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "test-aurora-57-cluster-parameter-group"
-}
-```
+- [PostgreSQL](examples/postgres): A simple example with VPC and PostgreSQL cluster.
+- [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
+- [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
 
 ## Documentation generation
 
@@ -180,6 +100,7 @@ MIT Licensed. See [LICENSE](https://github.com/deliveryhero/tf-ssh-bastion/tree/
 | instance_endpoints | A list of all cluster instance endpoints |
 | master_password | The master password |
 | master_username | The master username |
+| port | The port |
 | rds_cluster_id | The ID of the cluster |
 | reader_endpoint | The cluster reader endpoint |
 | security_group_id | The security group ID of the cluster |
