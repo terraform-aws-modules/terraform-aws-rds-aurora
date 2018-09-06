@@ -1,72 +1,79 @@
-# terraform-aws-rds-aurora
+# AWS RDS Aurora Terraform module
 
-Creates a AWS Aurora RDS cluster, cluster instances and DB subnet group.
+Terraform module which creates RDS Aurora resources on AWS.
 
-Optional Aurora features can also be enabled:
+These types of resources are supported:
 
-- Autoscaling of replicas
+* [RDS Cluster](https://www.terraform.io/docs/providers/aws/r/rds_cluster.html)
+* [RDS Cluster Instance](https://www.terraform.io/docs/providers/aws/r/rds_cluster_instance.html)
+* [DB Subnet Group](https://www.terraform.io/docs/providers/aws/r/db_subnet_group.html)
+* [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
+* [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
+
+## Available features
+
+- Autoscaling of read-replicas (based on CPU utilization)
 - Enhanced Monitoring
 
-### Usage
+## Usage
 
 ```hcl
-module "aurora_db_postgres96" {
-  source                          = "path/to/module"
+module "db" {
+  source                          = "terraform-aws-modules/rds-aurora/aws"
+
   name                            = "test-aurora-db-postgres96"
+
   engine                          = "aurora-postgresql"
-  engine-version                  = "9.6.3"
-  subnets                         = ["${module.vpc.database_subnets}"]
-  azs                             = ["${module.vpc.availability_zones}"]
-  vpc_id                          = "${module.vpc.vpc_id}"
-  replica_count                   = "1"
-  allowed_security_groups         = ["${aws_security_group.my_application.id}"]
+  engine_version                  = "9.6.3"
+
+  vpc_id                          = "vpc-12345678"
+  subnets                         = ["subnet-12345678", "subnet-87654321"]
+  azs                             = ["eu-west-1a", "eu-west-1b"]
+  
+  replica_count                   = 1
+  allowed_security_groups         = ["sg-12345678"]
   instance_type                   = "db.r4.large"
   storage_encrypted               = "true"
   apply_immediately               = "true"
-  monitoring_interval             = "10"
-  db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_postgres96_parameter_group.id}"
-  db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id}"
+  monitoring_interval             = 10
+  db_parameter_group_name         = "default"
+  db_cluster_parameter_group_name = "default"
+
   tags                            = {
-    "environment" = "dev"
-    "terraform"   = "true"
+    Environment = "dev"
+    Terraform   = "true"
   }
 }
 ```
 
-### Full examples
+## Examples
 
 - [PostgreSQL](examples/postgres): A simple example with VPC and PostgreSQL cluster.
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
 
-## Documentation generation
+## Documentation
 
-Documentation should be modified within `main.tf` and generated using [terraform-docs](https://github.com/segmentio/terraform-docs):
+Terraform documentation is generated automatically using [pre-commit hooks](http://www.pre-commit.com/). Follow installation instructions [here](https://pre-commit.com/#install).
 
-```bash
-terraform-docs md ./ | cat -s | tail -r | tail -n +2 | tail -r > README.md
-```
-
-## License
-
-MIT Licensed. See [LICENSE](https://github.com/deliveryhero/tf-ssh-bastion/tree/master/LICENSE) for full details.
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| allowed_security_groups | A list of Security Group ID's to allow access to. | list | `<list>` | no |
+| allowed_security_groups | A list of Security Group ID's to allow access to. | string | `<list>` | no |
 | apply_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `false` | no |
 | auto_minor_version_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `true` | no |
-| availability_zones | Availability zones for the cluster. Must 3 or less | list | `<list>` | no |
+| availability_zones | Availability zones for the cluster. Must 3 or less | string | `<list>` | no |
 | backup_retention_period | How long to keep backups for (in days) | string | `7` | no |
 | db_cluster_parameter_group_name | The name of a DB Cluster parameter group to use | string | `default.aurora5.6` | no |
 | db_parameter_group_name | The name of a DB parameter group to use | string | `default.aurora5.6` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `aurora` | no |
-| engine-version | Aurora database engine version. | string | `5.6.10a` | no |
+| engine_version | Aurora database engine version. | string | `5.6.10a` | no |
 | final_snapshot_identifier_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `final` | no |
 | identifier_prefix | Prefix for cluster and instance identifier | string | `` | no |
-| instance_type | Instance type to use | string | `db.r4.large` | no |
+| instance_type | Instance type to use | string | - | yes |
 | kms_key_id | The ARN for the KMS encryption key if one is set to the cluster. | string | `` | no |
 | monitoring_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | string | `0` | no |
 | name | Name given resources | string | - | yes |
@@ -96,11 +103,21 @@ MIT Licensed. See [LICENSE](https://github.com/deliveryhero/tf-ssh-bastion/tree/
 
 | Name | Description |
 |------|-------------|
-| endpoint | The cluster endpoint |
-| instance_endpoints | A list of all cluster instance endpoints |
-| master_password | The master password |
-| master_username | The master username |
-| port | The port |
-| rds_cluster_id | The ID of the cluster |
-| reader_endpoint | The cluster reader endpoint |
-| security_group_id | The security group ID of the cluster |
+| this_rds_cluster_endpoint | The cluster endpoint |
+| this_rds_cluster_id | aws_rds_cluster |
+| this_rds_cluster_instance_endpoints | aws_rds_cluster_instance |
+| this_rds_cluster_master_password | The master password |
+| this_rds_cluster_master_username | The master username |
+| this_rds_cluster_port | The port |
+| this_rds_cluster_reader_endpoint | The cluster reader endpoint |
+| this_security_group_id | aws_security_group |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Authors
+
+Currently maintained by [Max Williams](https://github.com/FutureSharks) and [these awesome contributors](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/graphs/contributors).
+
+## License
+
+MIT Licensed. See [LICENSE](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/LICENSE) for full details.

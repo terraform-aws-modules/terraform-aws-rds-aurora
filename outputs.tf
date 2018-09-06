@@ -1,40 +1,42 @@
-output "endpoint" {
-  value       = "${aws_rds_cluster.default.endpoint}"
-  description = "The cluster endpoint"
-}
-
-output "reader_endpoint" {
-  value       = "${aws_rds_cluster.default.reader_endpoint}"
-  description = "The cluster reader endpoint"
-}
-
-output "instance_endpoints" {
-  value       = ["${aws_rds_cluster_instance.cluster_instance.*.endpoint}"]
-  description = "A list of all cluster instance endpoints"
-}
-
-output "rds_cluster_id" {
-  value       = "${aws_rds_cluster.default.id}"
+// aws_rds_cluster
+output "this_rds_cluster_id" {
   description = "The ID of the cluster"
+  value       = "${aws_rds_cluster.this.id}"
 }
 
-output "master_password" {
-  sensitive   = true
-  value       = "${aws_rds_cluster.default.master_password}"
+output "this_rds_cluster_endpoint" {
+  description = "The cluster endpoint"
+  value       = "${aws_rds_cluster.this.endpoint}"
+}
+
+output "this_rds_cluster_reader_endpoint" {
+  description = "The cluster reader endpoint"
+  value       = "${aws_rds_cluster.this.reader_endpoint}"
+}
+
+output "this_rds_cluster_master_password" {
   description = "The master password"
+  value       = "${aws_rds_cluster.this.master_password}"
 }
 
-output "port" {
-  value       = "${aws_rds_cluster.default.port}"
+output "this_rds_cluster_port" {
   description = "The port"
+  value       = "${aws_rds_cluster.this.port}"
 }
 
-output "master_username" {
-  value       = "${aws_rds_cluster.default.master_username}"
+output "this_rds_cluster_master_username" {
   description = "The master username"
+  value       = "${aws_rds_cluster.this.master_username}"
 }
 
-output "security_group_id" {
-  value       = "${aws_security_group.default.id}"
+// aws_rds_cluster_instance
+output "this_rds_cluster_instance_endpoints" {
+  description = "A list of all cluster instance endpoints"
+  value       = ["${aws_rds_cluster_instance.this.*.endpoint}"]
+}
+
+// aws_security_group
+output "this_security_group_id" {
   description = "The security group ID of the cluster"
+  value       = "${aws_security_group.this.id}"
 }
