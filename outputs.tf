@@ -24,6 +24,11 @@ output "master_password" {
   description = "The master password"
 }
 
+output "port" {
+  value       = "${aws_rds_cluster.default.port}"
+  description = "The port"
+}
+
 output "master_username" {
   value       = "${aws_rds_cluster.default.master_username}"
   description = "The master username"
