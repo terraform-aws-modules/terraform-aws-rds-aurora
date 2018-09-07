@@ -25,7 +25,6 @@ module "aurora" {
   availability_zones              = ["${var.azs}"]
   vpc_id                          = "${module.vpc.vpc_id}"
   replica_count                   = 1
-  allowed_security_groups         = ["${aws_security_group.app_servers.id}"]
   instance_type                   = "db.t2.medium"
   apply_immediately               = true
   skip_final_snapshot             = true

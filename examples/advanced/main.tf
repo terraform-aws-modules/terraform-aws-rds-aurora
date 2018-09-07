@@ -29,7 +29,6 @@ module "aurora" {
   replica_scale_min               = 1
   replica_scale_max               = 5
   monitoring_interval             = 60
-  allowed_security_groups         = ["${aws_security_group.app_servers.id}"]
   instance_type                   = "db.r4.large"
   apply_immediately               = true
   skip_final_snapshot             = true
