@@ -1,29 +1,25 @@
 variable "name" {
-  type        = "string"
   description = "Name given resources"
 }
 
 variable "subnets" {
-  type        = "list"
   description = "List of subnet IDs to use"
+  type        = "list"
 }
 
 variable "identifier_prefix" {
-  type        = "string"
-  default     = ""
   description = "Prefix for cluster and instance identifier"
+  default     = ""
 }
 
 variable "replica_count" {
-  type        = "string"
-  default     = 1
   description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
+  default     = 1
 }
 
 variable "allowed_security_groups" {
-  type        = "list"
-  default     = []
   description = "A list of Security Group ID's to allow access to."
+  default     = []
 }
 
 variable "vpc_id" {
@@ -31,128 +27,107 @@ variable "vpc_id" {
 }
 
 variable "availability_zones" {
-  type        = "list"
-  default     = []
   description = "Availability zones for the cluster. Must 3 or less"
+  default     = []
 }
 
 variable "instance_type" {
-  type        = "string"
-  default     = "db.r4.large"
   description = "Instance type to use"
 }
 
 variable "publicly_accessible" {
-  type        = "string"
-  default     = "false"
   description = "Whether the DB should have a public IP address"
+  default     = "false"
 }
 
 variable "username" {
-  default     = "root"
   description = "Master DB username"
+  default     = "root"
 }
 
 variable "password" {
-  type        = "string"
-  default     = ""
   description = "Master DB password"
+  default     = ""
 }
 
 variable "final_snapshot_identifier_prefix" {
-  type        = "string"
-  default     = "final"
   description = "The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too."
+  default     = "final"
 }
 
 variable "skip_final_snapshot" {
-  type        = "string"
-  default     = "false"
   description = "Should a final snapshot be created on cluster destroy"
+  default     = "false"
 }
 
 variable "backup_retention_period" {
-  type        = "string"
-  default     = "7"
   description = "How long to keep backups for (in days)"
+  default     = "7"
 }
 
 variable "preferred_backup_window" {
-  type        = "string"
-  default     = "02:00-03:00"
   description = "When to perform DB backups"
+  default     = "02:00-03:00"
 }
 
 variable "preferred_maintenance_window" {
-  type        = "string"
-  default     = "sun:05:00-sun:06:00"
   description = "When to perform DB maintenance"
+  default     = "sun:05:00-sun:06:00"
 }
 
 variable "port" {
-  type        = "string"
-  default     = ""
   description = "The port on which to accept connections"
+  default     = ""
 }
 
 variable "apply_immediately" {
-  type        = "string"
-  default     = "false"
   description = "Determines whether or not any DB modifications are applied immediately, or during the maintenance window"
+  default     = "false"
 }
 
 variable "monitoring_interval" {
-  type        = "string"
-  default     = 0
   description = "The interval (seconds) between points when Enhanced Monitoring metrics are collected"
+  default     = 0
 }
 
 variable "auto_minor_version_upgrade" {
-  type        = "string"
-  default     = "true"
   description = "Determines whether minor engine upgrades will be performed automatically in the maintenance window"
+  default     = "true"
 }
 
 variable "db_parameter_group_name" {
-  type        = "string"
-  default     = "default.aurora5.6"
   description = "The name of a DB parameter group to use"
+  default     = "default.aurora5.6"
 }
 
 variable "db_cluster_parameter_group_name" {
-  type        = "string"
-  default     = "default.aurora5.6"
   description = "The name of a DB Cluster parameter group to use"
+  default     = "default.aurora5.6"
 }
 
 variable "snapshot_identifier" {
-  type        = "string"
-  default     = ""
   description = "DB snapshot to create this database from"
+  default     = ""
 }
 
 variable "storage_encrypted" {
-  type        = "string"
-  default     = "true"
   description = "Specifies whether the underlying storage layer should be encrypted"
+  default     = "true"
 }
 
 variable "kms_key_id" {
-  type        = "string"
-  default     = ""
   description = "The ARN for the KMS encryption key if one is set to the cluster."
+  default     = ""
 }
 
 variable "engine" {
-  type        = "string"
-  default     = "aurora"
   description = "Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql"
+  default     = "aurora"
 }
 
-variable "engine-version" {
-  type        = "string"
-  default     = "5.6.10a"
+variable "engine_version" {
   description = "Aurora database engine version."
+  default     = "5.6.10a"
 }
 
 variable "replica_scale_enabled" {

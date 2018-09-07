@@ -1,7 +1,3 @@
-terraform {
-  required_version = ">= 0.11.7"
-}
-
 provider "aws" {
   region = "us-east-1"
 }
@@ -20,7 +16,7 @@ module "aurora" {
   source                          = "../../"
   name                            = "aurora-example"
   engine                          = "aurora-mysql"
-  engine-version                  = "5.7.12"
+  engine_version                  = "5.7.12"
   subnets                         = ["${module.vpc.database_subnets}"]
   availability_zones              = ["${var.azs}"]
   vpc_id                          = "${module.vpc.vpc_id}"
@@ -53,15 +49,15 @@ resource "aws_security_group" "app_servers" {
 
 resource "aws_security_group_rule" "allow_access" {
   type                     = "ingress"
-  from_port                = "${module.aurora.port}"
-  to_port                  = "${module.aurora.port}"
+  from_port                = "${module.aurora.this_rds_cluster_port}"
+  to_port                  = "${module.aurora.this_rds_cluster_port}"
   protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.app_servers.id}"
-  security_group_id        = "${module.aurora.security_group_id}"
+  security_group_id        = "${module.aurora.this_security_group_id}"
 }
 
 module "vpc" {
-  source = "git@github.com:terraform-aws-modules/terraform-aws-vpc.git?ref=v1.37.0"
+  source = "terraform-aws-modules/vpc/aws"
   name   = "example"
   cidr   = "10.0.0.0/16"
   azs    = ["${var.azs}"]
