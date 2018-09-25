@@ -68,6 +68,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | availability_zones | Availability zones for the cluster. Must 3 or less | string | `<list>` | no |
 | backup_retention_period | How long to keep backups for (in days) | string | `7` | no |
 | db_cluster_parameter_group_name | The name of a DB Cluster parameter group to use | string | `default.aurora5.6` | no |
+| db_name| The name of the database | string | - | yes
 | db_parameter_group_name | The name of a DB parameter group to use | string | `default.aurora5.6` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `aurora` | no |
 | engine_version | Aurora database engine version. | string | `5.6.10a` | no |
@@ -110,6 +111,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | this_rds_cluster_master_username | The master username |
 | this_rds_cluster_port | The port |
 | this_rds_cluster_reader_endpoint | The cluster reader endpoint |
+| this_rds_db_name | The database name |
 | this_security_group_id | aws_security_group |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
