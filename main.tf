@@ -21,6 +21,7 @@ resource "aws_rds_cluster" "this" {
   availability_zones              = ["${var.availability_zones}"]
   engine                          = "${var.engine}"
   engine_version                  = "${var.engine_version}"
+  database_name                   = "${var.db_name}"
   kms_key_id                      = "${var.kms_key_id}"
   master_username                 = "${var.username}"
   master_password                 = "${local.master_password}"

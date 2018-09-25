@@ -35,6 +35,12 @@ output "this_rds_cluster_instance_endpoints" {
   value       = ["${aws_rds_cluster_instance.this.*.endpoint}"]
 }
 
+// aws_rds_db_name
+output "this_rds_db_name" {
+  description = "name of the db"
+  value       = "${aws_rds_cluster.this.db_name}"
+}
+
 // aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"

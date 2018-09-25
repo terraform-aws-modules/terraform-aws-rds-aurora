@@ -95,6 +95,10 @@ variable "auto_minor_version_upgrade" {
   default     = "true"
 }
 
+variable "db_name" {
+  description = "The name of the DB"
+}
+
 variable "db_parameter_group_name" {
   description = "The name of a DB parameter group to use"
   default     = "default.aurora5.6"
