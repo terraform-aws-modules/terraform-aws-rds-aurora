@@ -12,8 +12,7 @@ resource "aws_db_subnet_group" "this" {
   name        = "${var.name}"
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = ["${var.subnets}"]
-
-  tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
+  tags        = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
 }
 
 resource "aws_rds_cluster" "this" {
@@ -36,13 +35,11 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted               = "${var.storage_encrypted}"
   apply_immediately               = "${var.apply_immediately}"
   db_cluster_parameter_group_name = "${var.db_cluster_parameter_group_name}"
-
-  tags = "${var.tags}"
+  tags                            = "${var.tags}"
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = "${var.replica_scale_enabled ? var.replica_scale_min : var.replica_count}"
-
+  count                           = "${var.replica_scale_enabled ? var.replica_scale_min : var.replica_count}"
   identifier                      = "${var.name}-${count.index + 1}"
   cluster_identifier              = "${aws_rds_cluster.this.id}"
   engine                          = "${var.engine}"
@@ -59,8 +56,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = "${count.index + 1}"
   performance_insights_enabled    = "${var.performance_insights_enabled}"
   performance_insights_kms_key_id = "${var.performance_insights_kms_key_id}"
-
-  tags = "${var.tags}"
+  tags                            = "${var.tags}"
 }
 
 resource "random_id" "snapshot_identifier" {
@@ -83,22 +79,19 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = "${var.monitoring_interval > 0 ? 1 : 0}"
-
+  count              = "${var.monitoring_interval > 0 ? 1 : 0}"
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = "${data.aws_iam_policy_document.monitoring_rds_assume_role.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = "${var.monitoring_interval > 0 ? 1 : 0}"
-
+  count      = "${var.monitoring_interval > 0 ? 1 : 0}"
   role       = "${aws_iam_role.rds_enhanced_monitoring.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
 resource "aws_appautoscaling_target" "read_replica_count" {
-  count = "${var.replica_scale_enabled ? 1 : 0}"
-
+  count              = "${var.replica_scale_enabled ? 1 : 0}"
   max_capacity       = "${var.replica_scale_max}"
   min_capacity       = "${var.replica_scale_min}"
   resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
@@ -107,8 +100,7 @@ resource "aws_appautoscaling_target" "read_replica_count" {
 }
 
 resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
-  count = "${var.replica_scale_enabled ? 1 : 0}"
-
+  count              = "${var.replica_scale_enabled ? 1 : 0}"
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
@@ -132,13 +124,11 @@ resource "aws_security_group" "this" {
   name        = "aurora-${var.name}"
   description = "For Aurora cluster ${var.name}"
   vpc_id      = "${var.vpc_id}"
-
-  tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
+  tags        = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
 }
 
 resource "aws_security_group_rule" "default_ingress" {
-  count = "${length(var.allowed_security_groups)}"
-
+  count                    = "${length(var.allowed_security_groups)}"
   type                     = "ingress"
   from_port                = "${aws_rds_cluster.this.port}"
   to_port                  = "${aws_rds_cluster.this.port}"
