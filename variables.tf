@@ -2,8 +2,8 @@ variable "name" {
   description = "Name given resources"
 }
 
-variable "create_cluster" {
-  description = "Whether to create the Aurora cluster"
+variable "create_resources" {
+  description = "Whether to create the Aurora cluster and related resources"
   default     = true
   type        = "string"
 }
