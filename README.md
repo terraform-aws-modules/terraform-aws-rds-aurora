@@ -20,16 +20,12 @@ These types of resources are supported:
 ```hcl
 module "db" {
   source                          = "terraform-aws-modules/rds-aurora/aws"
-
   name                            = "test-aurora-db-postgres96"
-
   engine                          = "aurora-postgresql"
   engine_version                  = "9.6.3"
-
   vpc_id                          = "vpc-12345678"
   subnets                         = ["subnet-12345678", "subnet-87654321"]
   azs                             = ["eu-west-1a", "eu-west-1b"]
-  
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
   instance_type                   = "db.r4.large"
@@ -38,7 +34,6 @@ module "db" {
   monitoring_interval             = 10
   db_parameter_group_name         = "default"
   db_cluster_parameter_group_name = "default"
-
   tags                            = {
     Environment = "dev"
     Terraform   = "true"
