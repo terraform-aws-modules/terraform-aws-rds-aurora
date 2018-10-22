@@ -2,6 +2,12 @@ variable "name" {
   description = "Name given resources"
 }
 
+variable "create_cluster" {
+  description = "Whether to create the Aurora cluster"
+  default     = true
+  type        = "string"
+}
+
 variable "subnets" {
   description = "List of subnet IDs to use"
   type        = "list"

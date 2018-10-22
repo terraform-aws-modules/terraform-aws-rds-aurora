@@ -17,6 +17,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_rds_cluster" "this" {
+  count                           = "${var.create_cluster}"
   cluster_identifier              = "${var.name}"
   availability_zones              = ["${var.availability_zones}"]
   engine                          = "${var.engine}"
@@ -41,8 +42,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = "${var.replica_scale_enabled ? var.replica_scale_min : var.replica_count}"
-
+  count                           = "${var.create_cluster ? var.replica_scale_enabled ? var.replica_scale_min : var.replica_count : 0}"
   identifier                      = "${var.name}-${count.index + 1}"
   cluster_identifier              = "${aws_rds_cluster.this.id}"
   engine                          = "${var.engine}"
