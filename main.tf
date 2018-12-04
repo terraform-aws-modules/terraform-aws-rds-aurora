@@ -22,6 +22,7 @@ resource "aws_rds_cluster" "this" {
   engine                          = "${var.engine}"
   engine_version                  = "${var.engine_version}"
   kms_key_id                      = "${var.kms_key_id}"
+  database_name                   = "${var.database_name}"
   master_username                 = "${var.username}"
   master_password                 = "${local.master_password}"
   final_snapshot_identifier       = "${var.final_snapshot_identifier_prefix}-${var.name}-${random_id.snapshot_identifier.hex}"

@@ -96,6 +96,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | storage_encrypted | Specifies whether the underlying storage layer should be encrypted | string | `true` | no |
 | subnets | List of subnet IDs to use | list | - | yes |
 | tags | A map of tags to add to all resources. | map | `<map>` | no |
+| database_name | Default DB name | string | `` | no |
 | username | Master DB username | string | `root` | no |
 | vpc_id | VPC ID | string | - | yes |
 
@@ -108,6 +109,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | this_rds_cluster_instance_endpoints | aws_rds_cluster_instance |
 | this_rds_cluster_master_password | The master password |
 | this_rds_cluster_master_username | The master username |
+| this_rds_cluster_database_name | The default database name |
 | this_rds_cluster_port | The port |
 | this_rds_cluster_reader_endpoint | The cluster reader endpoint |
 | this_security_group_id | aws_security_group |

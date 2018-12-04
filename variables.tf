@@ -40,6 +40,11 @@ variable "publicly_accessible" {
   default     = "false"
 }
 
+variable "database_name" {
+  description = "Default DB Name"
+  default     = ""
+}
+
 variable "username" {
   description = "Master DB username"
   default     = "root"
