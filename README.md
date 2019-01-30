@@ -115,7 +115,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 ## Authors
 
-Currently maintained by [Max Williams](https://github.com/FutureSharks) and [these awesome contributors](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/graphs/contributors).
+Currently maintained by [Anton Babenko](https://github.com/antonbabenko) and [these awesome contributors](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/graphs/contributors).
 
 ## License
 
