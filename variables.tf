@@ -26,11 +26,6 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
-variable "availability_zones" {
-  description = "Availability zones for the cluster. Must 3 or less"
-  default     = []
-}
-
 variable "instance_type" {
   description = "Instance type to use"
 }

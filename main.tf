@@ -18,7 +18,6 @@ resource "aws_db_subnet_group" "this" {
 
 resource "aws_rds_cluster" "this" {
   cluster_identifier              = "${var.name}"
-  availability_zones              = ["${var.availability_zones}"]
   engine                          = "${var.engine}"
   engine_version                  = "${var.engine_version}"
   kms_key_id                      = "${var.kms_key_id}"
@@ -130,11 +129,10 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "aurora-${var.name}"
-  description = "For Aurora cluster ${var.name}"
+  name_prefix = "${var.name}-"
   vpc_id      = "${var.vpc_id}"
 
-  tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
+  tags = "${var.tags}"
 }
 
 resource "aws_security_group_rule" "default_ingress" {

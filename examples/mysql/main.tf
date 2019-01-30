@@ -18,7 +18,6 @@ module "aurora" {
   engine                          = "aurora-mysql"
   engine_version                  = "5.7.12"
   subnets                         = ["${module.vpc.database_subnets}"]
-  availability_zones              = ["${var.azs}"]
   vpc_id                          = "${module.vpc.vpc_id}"
   replica_count                   = 1
   instance_type                   = "db.t2.medium"
