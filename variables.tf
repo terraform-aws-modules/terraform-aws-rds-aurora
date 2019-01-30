@@ -35,6 +35,11 @@ variable "publicly_accessible" {
   default     = "false"
 }
 
+variable "database_name" {
+  description = "Name for an automatically created database on cluster creation"
+  default     = ""
+}
+
 variable "username" {
   description = "Master DB username"
   default     = "root"

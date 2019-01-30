@@ -65,6 +65,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
+| database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
@@ -102,6 +103,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description |
 |------|-------------|
+| this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
 | this\_rds\_cluster\_id | The ID of the cluster |
 | this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
