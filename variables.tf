@@ -27,7 +27,7 @@ variable "vpc_id" {
 }
 
 variable "availability_zones" {
-  description = "Availability zones for the cluster. Must 3 or less"
+  description = "A list of EC2 Availability Zones that instances in the DB cluster can be created in"
   default     = []
 }
 
