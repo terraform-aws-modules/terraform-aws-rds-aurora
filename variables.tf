@@ -26,11 +26,6 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
-variable "availability_zones" {
-  description = "Availability zones for the cluster. Must 3 or less"
-  default     = []
-}
-
 variable "instance_type" {
   description = "Instance type to use"
 }
@@ -62,6 +57,11 @@ variable "final_snapshot_identifier_prefix" {
 
 variable "skip_final_snapshot" {
   description = "Should a final snapshot be created on cluster destroy"
+  default     = "false"
+}
+
+variable "deletion_protection" {
+  description = "If the DB instance should have deletion protection enabled"
   default     = "false"
 }
 
