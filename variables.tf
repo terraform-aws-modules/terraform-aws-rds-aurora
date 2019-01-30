@@ -41,7 +41,7 @@ variable "publicly_accessible" {
 }
 
 variable "database_name" {
-  description = "Default DB Name"
+  description = "Name for an automatically created database on cluster creation"
   default     = ""
 }
 

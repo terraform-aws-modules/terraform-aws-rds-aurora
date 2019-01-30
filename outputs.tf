@@ -14,9 +14,10 @@ output "this_rds_cluster_reader_endpoint" {
   value       = "${aws_rds_cluster.this.reader_endpoint}"
 }
 
+// database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
 output "this_rds_cluster_database_name" {
-  description = "The name of the default database"
-  value       = "${aws_rds_cluster.this.database_name}"
+  description = "Name for an automatically created database on cluster creation"
+  value       = "${var.database_name}"
 }
 
 output "this_rds_cluster_master_password" {
