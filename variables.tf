@@ -55,6 +55,11 @@ variable "skip_final_snapshot" {
   default     = "false"
 }
 
+variable "deletion_protection" {
+  description = "If the DB instance should have deletion protection enabled"
+  default     = "false"
+}
+
 variable "backup_retention_period" {
   description = "How long to keep backups for (in days)"
   default     = "7"

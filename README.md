@@ -67,6 +67,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
+| deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |
 | engine\_version | Aurora database engine version. | string | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
