@@ -26,11 +26,6 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
-variable "availability_zones" {
-  description = "A list of EC2 Availability Zones that instances in the DB cluster can be created in"
-  default     = []
-}
-
 variable "instance_type" {
   description = "Instance type to use"
 }

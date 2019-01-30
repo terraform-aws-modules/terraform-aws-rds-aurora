@@ -28,7 +28,6 @@ module "db" {
 
   vpc_id                          = "vpc-12345678"
   subnets                         = ["subnet-12345678", "subnet-87654321"]
-  availability_zones              = ["eu-west-1a", "eu-west-1b"]
 
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
@@ -65,7 +64,6 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
-| availability\_zones | A list of EC2 Availability Zones that instances in the DB cluster can be created in | list | `[]` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
