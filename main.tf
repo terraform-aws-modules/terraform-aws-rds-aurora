@@ -129,11 +129,10 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "aurora-${var.name}"
-  description = "For Aurora cluster ${var.name}"
+  name_prefix = "${var.name}-"
   vpc_id      = "${var.vpc_id}"
 
-  tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
+  tags = "${var.tags}"
 }
 
 resource "aws_security_group_rule" "default_ingress" {
