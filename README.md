@@ -28,14 +28,14 @@ module "db" {
 
   vpc_id                          = "vpc-12345678"
   subnets                         = ["subnet-12345678", "subnet-87654321"]
-  azs                             = ["eu-west-1a", "eu-west-1b"]
-  
+
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
   instance_type                   = "db.r4.large"
-  storage_encrypted               = "true"
-  apply_immediately               = "true"
+  storage_encrypted               = true
+  apply_immediately               = true
   monitoring_interval             = 10
+
   db_parameter_group_name         = "default"
   db_cluster_parameter_group_name = "default"
 
@@ -61,14 +61,14 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `<list>` | no |
+| allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
-| availability\_zones | Availability zones for the cluster. Must 3 or less | list | `<list>` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
+| deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |
 | engine\_version | Aurora database engine version. | string | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
@@ -95,7 +95,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | string | `"true"` | no |
 | subnets | List of subnet IDs to use | list | n/a | yes |
-| tags | A map of tags to add to all resources. | map | `<map>` | no |
+| tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
 

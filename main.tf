@@ -18,7 +18,6 @@ resource "aws_db_subnet_group" "this" {
 
 resource "aws_rds_cluster" "this" {
   cluster_identifier              = "${var.name}"
-  availability_zones              = ["${var.availability_zones}"]
   engine                          = "${var.engine}"
   engine_version                  = "${var.engine_version}"
   kms_key_id                      = "${var.kms_key_id}"
@@ -27,6 +26,7 @@ resource "aws_rds_cluster" "this" {
   master_password                 = "${local.master_password}"
   final_snapshot_identifier       = "${var.final_snapshot_identifier_prefix}-${var.name}-${random_id.snapshot_identifier.hex}"
   skip_final_snapshot             = "${var.skip_final_snapshot}"
+  deletion_protection             = "${var.deletion_protection}"
   backup_retention_period         = "${var.backup_retention_period}"
   preferred_backup_window         = "${var.preferred_backup_window}"
   preferred_maintenance_window    = "${var.preferred_maintenance_window}"
@@ -130,11 +130,10 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "aurora-${var.name}"
-  description = "For Aurora cluster ${var.name}"
+  name_prefix = "${var.name}-"
   vpc_id      = "${var.vpc_id}"
 
-  tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
+  tags = "${var.tags}"
 }
 
 resource "aws_security_group_rule" "default_ingress" {
