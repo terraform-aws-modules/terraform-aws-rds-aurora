@@ -18,7 +18,6 @@ module "aurora" {
   engine                          = "aurora-postgresql"
   engine_version                  = "9.6.3"
   subnets                         = ["${module.vpc.database_subnets}"]
-  availability_zones              = ["${var.azs}"]
   vpc_id                          = "${module.vpc.vpc_id}"
   replica_count                   = 1
   instance_type                   = "db.r4.large"
