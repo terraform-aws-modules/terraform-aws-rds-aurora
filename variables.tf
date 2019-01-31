@@ -22,6 +22,11 @@ variable "allowed_security_groups" {
   default     = []
 }
 
+variable "allowed_security_groups_count" {
+  description = "The number of Security Groups being added, terraform doesn't let us use length() in a count field"
+  default     = 0
+}
+
 variable "vpc_id" {
   description = "VPC ID"
 }
