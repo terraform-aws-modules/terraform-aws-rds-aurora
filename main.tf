@@ -137,7 +137,7 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_security_group_rule" "default_ingress" {
-  count = "${length(var.allowed_security_groups)}"
+  count = "${var.allowed_security_groups_count}"
 
   type                     = "ingress"
   from_port                = "${aws_rds_cluster.this.port}"
