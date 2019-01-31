@@ -62,6 +62,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
+| allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
