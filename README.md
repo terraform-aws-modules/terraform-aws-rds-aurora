@@ -31,6 +31,7 @@ module "db" {
 
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
+  allowed_security_groups_count   = 1
   instance_type                   = "db.r4.large"
   storage_encrypted               = true
   apply_immediately               = true
