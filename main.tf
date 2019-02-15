@@ -37,7 +37,7 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted                   = "${var.storage_encrypted}"
   apply_immediately                   = "${var.apply_immediately}"
   db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
-  iam_database_authentication_enabled = "${local.iam_database_authentication_enabled}"
+  iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
 
   tags = "${var.tags}"
 }
