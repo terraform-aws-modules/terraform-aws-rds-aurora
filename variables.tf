@@ -202,5 +202,6 @@ variable "iam_database_authentication_enabled" {
 
 variable "enabled_cloudwatch_logs_exports" {
   description = "List of log types to export to cloudwatch"
-  type        = []
+  type        = "list"
+  default     = []
 }
