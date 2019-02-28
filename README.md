@@ -73,6 +73,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
+| enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |
 | engine\_version | Aurora database engine version. | string | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
@@ -103,7 +104,6 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
-|enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | n/a | no |
 
 ## Outputs
 
