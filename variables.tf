@@ -199,3 +199,8 @@ variable "iam_database_authentication_enabled" {
   default     = "false"
   description = "Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported."
 }
+
+variable "enabled_cloudwatch_logs_exports" {
+  description = "List of log types to export to cloudwatch"
+  type        = []
+}

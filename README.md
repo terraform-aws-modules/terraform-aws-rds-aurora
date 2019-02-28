@@ -40,6 +40,8 @@ module "db" {
   db_parameter_group_name         = "default"
   db_cluster_parameter_group_name = "default"
 
+  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+
   tags                            = {
     Environment = "dev"
     Terraform   = "true"
@@ -101,6 +103,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
+|enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | n/a | no |
 
 ## Outputs
 
