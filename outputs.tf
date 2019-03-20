@@ -4,6 +4,11 @@ output "this_rds_cluster_id" {
   value       = "${aws_rds_cluster.this.id}"
 }
 
+output "this_rds_cluster_resource_id" {
+  description = "The Resource ID of the cluster"
+  value       = "${aws_rds_cluster.this.cluster_resource_id}"
+}
+
 output "this_rds_cluster_endpoint" {
   description = "The cluster endpoint"
   value       = "${aws_rds_cluster.this.endpoint}"
