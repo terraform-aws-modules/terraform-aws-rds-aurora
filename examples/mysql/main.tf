@@ -79,3 +79,24 @@ module "vpc" {
     "10.0.9.0/25",
   ]
 }
+
+# IAM Policy for use with iam_database_authentication = true
+resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
+  name = "test-aurora-db-57-policy-iam-auth"
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": [
+        "arn:aws:rds-db:us-east-1:123456789012:dbuser:${module.aurora.this_rds_cluster_resource_id}/jane_doe"
+      ]
+    }
+  ]
+}
+POLICY
+}
