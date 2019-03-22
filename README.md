@@ -114,12 +114,12 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
 | this\_rds\_cluster\_id | The ID of the cluster |
-| this\_rds\_cluster\_resource\_id | The Resource ID of the cluster |
 | this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
 | this\_rds\_cluster\_master\_password | The master password |
 | this\_rds\_cluster\_master\_username | The master username |
 | this\_rds\_cluster\_port | The port |
 | this\_rds\_cluster\_reader\_endpoint | The cluster reader endpoint |
+| this\_rds\_cluster\_resource\_id | The Resource ID of the cluster |
 | this\_security\_group\_id | The security group ID of the cluster |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

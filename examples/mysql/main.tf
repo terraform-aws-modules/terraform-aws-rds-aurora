@@ -83,6 +83,7 @@ module "vpc" {
 # IAM Policy for use with iam_database_authentication = true
 resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
   name = "test-aurora-db-57-policy-iam-auth"
+
   policy = <<POLICY
 {
   "Version": "2012-10-17",
