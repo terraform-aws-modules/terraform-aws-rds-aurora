@@ -205,3 +205,15 @@ variable "enabled_cloudwatch_logs_exports" {
   type        = "list"
   default     = []
 }
+
+variable "global_cluster_identifier" {
+  description = "The global cluster identifier specified on aws_rds_global_cluster"
+  type        = "string"
+  default     = ""
+}
+
+variable "engine_mode" {
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  type        = "string"
+  default     = "provisioned"
+}
