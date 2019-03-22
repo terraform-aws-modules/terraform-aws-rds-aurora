@@ -141,39 +141,33 @@ variable "engine_version" {
 }
 
 variable "replica_scale_enabled" {
-  type        = "string"
-  default     = false
   description = "Whether to enable autoscaling for RDS Aurora (MySQL) read replicas"
+  default     = false
 }
 
 variable "replica_scale_max" {
-  type        = "string"
-  default     = "0"
   description = "Maximum number of replicas to allow scaling for"
+  default     = "0"
 }
 
 variable "replica_scale_min" {
-  type        = "string"
-  default     = "2"
   description = "Maximum number of replicas to allow scaling for"
+  default     = "2"
 }
 
 variable "replica_scale_cpu" {
-  type        = "string"
-  default     = "70"
   description = "CPU usage to trigger autoscaling at"
+  default     = "70"
 }
 
 variable "replica_scale_in_cooldown" {
-  type        = "string"
-  default     = "300"
   description = "Cooldown in seconds before allowing further scaling operations after a scale in"
+  default     = "300"
 }
 
 variable "replica_scale_out_cooldown" {
-  type        = "string"
-  default     = "300"
   description = "Cooldown in seconds before allowing further scaling operations after a scale out"
+  default     = "300"
 }
 
 variable "tags" {
@@ -183,21 +177,18 @@ variable "tags" {
 }
 
 variable "performance_insights_enabled" {
-  type        = "string"
-  default     = "false"
   description = "Specifies whether Performance Insights is enabled or not."
+  default     = false
 }
 
 variable "performance_insights_kms_key_id" {
-  type        = "string"
-  default     = ""
   description = "The ARN for the KMS key to encrypt Performance Insights data."
+  default     = ""
 }
 
 variable "iam_database_authentication_enabled" {
-  type        = "string"
-  default     = "false"
   description = "Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported."
+  default     = false
 }
 
 variable "enabled_cloudwatch_logs_exports" {
@@ -208,12 +199,10 @@ variable "enabled_cloudwatch_logs_exports" {
 
 variable "global_cluster_identifier" {
   description = "The global cluster identifier specified on aws_rds_global_cluster"
-  type        = "string"
   default     = ""
 }
 
 variable "engine_mode" {
   description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
-  type        = "string"
   default     = "provisioned"
 }

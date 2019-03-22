@@ -75,8 +75,10 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |
+| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | string | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | string | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
+| global\_cluster\_identifier | The global cluster identifier specified on aws_rds_global_cluster | string | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | string | `"false"` | no |
 | identifier\_prefix | Prefix for cluster and instance identifier | string | `""` | no |
 | instance\_type | Instance type to use | string | n/a | yes |
