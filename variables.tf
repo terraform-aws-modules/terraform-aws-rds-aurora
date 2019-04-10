@@ -1,3 +1,7 @@
+variable "create" {
+  description = "Controls if any resource should be created (it affects almost all resources)"
+  default     = true
+}
 variable "name" {
   description = "Name given resources"
 }
