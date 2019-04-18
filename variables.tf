@@ -7,11 +7,6 @@ variable "subnets" {
   type        = "list"
 }
 
-variable "identifier_prefix" {
-  description = "Prefix for cluster and instance identifier"
-  default     = ""
-}
-
 variable "replica_count" {
   description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
   default     = 1
