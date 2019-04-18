@@ -80,7 +80,6 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws_rds_global_cluster | string | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | string | `"false"` | no |
-| identifier\_prefix | Prefix for cluster and instance identifier | string | `""` | no |
 | instance\_type | Instance type to use | string | n/a | yes |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | string | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | string | `"0"` | no |
