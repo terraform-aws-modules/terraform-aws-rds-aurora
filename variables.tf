@@ -151,7 +151,7 @@ variable "replica_scale_max" {
 }
 
 variable "replica_scale_min" {
-  description = "Maximum number of replicas to allow scaling for"
+  description = "Minimum number of replicas to allow scaling for"
   default     = "2"
 }
 
