@@ -96,7 +96,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_enabled | Whether to enable autoscaling for RDS Aurora (MySQL) read replicas | string | `"false"` | no |
 | replica\_scale\_in\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale in | string | `"300"` | no |
 | replica\_scale\_max | Maximum number of replicas to allow scaling for | string | `"0"` | no |
-| replica\_scale\_min | Maximum number of replicas to allow scaling for | string | `"2"` | no |
+| replica\_scale\_min | Minimum number of replicas to allow scaling for | string | `"2"` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | string | `"300"` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | string | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
