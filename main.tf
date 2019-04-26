@@ -34,7 +34,7 @@ resource "aws_rds_cluster" "this" {
   preferred_maintenance_window        = "${var.preferred_maintenance_window}"
   port                                = "${local.port}"
   db_subnet_group_name                = "${aws_db_subnet_group.this.name}"
-  vpc_security_group_ids              = ["${aws_security_group.this.id}"]
+  vpc_security_group_ids              = "${var.vpc_security_groups}"
   snapshot_identifier                 = "${var.snapshot_identifier}"
   storage_encrypted                   = "${var.storage_encrypted}"
   apply_immediately                   = "${var.apply_immediately}"
@@ -59,7 +59,7 @@ resource "aws_rds_cluster_instance" "this" {
   db_parameter_group_name         = "${var.db_parameter_group_name}"
   preferred_maintenance_window    = "${var.preferred_maintenance_window}"
   apply_immediately               = "${var.apply_immediately}"
-  monitoring_role_arn             = "${join("", aws_iam_role.rds_enhanced_monitoring.*.arn)}"
+  monitoring_role_arn             = "${var.iam_role_enhanced_monitoring_arn}"
   monitoring_interval             = "${var.monitoring_interval}"
   auto_minor_version_upgrade      = "${var.auto_minor_version_upgrade}"
   promotion_tier                  = "${count.index + 1}"
@@ -75,31 +75,6 @@ resource "random_id" "snapshot_identifier" {
   }
 
   byte_length = 4
-}
-
-data "aws_iam_policy_document" "monitoring_rds_assume_role" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["monitoring.rds.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = "${var.monitoring_interval > 0 ? 1 : 0}"
-
-  name               = "rds-enhanced-monitoring-${var.name}"
-  assume_role_policy = "${data.aws_iam_policy_document.monitoring_rds_assume_role.json}"
-}
-
-resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = "${var.monitoring_interval > 0 ? 1 : 0}"
-
-  role       = "${aws_iam_role.rds_enhanced_monitoring.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
 resource "aws_appautoscaling_target" "read_replica_count" {
@@ -132,22 +107,4 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
   }
 
   depends_on = ["aws_appautoscaling_target.read_replica_count"]
-}
-
-resource "aws_security_group" "this" {
-  name_prefix = "${var.name}-"
-  vpc_id      = "${var.vpc_id}"
-
-  tags = "${var.tags}"
-}
-
-resource "aws_security_group_rule" "default_ingress" {
-  count = "${var.allowed_security_groups_count}"
-
-  type                     = "ingress"
-  from_port                = "${aws_rds_cluster.this.port}"
-  to_port                  = "${aws_rds_cluster.this.port}"
-  protocol                 = "tcp"
-  source_security_group_id = "${element(var.allowed_security_groups, count.index)}"
-  security_group_id        = "${aws_security_group.this.id}"
 }

@@ -12,14 +12,9 @@ variable "replica_count" {
   default     = 1
 }
 
-variable "allowed_security_groups" {
+variable "vpc_security_groups" {
   description = "A list of Security Group ID's to allow access to."
   default     = []
-}
-
-variable "allowed_security_groups_count" {
-  description = "The number of Security Groups being added, terraform doesn't let us use length() in a count field"
-  default     = 0
 }
 
 variable "vpc_id" {
@@ -94,6 +89,12 @@ variable "monitoring_interval" {
   description = "The interval (seconds) between points when Enhanced Monitoring metrics are collected"
   default     = 0
 }
+
+variable "iam_role_enhanced_monitoring_arn" {
+  description = "Enhanched monitoring IAM role ARN"
+  default = ""
+}
+
 
 variable "auto_minor_version_upgrade" {
   description = "Determines whether minor engine upgrades will be performed automatically in the maintenance window"
