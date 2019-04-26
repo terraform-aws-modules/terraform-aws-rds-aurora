@@ -45,9 +45,3 @@ output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
   value       = ["${aws_rds_cluster_instance.this.*.endpoint}"]
 }
-
-// aws_security_group
-output "this_security_group_id" {
-  description = "The security group ID of the cluster"
-  value       = "${aws_security_group.this.id}"
-}
