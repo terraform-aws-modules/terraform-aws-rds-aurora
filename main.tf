@@ -1,6 +1,7 @@
 locals {
   port            = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
   master_password = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  sg_count        = "${length(var.allowed_security_groups)}"
 }
 
 # Random string to use as master password unless one is specified
@@ -142,7 +143,7 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_security_group_rule" "default_ingress" {
-  count = "${var.allowed_security_groups_count}"
+  count = "${local.sg_count}"
 
   type                     = "ingress"
   from_port                = "${aws_rds_cluster.this.port}"
