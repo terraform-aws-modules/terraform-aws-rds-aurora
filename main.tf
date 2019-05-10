@@ -9,6 +9,7 @@ resource "random_id" "master_password" {
 }
 
 resource "aws_db_subnet_group" "this" {
+  count       = "${var.db_subnet_group == "" ? 1: 0}"
   name        = "${var.name}"
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = ["${var.subnets}"]
@@ -33,7 +34,7 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window             = "${var.preferred_backup_window}"
   preferred_maintenance_window        = "${var.preferred_maintenance_window}"
   port                                = "${local.port}"
-  db_subnet_group_name                = "${aws_db_subnet_group.this.name}"
+  db_subnet_group_name                = "${var.db_subnet_group == "" ? aws_db_subnet_group.this.name : var.db_subnet_group }"
   vpc_security_group_ids              = ["${aws_security_group.this.id}"]
   snapshot_identifier                 = "${var.snapshot_identifier}"
   storage_encrypted                   = "${var.storage_encrypted}"
@@ -144,6 +145,9 @@ resource "aws_security_group" "this" {
     from_port       = "${local.port}"
     to_port         = "${local.port}"
     protocol        = "tcp"
+    cidr_blocks     = "${var.allowed_cidr_blocks}"
+    ipv6_cidr_blocks= "${var.allowed_ipv6_cidr_blocks}"
     security_groups = "${var.allowed_security_groups}"
+    self            = "${var.allow_self}"
   }
 }

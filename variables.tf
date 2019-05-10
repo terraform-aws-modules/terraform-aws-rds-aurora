@@ -5,6 +5,7 @@ variable "name" {
 variable "subnets" {
   description = "List of subnet IDs to use"
   type        = "list"
+  default     = []
 }
 
 variable "replica_count" {
@@ -12,9 +13,26 @@ variable "replica_count" {
   default     = 1
 }
 
+variable "allowed_cidr_blocks" {
+  description = "A list of CIDR Blocks to allow access to."
+  default     = []
+}
+
+
+variable "allowed_ipv6_cidr_blocks" {
+  description = "A list of IPv6 CIDR Blocks to allow access to."
+  default     = []
+}
+
 variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to."
   default     = []
+}
+
+
+variable "allow_self" {
+  description = "Allow created security group to access itself"
+  default     = false
 }
 
 variable "vpc_id" {
@@ -195,4 +213,9 @@ variable "global_cluster_identifier" {
 variable "engine_mode" {
   description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
   default     = "provisioned"
+}
+
+variable "db_subnet_group" {
+  description = "The name of an existing DB subnet group to use"
+  default     = ""
 }

@@ -63,7 +63,10 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| allowed\_cidr\_blocks | A list of CIDR Blocks to allow access to. | list | `[]` | no |
+| allowed\_ipv6\_cidr\_blocks | A list of IPv6 CIDR Blocks to allow access to. | list | `[]` | no |
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
+| allow\_self | Determines wether or not to allow created security group to access itself. | string | `"false"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
