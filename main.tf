@@ -34,7 +34,7 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window             = "${var.preferred_backup_window}"
   preferred_maintenance_window        = "${var.preferred_maintenance_window}"
   port                                = "${local.port}"
-  db_subnet_group_name                = "${var.db_subnet_group == "" ? aws_db_subnet_group.this.name : var.db_subnet_group }"
+  db_subnet_group_name                = "${var.db_subnet_group == "" ? var.name : var.db_subnet_group }"
   vpc_security_group_ids              = ["${aws_security_group.this.id}"]
   snapshot_identifier                 = "${var.snapshot_identifier}"
   storage_encrypted                   = "${var.storage_encrypted}"
@@ -56,7 +56,7 @@ resource "aws_rds_cluster_instance" "this" {
   engine_version                  = "${var.engine_version}"
   instance_class                  = "${var.instance_type}"
   publicly_accessible             = "${var.publicly_accessible}"
-  db_subnet_group_name            = "${aws_db_subnet_group.this.name}"
+  db_subnet_group_name            = "${var.db_subnet_group == "" ? var.name : var.db_subnet_group }"
   db_parameter_group_name         = "${var.db_parameter_group_name}"
   preferred_maintenance_window    = "${var.preferred_maintenance_window}"
   apply_immediately               = "${var.apply_immediately}"
