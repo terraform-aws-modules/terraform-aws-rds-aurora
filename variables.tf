@@ -4,7 +4,7 @@ variable "name" {
 
 variable "subnets" {
   description = "List of subnet IDs to use"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "replica_count" {
@@ -167,7 +167,7 @@ variable "replica_scale_out_cooldown" {
 
 variable "tags" {
   description = "A map of tags to add to all resources."
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
@@ -188,7 +188,7 @@ variable "iam_database_authentication_enabled" {
 
 variable "enabled_cloudwatch_logs_exports" {
   description = "List of log types to export to cloudwatch"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
@@ -201,3 +201,4 @@ variable "engine_mode" {
   description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
   default     = "provisioned"
 }
+
