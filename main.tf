@@ -141,13 +141,8 @@ resource "aws_security_group" "this" {
   tags = "${var.tags}"
 }
 
-locals {
-  allowed_security_groups_count = "${length(var.allowed_security_groups)}"
-  allowed_cidr_blocks_count     = "${length(var.allowed_cidr_blocks)}"
-}
-
 resource "aws_security_group_rule" "default_ingress" {
-  count = "${local.allowed_security_groups_count}"
+  count = "${var.allowed_security_groups_count}"
 
   type                     = "ingress"
   from_port                = "${aws_rds_cluster.this.port}"
@@ -158,7 +153,7 @@ resource "aws_security_group_rule" "default_ingress" {
 }
 
 resource "aws_security_group_rule" "cidr_ingress" {
-  count = "${local.allowed_cidr_blocks_count}"
+  count = "${var.allowed_cidr_blocks_count}"
 
   type              = "ingress"
   from_port         = "${aws_rds_cluster.this.port}"
