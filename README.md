@@ -31,9 +31,9 @@ module "db" {
 
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
-  alllowed_security_groups_count  = 1
+  allowed_security_groups_count   = 1
   allowed_cidr_blocks             = ["10.0.0.0/8"]
-  alllowed_cidr_blocks_count      = 1
+  allowed_cidr_blocks_count       = 1
   instance_type                   = "db.r4.large"
   storage_encrypted               = true
   apply_immediately               = true
