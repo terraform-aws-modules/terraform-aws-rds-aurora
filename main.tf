@@ -156,4 +156,3 @@ resource "aws_security_group_rule" "default_ingress" {
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = aws_security_group.this.id
 }
-

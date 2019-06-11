@@ -10,6 +10,12 @@ These types of resources are supported:
 * [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
 * [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
 
+## Terraform versions
+
+Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+
+Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+
 ## Available features
 
 - Autoscaling of read-replicas (based on CPU utilization)
@@ -19,12 +25,13 @@ These types of resources are supported:
 
 ```hcl
 module "db" {
-  source                          = "terraform-aws-modules/rds-aurora/aws"
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 2.0"
 
   name                            = "test-aurora-db-postgres96"
 
   engine                          = "aurora-postgresql"
-  engine_version                  = "9.6.3"
+  engine_version                  = "9.6.9"
 
   vpc_id                          = "vpc-12345678"
   subnets                         = ["subnet-12345678", "subnet-87654321"]
