@@ -19,6 +19,8 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   global_cluster_identifier           = "${var.global_cluster_identifier}"
   cluster_identifier                  = "${var.name}"
+  replication_source_identifier       = "${var.replication_source_identifier}"
+  source_region                       = "${var.source_region}"
   engine                              = "${var.engine}"
   engine_mode                         = "${var.engine_mode}"
   engine_version                      = "${var.engine_version}"

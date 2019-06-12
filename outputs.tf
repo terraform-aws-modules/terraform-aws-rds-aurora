@@ -4,6 +4,11 @@ output "this_rds_cluster_id" {
   value       = "${aws_rds_cluster.this.id}"
 }
 
+output "this_rds_cluster_arn" {
+  description = "Amazon Resource Name (ARN) of cluster"
+  value       = "${aws_rds_cluster.this.arn}"
+}
+
 output "this_rds_cluster_resource_id" {
   description = "The Resource ID of the cluster"
   value       = "${aws_rds_cluster.this.cluster_resource_id}"
@@ -50,4 +55,9 @@ output "this_rds_cluster_instance_endpoints" {
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = "${aws_security_group.this.id}"
+}
+
+output "this_rds_cluster_replication_source_identifier" {
+  description = "ARN of the source DB cluster or DB instance if this DB cluster is created as a Read Replica."
+  value       = "${aws_rds_cluster.this.replication_source_identifier}"
 }
