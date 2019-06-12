@@ -201,3 +201,9 @@ variable "engine_mode" {
   description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
   default     = "provisioned"
 }
+
+variable "vpc_security_group_ids" {
+  description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
+  type        = "list"
+  default     = []
+}
