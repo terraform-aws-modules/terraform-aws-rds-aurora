@@ -105,6 +105,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
+| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `<list>` | no |
 
 ## Outputs
 
