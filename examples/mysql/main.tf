@@ -56,10 +56,11 @@ resource "aws_security_group_rule" "allow_access" {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-  name   = "example"
-  cidr   = "10.0.0.0/16"
-  azs    = ["${var.azs}"]
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> v1.0"
+  name    = "example"
+  cidr    = "10.0.0.0/16"
+  azs     = ["${var.azs}"]
 
   private_subnets = [
     "10.0.1.0/24",
