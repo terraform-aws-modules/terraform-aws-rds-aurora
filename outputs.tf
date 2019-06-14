@@ -1,4 +1,9 @@
 // aws_rds_cluster
+output "this_rds_cluster_arn" {
+  description = "The ID of the cluster"
+  value       = aws_rds_cluster.this.arn
+}
+
 output "this_rds_cluster_id" {
   description = "The ID of the cluster"
   value       = aws_rds_cluster.this.id
