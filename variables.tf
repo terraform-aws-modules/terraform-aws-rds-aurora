@@ -210,7 +210,8 @@ variable "replication_source_identifier" {
 variable "source_region" {
   description = "The source region for an encrypted replica DB cluster."
   default     = ""
-  
+}
+
 variable "vpc_security_group_ids" {
   description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
   type        = "list"
