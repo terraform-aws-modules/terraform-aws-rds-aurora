@@ -26,6 +26,9 @@ module "aurora" {
   db_parameter_group_name         = "${aws_db_parameter_group.aurora_db_57_parameter_group.id}"
   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.aurora_57_cluster_parameter_group.id}"
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+
+  allowed_cidr_blocks_count = 1
+  allowed_cidr_blocks       = ["10.20.0.0/20"]
 }
 
 resource "aws_db_parameter_group" "aurora_db_57_parameter_group" {
