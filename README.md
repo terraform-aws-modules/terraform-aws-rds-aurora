@@ -66,10 +66,10 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | list | `[]` | no |
+| allowed\_cidr\_blocks\_count | The number of CIDR blocks being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
 | allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
-| allowed\_cidr\_blocks | A list of CIDR blocks to allow access to | list | `[]` | no |
-| allowed\_cidr\_blocks\_count | The number of CIDR blocks being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
@@ -109,7 +109,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
-| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `<list>` | no |
+| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `[]` | no |
 
 ## Outputs
 
