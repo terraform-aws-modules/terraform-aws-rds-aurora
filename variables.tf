@@ -14,7 +14,8 @@ variable "replica_count" {
 
 variable "vpc_security_groups" {
   description = "A list of Security Group ID's to allow access to."
-  default     = ""
+  default     = []
+  type        = "list"
 }
 
 variable "vpc_id" {
