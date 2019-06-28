@@ -58,7 +58,7 @@ module "db" {
 
 ## Examples
 
-- [PostgreSQL](examples/postgres): A simple example with VPC and PostgreSQL cluster.
+- [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
 
