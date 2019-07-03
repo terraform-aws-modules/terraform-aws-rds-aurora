@@ -156,3 +156,14 @@ resource "aws_security_group_rule" "default_ingress" {
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = aws_security_group.this.id
 }
+
+resource "aws_security_group_rule" "default_ingress_cidrs" {
+  type                     = "ingress"
+  from_port                = aws_rds_cluster.this.port
+  to_port                  = aws_rds_cluster.this.port
+  protocol                 = "tcp"
+  cidr_blocks              = var.allowed_cidrs
+  security_group_id        = aws_security_group.this.id
+  count                    = (length(compact(var.allowed_cidrs)) == 0 ? 0 : 1)
+}
+

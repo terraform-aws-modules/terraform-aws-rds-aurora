@@ -17,6 +17,10 @@ variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to."
   default     = []
 }
+variable "allowed_cidrs" {
+  description = "A list of Security Group CIDRs to allow access to."
+  default     = []
+}
 
 variable "allowed_security_groups_count" {
   description = "The number of Security Groups being added, terraform doesn't let us use length() in a count field"
@@ -242,3 +246,5 @@ variable "vpc_security_group_ids" {
   type        = list
   default     = []
 }
+
+
