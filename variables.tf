@@ -19,6 +19,7 @@ variable "allowed_security_groups" {
 }
 variable "allowed_cidrs" {
   description = "A list of Security Group CIDRs to allow access to."
+  type        = list
   default     = []
 }
 
