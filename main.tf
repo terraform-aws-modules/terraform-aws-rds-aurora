@@ -1,6 +1,7 @@
 locals {
-  port            = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
-  master_password = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  port             = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
+  master_password  = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  backtrack_window = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
 }
 
 # Random string to use as master password unless one is specified
@@ -40,6 +41,7 @@ resource "aws_rds_cluster" "this" {
   apply_immediately                   = "${var.apply_immediately}"
   db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
+  backtrack_window                    = "${local.backtrack_window}"
 
   enabled_cloudwatch_logs_exports = "${var.enabled_cloudwatch_logs_exports}"
 
