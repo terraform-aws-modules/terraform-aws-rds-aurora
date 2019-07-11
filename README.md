@@ -10,6 +10,12 @@ These types of resources are supported:
 * [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
 * [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
 
+## Terraform versions
+
+Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+
+Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+
 ## Available features
 
 - Autoscaling of read-replicas (based on CPU utilization)
@@ -19,12 +25,13 @@ These types of resources are supported:
 
 ```hcl
 module "db" {
-  source                          = "terraform-aws-modules/rds-aurora/aws"
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 2.0"
 
   name                            = "test-aurora-db-postgres96"
 
   engine                          = "aurora-postgresql"
-  engine_version                  = "9.6.3"
+  engine_version                  = "9.6.9"
 
   vpc_id                          = "vpc-12345678"
   subnets                         = ["subnet-12345678", "subnet-87654321"]
@@ -51,7 +58,7 @@ module "db" {
 
 ## Examples
 
-- [PostgreSQL](examples/postgres): A simple example with VPC and PostgreSQL cluster.
+- [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
 
@@ -75,10 +82,11 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |
+| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | string | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | string | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
+| global\_cluster\_identifier | The global cluster identifier specified on aws_rds_global_cluster | string | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | string | `"false"` | no |
-| identifier\_prefix | Prefix for cluster and instance identifier | string | `""` | no |
 | instance\_type | Instance type to use | string | n/a | yes |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | string | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | string | `"0"` | no |
@@ -95,7 +103,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_enabled | Whether to enable autoscaling for RDS Aurora (MySQL) read replicas | string | `"false"` | no |
 | replica\_scale\_in\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale in | string | `"300"` | no |
 | replica\_scale\_max | Maximum number of replicas to allow scaling for | string | `"0"` | no |
-| replica\_scale\_min | Maximum number of replicas to allow scaling for | string | `"2"` | no |
+| replica\_scale\_min | Minimum number of replicas to allow scaling for | string | `"2"` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | string | `"300"` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | string | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
@@ -104,6 +112,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
+| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `[]` | no |
 
 ## Outputs
 
@@ -111,12 +120,14 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 |------|-------------|
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
+| this\_rds\_cluster\_arn | The ARN of the cluster |
 | this\_rds\_cluster\_id | The ID of the cluster |
 | this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
 | this\_rds\_cluster\_master\_password | The master password |
 | this\_rds\_cluster\_master\_username | The master username |
 | this\_rds\_cluster\_port | The port |
 | this\_rds\_cluster\_reader\_endpoint | The cluster reader endpoint |
+| this\_rds\_cluster\_resource\_id | The Resource ID of the cluster |
 | this\_security\_group\_id | The security group ID of the cluster |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
