@@ -242,3 +242,9 @@ variable "vpc_security_group_ids" {
   type        = list
   default     = []
 }
+
+variable "backtrack_windows" {
+  description = "The target backtrack window, in seconds"
+  type        = string
+  default     = ""
+}
