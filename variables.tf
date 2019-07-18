@@ -218,3 +218,9 @@ variable "vpc_security_group_ids" {
   type        = "list"
   default     = []
 }
+
+variable "copy_tags_to_snapshot" {
+  type        = "string"
+  default     = "true"
+  description = "Whether to copy the tag to snapshot."
+}
