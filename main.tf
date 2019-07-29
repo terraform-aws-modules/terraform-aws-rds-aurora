@@ -11,7 +11,7 @@ resource "random_id" "master_password" {
 resource "aws_db_subnet_group" "this" {
   name        = "${var.name}"
   description = "For Aurora cluster ${var.name}"
-  subnet_ids  = ["${var.subnets}"]
+  subnet_ids  = "${var.subnets}"
 
   tags = "${merge(var.tags, map("Name", "aurora-${var.name}"))}"
 }
