@@ -39,7 +39,8 @@ module "db" {
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
   allowed_security_groups_count   = 1
-  instance_type                   = "db.r4.large"
+  instance_type_master            = "db.r4.large"
+  instance_type_replica	          = "db.t2.large"
   storage_encrypted               = true
   apply_immediately               = true
   monitoring_interval             = 10
@@ -87,7 +88,8 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | string | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws_rds_global_cluster | string | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | string | `"false"` | no |
-| instance\_type | Instance type to use | string | n/a | yes |
+| instance\_type_master | Instance type to use at master | string | n/a | yes |
+| instance\_type_replica | Instance type to use at replica, if not set defaults to instance_type_master | string | n/a | no |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | string | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | string | `"0"` | no |
 | name | Name given resources | string | n/a | yes |
