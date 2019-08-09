@@ -1,7 +1,7 @@
 locals {
   port            = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password = var.password == "" ? random_id.master_password.b64 : var.password
-  this_sg = var.allowed_security_groups_count > 0 ? concat([aws_security_group.this.id], var.vpc_security_group_ids) : var.vpc_security_group_ids
+  this_sg = var.allowed_security_groups_count > 0 ? concat([aws_security_group.this[0].id], var.vpc_security_group_ids) : var.vpc_security_group_ids
 }
 
 # Random string to use as master password unless one is specified
@@ -156,5 +156,5 @@ resource "aws_security_group_rule" "default_ingress" {
   to_port                  = aws_rds_cluster.this.port
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
-  security_group_id        = aws_security_group.this.id
+  security_group_id        = aws_security_group.this[0].id
 }

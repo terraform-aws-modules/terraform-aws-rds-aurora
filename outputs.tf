@@ -54,6 +54,6 @@ output "this_rds_cluster_instance_endpoints" {
 // aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
-  value       = aws_security_group.this.id
+  value       = aws_security_group.this[0].id
 }
 
