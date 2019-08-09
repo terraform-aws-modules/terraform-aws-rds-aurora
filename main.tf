@@ -1,6 +1,7 @@
 locals {
   port            = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password = var.password == "" ? random_id.master_password.b64 : var.password
+  this_sg = var.allowed_security_groups_count > 0 ? concat([aws_security_group.this.id], var.vpc_security_group_ids) : var.vpc_security_group_ids
 }
 
 # Random string to use as master password unless one is specified
@@ -39,7 +40,7 @@ resource "aws_rds_cluster" "this" {
   preferred_maintenance_window        = var.preferred_maintenance_window
   port                                = local.port
   db_subnet_group_name                = aws_db_subnet_group.this.name
-  vpc_security_group_ids              = concat([aws_security_group.this.id], var.vpc_security_group_ids)
+  vpc_security_group_ids              = local.this_sg
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
@@ -140,6 +141,7 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
+  count = var.allowed_security_groups_count > 0 ? 1 : 0 
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
 
