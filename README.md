@@ -40,7 +40,7 @@ module "db" {
   allowed_security_groups         = ["sg-12345678"]
   allowed_security_groups_count   = 1
   instance_type_master            = "db.r4.large"
-  instance_type_replica	          = "db.t2.large"
+  instance_type_replica           = "db.t2.large"
   storage_encrypted               = true
   apply_immediately               = true
   monitoring_interval             = 10
@@ -136,6 +136,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 ## Authors
 
+This is a fork from AWS Module https://github.com/terraform-aws-modules/terraform-aws-rds-aurora
 Currently maintained by [Anton Babenko](https://github.com/antonbabenko) and [these awesome contributors](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/graphs/contributors).
 
 ## License

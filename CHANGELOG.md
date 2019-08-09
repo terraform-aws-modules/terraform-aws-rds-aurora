@@ -167,22 +167,23 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.2.0...HEAD
-[v2.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.15.0...v2.2.0
-[v1.15.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.1.0...v1.15.0
-[v2.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.14.0...v2.1.0
-[v1.14.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.0.0...v1.14.0
-[v2.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.13.0...v2.0.0
-[v1.13.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.12.0...v1.13.0
-[v1.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.11.0...v1.12.0
-[v1.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.10.0...v1.11.0
-[v1.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.9.0...v1.10.0
-[v1.9.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.8.0...v1.9.0
-[v1.8.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.7.0...v1.8.0
-[v1.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.6.0...v1.7.0
-[v1.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.5.0...v1.6.0
-[v1.5.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.4.0...v1.5.0
-[v1.4.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.3.0...v1.4.0
-[v1.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.1.0...v1.3.0
-[v1.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.0.0...v1.1.0
-[v1.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v0.0.1...v1.0.0
+[Unreleased]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v2.2.1...HEAD
+[v2.2.1]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v2.2.0...v2.2.1
+[v2.2.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.15.0...v2.2.0
+[v1.15.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v2.1.0...v1.15.0
+[v2.1.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.14.0...v2.1.0
+[v1.14.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v2.0.0...v1.14.0
+[v2.0.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.13.0...v2.0.0
+[v1.13.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.12.0...v1.13.0
+[v1.12.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.11.0...v1.12.0
+[v1.11.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.10.0...v1.11.0
+[v1.10.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.9.0...v1.10.0
+[v1.9.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.8.0...v1.9.0
+[v1.8.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.7.0...v1.8.0
+[v1.7.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.6.0...v1.7.0
+[v1.6.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.5.0...v1.6.0
+[v1.5.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.4.0...v1.5.0
+[v1.4.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.3.0...v1.4.0
+[v1.3.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.1.0...v1.3.0
+[v1.1.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v1.0.0...v1.1.0
+[v1.0.0]: https://github.com/lfventura/terraform-aws-rds-aurora/compare/v0.0.1...v1.0.0

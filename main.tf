@@ -52,7 +52,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 locals {
-  instance_type_replica = var.instance_type_replica != "unset" ? var.instance_type_replica : var_instance_type_master
+  instance_type_replica = var.instance_type_replica != "unset" ? var.instance_type_replica : var.instance_type_master
 }
 
 resource "aws_rds_cluster_instance" "this" {
@@ -62,7 +62,7 @@ resource "aws_rds_cluster_instance" "this" {
   cluster_identifier              = aws_rds_cluster.this.id
   engine                          = var.engine
   engine_version                  = var.engine_version
-  instance_class                  = count.index > 1 ? locals.instance_type_replica : var.instance_type_master
+  instance_class                  = count.index > 1 ? local.instance_type_replica : var.instance_type_master
   publicly_accessible             = var.publicly_accessible
   db_subnet_group_name            = aws_db_subnet_group.this.name
   db_parameter_group_name         = var.db_parameter_group_name
