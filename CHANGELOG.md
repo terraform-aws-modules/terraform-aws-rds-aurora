@@ -3,6 +3,11 @@
 
 
 
+<a name="v2.2.1"></a>
+## [v2.2.1] - 2019-08-09
+
+- Support for different instance types for master and replica
+
 <a name="v2.2.0"></a>
 ## [v2.2.0] - 2019-06-24
 
