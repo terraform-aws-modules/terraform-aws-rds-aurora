@@ -24,7 +24,7 @@ module "aurora" {
   subnets                         = data.aws_subnet_ids.all.ids
   vpc_id                          = data.aws_vpc.default.id
   replica_count                   = 1
-  instance_type_master            = "db.r4.large"
+  instance_type                   = "db.r4.large"
   apply_immediately               = true
   skip_final_snapshot             = true
   db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id

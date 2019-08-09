@@ -34,8 +34,8 @@ variable "instance_type_replica" {
   default     = "unset"
 }
 
-variable "instance_type_master" {
-  description = "Instance type to use at master instance"
+variable "instance_type" {
+  description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
   type        = string
 }
 
