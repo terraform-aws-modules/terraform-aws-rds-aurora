@@ -35,6 +35,7 @@ resource "aws_rds_cluster" "this" {
   port                                = "${local.port}"
   db_subnet_group_name                = "${aws_db_subnet_group.this.name}"
   vpc_security_group_ids              = ["${concat(list(aws_security_group.this.id), var.vpc_security_group_ids)}"]
+  scaling_configuration               = "${var.scaling_configuration}"
   snapshot_identifier                 = "${var.snapshot_identifier}"
   storage_encrypted                   = "${var.storage_encrypted}"
   apply_immediately                   = "${var.apply_immediately}"
