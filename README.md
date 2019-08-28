@@ -79,6 +79,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
+| db\_subnet\_group\_name | The existing subnet group name to use | string | `""` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | string | `"false"` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | string | `"aurora"` | no |

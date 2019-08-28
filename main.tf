@@ -1,6 +1,7 @@
 locals {
-  port            = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
-  master_password = var.password == "" ? random_id.master_password.b64 : var.password
+  port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
+  master_password      = var.password == "" ? random_id.master_password.b64 : var.password
+  db_subnet_group_name = var.db_subnet_group_name == "" ? aws_db_subnet_group.this[0].name : var.db_subnet_group_name
 }
 
 # Random string to use as master password unless one is specified
@@ -9,6 +10,8 @@ resource "random_id" "master_password" {
 }
 
 resource "aws_db_subnet_group" "this" {
+  count = var.db_subnet_group_name == "" ? 1 : 0
+
   name        = var.name
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
@@ -38,7 +41,7 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window             = var.preferred_backup_window
   preferred_maintenance_window        = var.preferred_maintenance_window
   port                                = local.port
-  db_subnet_group_name                = aws_db_subnet_group.this.name
+  db_subnet_group_name                = local.db_subnet_group_name
   vpc_security_group_ids              = concat([aws_security_group.this.id], var.vpc_security_group_ids)
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
@@ -60,7 +63,7 @@ resource "aws_rds_cluster_instance" "this" {
   engine_version                  = var.engine_version
   instance_class                  = var.instance_type
   publicly_accessible             = var.publicly_accessible
-  db_subnet_group_name            = aws_db_subnet_group.this.name
+  db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
   apply_immediately               = var.apply_immediately
