@@ -242,3 +242,9 @@ variable "vpc_security_group_ids" {
   type        = list
   default     = []
 }
+
+variable "db_subnet_group_name" {
+  description = "The existing subnet group name to use"
+  type        = string
+  default     = ""
+}
