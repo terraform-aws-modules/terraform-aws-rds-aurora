@@ -6,6 +6,7 @@ variable "name" {
 variable "subnets" {
   description = "List of subnet IDs to use"
   type        = list(string)
+  default     = []
 }
 
 variable "replica_count" {
