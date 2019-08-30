@@ -75,6 +75,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | bool | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | bool | `"true"` | no |
+| backtrack\_window | How far back in time you might want to rewind (in seconds) | number | `"0"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | number | `"7"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
