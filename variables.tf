@@ -249,3 +249,9 @@ variable "db_subnet_group_name" {
   type        = string
   default     = ""
 }
+
+variable "backtrack_window" {
+  description = "The target backtrack window in seconds"
+  type        = number
+  default     = 0
+}
