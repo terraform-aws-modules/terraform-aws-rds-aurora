@@ -184,6 +184,12 @@ variable "replica_scale_cpu" {
   default     = 70
 }
 
+variable "replica_scale_connections" {
+  description = "Average number of connections to trigger autoscaling at. Default value is 70% of db.r4.large's default max_connections"
+  type        = number
+  default     = 700
+}
+
 variable "replica_scale_in_cooldown" {
   description = "Cooldown in seconds before allowing further scaling operations after a scale in"
   type        = number
@@ -248,4 +254,9 @@ variable "db_subnet_group_name" {
   description = "The existing subnet group name to use"
   type        = string
   default     = ""
+}
+
+variable "predefined_metric_type" {
+  description = "The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections."
+  default     = "RDSReaderAverageCPUUtilization"
 }
