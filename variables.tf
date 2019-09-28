@@ -218,3 +218,8 @@ variable "vpc_security_group_ids" {
   type        = "list"
   default     = []
 }
+
+variable "copy_tags_to_snapshot" {
+  description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
+  default     = false
+}
