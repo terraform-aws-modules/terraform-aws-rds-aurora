@@ -223,3 +223,8 @@ variable "backtrack_window" {
   description = "The target backtrack window, in seconds"
   default     = ""
 }
+
+variable "copy_tags_to_snapshot" {
+  description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
+  default     = false
+}

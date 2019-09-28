@@ -67,6 +67,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = "${count.index + 1}"
   performance_insights_enabled    = "${var.performance_insights_enabled}"
   performance_insights_kms_key_id = "${var.performance_insights_kms_key_id}"
+  copy_tags_to_snapshot           = "${var.copy_tags_to_snapshot}"
 
   tags = "${var.tags}"
 }
