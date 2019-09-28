@@ -219,6 +219,11 @@ variable "vpc_security_group_ids" {
   default     = []
 }
 
+variable "backtrack_window" {
+  description = "The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours)"
+  default     = ""
+}
+
 variable "copy_tags_to_snapshot" {
   description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
   default     = false
