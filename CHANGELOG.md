@@ -3,9 +3,16 @@
 
 
 
+<a name="v1.17.0"></a>
+## [v1.17.0] - 2019-09-28
+
+- Added backtrack_windows for Aurora ([#57](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/57))
+
+
 <a name="v1.16.0"></a>
 ## [v1.16.0] - 2019-09-28
 
+- Updated CHANGELOG
 - Added changelog
 - Added copy_tags_to_snapshot (closes [#60](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/60))
 - Allow the addition of IP-based ingress rules ([#51](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/51))
@@ -181,7 +188,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.16.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.17.0...HEAD
+[v1.17.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.16.0...v1.17.0
 [v1.16.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.3.0...v1.16.0
 [v2.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.2.0...v2.3.0
 [v2.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.15.0...v2.2.0
