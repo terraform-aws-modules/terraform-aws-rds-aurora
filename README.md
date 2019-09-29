@@ -72,7 +72,9 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
+| backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | string | `"0"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
+| copy\_tags\_to\_snapshot | Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance. | string | `"false"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
@@ -102,8 +104,11 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_max | Maximum number of replicas to allow scaling for | string | `"0"` | no |
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | string | `"2"` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | string | `"300"` | no |
-| scaling_configuration | List of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless` | list | `<list>` | no || skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | string | `"false"` | no |
+| scaling_configuration | List of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless` | list | `<list>` | no |
+| replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | string | `""` | no |
+| skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | string | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
+| source\_region | The source region for an encrypted replica DB cluster. | string | `""` | no |
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | string | `"true"` | no |
 | subnets | List of subnet IDs to use | list | n/a | yes |
 | tags | A map of tags to add to all resources. | map | `{}` | no |
@@ -115,6 +120,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description |
 |------|-------------|
+| this\_rds\_cluster\_arn | Amazon Resource Name (ARN) of cluster |
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
 | this\_rds\_cluster\_id | The ID of the cluster |

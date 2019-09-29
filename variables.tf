@@ -219,8 +219,28 @@ variable "engine_mode" {
   default     = "provisioned"
 }
 
+variable "replication_source_identifier" {
+  description = "ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica."
+  default     = ""
+}
+
+variable "source_region" {
+  description = "The source region for an encrypted replica DB cluster."
+  default     = ""
+}
+
 variable "vpc_security_group_ids" {
   description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
   type        = "list"
   default     = []
+}
+
+variable "backtrack_window" {
+  description = "The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours)"
+  default     = "0"
+}
+
+variable "copy_tags_to_snapshot" {
+  description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
+  default     = false
 }

@@ -1,6 +1,7 @@
 locals {
-  port            = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
-  master_password = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  port             = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
+  master_password  = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  backtrack_window = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
 }
 
 # Random string to use as master password unless one is specified
@@ -19,6 +20,8 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   global_cluster_identifier           = "${var.global_cluster_identifier}"
   cluster_identifier                  = "${var.name}"
+  replication_source_identifier       = "${var.replication_source_identifier}"
+  source_region                       = "${var.source_region}"
   engine                              = "${var.engine}"
   engine_mode                         = "${var.engine_mode}"
   engine_version                      = "${var.engine_version}"
@@ -41,6 +44,7 @@ resource "aws_rds_cluster" "this" {
   apply_immediately                   = "${var.apply_immediately}"
   db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
+  backtrack_window                    = "${local.backtrack_window}"
 
   enabled_cloudwatch_logs_exports = "${var.enabled_cloudwatch_logs_exports}"
 
@@ -66,6 +70,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = "${count.index + 1}"
   performance_insights_enabled    = "${var.performance_insights_enabled}"
   performance_insights_kms_key_id = "${var.performance_insights_kms_key_id}"
+  copy_tags_to_snapshot           = "${var.copy_tags_to_snapshot}"
 
   tags = "${var.tags}"
 }
@@ -99,7 +104,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
   count = "${var.monitoring_interval > 0 ? 1 : 0}"
 
-  role       = "${aws_iam_role.rds_enhanced_monitoring.name}"
+  role       = "${aws_iam_role.rds_enhanced_monitoring.0.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
