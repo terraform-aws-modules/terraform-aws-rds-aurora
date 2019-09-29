@@ -121,6 +121,12 @@ variable "db_cluster_parameter_group_name" {
   default     = "default.aurora5.6"
 }
 
+variable "scaling_configuration" {
+  description = "List of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless`"
+  default     = []
+  type        = "list"
+}
+
 variable "snapshot_identifier" {
   description = "DB snapshot to create this database from"
   default     = ""

@@ -104,6 +104,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_max | Maximum number of replicas to allow scaling for | string | `"0"` | no |
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | string | `"2"` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | string | `"300"` | no |
+| scaling_configuration | List of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless` | list | `<list>` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | string | `""` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | string | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
