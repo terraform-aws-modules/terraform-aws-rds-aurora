@@ -45,6 +45,14 @@ output "this_rds_cluster_master_username" {
   value       = "${aws_rds_cluster.this.master_username}"
 }
 
+// Commented out because of this issue - https://github.com/terraform-providers/terraform-provider-aws/issues/10290
+// Error: Error running plan: 1 error occurred:
+//	* Resource 'aws_rds_cluster.this' does not have attribute 'replication_source_identifier' for variable 'aws_rds_cluster.this.replication_source_identifier'
+//output "this_rds_cluster_replication_source_identifier" {
+//  description = "ARN of the source DB cluster or DB instance if this DB cluster is created as a Read Replica."
+//  value       = "${aws_rds_cluster.this.replication_source_identifier}"
+//}
+
 // aws_rds_cluster_instance
 output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
@@ -55,9 +63,4 @@ output "this_rds_cluster_instance_endpoints" {
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = "${aws_security_group.this.id}"
-}
-
-output "this_rds_cluster_replication_source_identifier" {
-  description = "ARN of the source DB cluster or DB instance if this DB cluster is created as a Read Replica."
-  value       = "${aws_rds_cluster.this.replication_source_identifier}"
 }
