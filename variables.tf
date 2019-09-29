@@ -22,6 +22,17 @@ variable "allowed_security_groups_count" {
   default     = 0
 }
 
+variable "allowed_cidr_blocks" {
+  description = "A list of CIDR blocks which are allowed to access the database"
+  type        = "list"
+  default     = []
+}
+
+variable "allowed_cidr_blocks_count" {
+  description = "The number of CIDR blocks being added, terraform doesn't let us use length() in a count field"
+  default     = 0
+}
+
 variable "vpc_id" {
   description = "VPC ID"
 }
@@ -216,4 +227,14 @@ variable "vpc_security_group_ids" {
   description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
   type        = "list"
   default     = []
+}
+
+variable "backtrack_window" {
+  description = "The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours)"
+  default     = ""
+}
+
+variable "copy_tags_to_snapshot" {
+  description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
+  default     = false
 }

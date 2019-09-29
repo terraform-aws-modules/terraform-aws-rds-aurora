@@ -1,6 +1,7 @@
 locals {
-  port            = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
-  master_password = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  port             = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
+  master_password  = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  backtrack_window = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
 }
 
 # Random string to use as master password unless one is specified
@@ -42,6 +43,7 @@ resource "aws_rds_cluster" "this" {
   apply_immediately                   = "${var.apply_immediately}"
   db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
+  backtrack_window                    = "${local.backtrack_window}"
 
   enabled_cloudwatch_logs_exports = "${var.enabled_cloudwatch_logs_exports}"
 
@@ -67,6 +69,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = "${count.index + 1}"
   performance_insights_enabled    = "${var.performance_insights_enabled}"
   performance_insights_kms_key_id = "${var.performance_insights_kms_key_id}"
+  copy_tags_to_snapshot           = "${var.copy_tags_to_snapshot}"
 
   tags = "${var.tags}"
 }
@@ -152,4 +155,15 @@ resource "aws_security_group_rule" "default_ingress" {
   protocol                 = "tcp"
   source_security_group_id = "${element(var.allowed_security_groups, count.index)}"
   security_group_id        = "${aws_security_group.this.id}"
+}
+
+resource "aws_security_group_rule" "cidr_ingress" {
+  count = "${var.allowed_cidr_blocks_count}"
+
+  type              = "ingress"
+  from_port         = "${aws_rds_cluster.this.port}"
+  to_port           = "${aws_rds_cluster.this.port}"
+  protocol          = "tcp"
+  cidr_blocks       = ["${element(var.allowed_cidr_blocks, count.index)}"]
+  security_group_id = "${aws_security_group.this.id}"
 }

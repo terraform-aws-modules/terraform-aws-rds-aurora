@@ -32,6 +32,8 @@ module "db" {
   replica_count                   = 1
   allowed_security_groups         = ["sg-12345678"]
   allowed_security_groups_count   = 1
+  allowed_cidr_blocks             = ["10.0.0.0/8"]
+  allowed_cidr_blocks_count       = 1
   instance_type                   = "db.r4.large"
   storage_encrypted               = true
   apply_immediately               = true
@@ -64,11 +66,15 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | list | `[]` | no |
+| allowed\_cidr\_blocks\_count | The number of CIDR blocks being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | list | `[]` | no |
 | allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | string | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
+| backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | string | `""` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
+| copy\_tags\_to\_snapshot | Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance. | string | `"false"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
@@ -105,7 +111,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | tags | A map of tags to add to all resources. | map | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
-| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `<list>` | no |
+| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `[]` | no |
 
 ## Outputs
 
