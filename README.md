@@ -60,6 +60,7 @@ module "db" {
 
 - [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
+- [Serverless](examples/serverless): Serverless PostgreSQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
 
 ## Documentation
@@ -75,7 +76,9 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | allowed\_security\_groups\_count | The number of Security Groups being added, terraform doesn't let us use length() in a count field | string | `"0"` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | bool | `"false"` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | bool | `"true"` | no |
+| backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | number | `"0"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | number | `"7"` | no |
+| copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | bool | `"false"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
 | db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
@@ -106,14 +109,17 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_max | Maximum number of replicas to allow scaling for | number | `"0"` | no |
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | number | `"2"` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | number | `"300"` | no |
+| replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | string | `""` | no |
+| scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless` | map(string) | `{}` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | bool | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
+| source\_region | The source region for an encrypted replica DB cluster. | string | `""` | no |
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | bool | `"true"` | no |
 | subnets | List of subnet IDs to use | list(string) | `[]` | no |
 | tags | A map of tags to add to all resources. | map(string) | `{}` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
-| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list | `[]` | no |
+| vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list(string) | `[]` | no |
 
 ## Outputs
 
