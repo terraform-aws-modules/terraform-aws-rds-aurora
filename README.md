@@ -104,7 +104,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | preferred\_maintenance\_window | When to perform DB maintenance | string | `"sun:05:00-sun:06:00"` | no |
 | publicly\_accessible | Whether the DB should have a public IP address | bool | `"false"` | no |
 | replica\_count | Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead. | string | `"1"` | no |
-| replica\_scale\_connections | Average number of connections to trigger autoscaling at. Default value is 70% of db.r4.large's default max_connections: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Performance.html."| number | `"700"` | no |
+| replica\_scale\_connections | Average number of connections to trigger autoscaling at. Default value is 70% of db.r4.large's default max_connections | number | `"700"` | no |
 | replica\_scale\_cpu | CPU usage to trigger autoscaling at | number | `"70"` | no |
 | replica\_scale\_enabled | Whether to enable autoscaling for RDS Aurora (MySQL) read replicas | bool | `"false"` | no |
 | replica\_scale\_in\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale in | number | `"300"` | no |
