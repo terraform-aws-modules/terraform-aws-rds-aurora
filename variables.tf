@@ -130,6 +130,12 @@ variable "db_cluster_parameter_group_name" {
   default     = "default.aurora5.6"
 }
 
+variable "scaling_configuration" {
+  description = "Map of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless`"
+  type        = map(string)
+  default     = {}
+}
+
 variable "snapshot_identifier" {
   description = "DB snapshot to create this database from"
   type        = string
@@ -244,9 +250,19 @@ variable "engine_mode" {
   default     = "provisioned"
 }
 
+variable "replication_source_identifier" {
+  description = "ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica."
+  default     = ""
+}
+
+variable "source_region" {
+  description = "The source region for an encrypted replica DB cluster."
+  default     = ""
+}
+
 variable "vpc_security_group_ids" {
   description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
-  type        = list
+  type        = list(string)
   default     = []
 }
 
@@ -259,4 +275,16 @@ variable "db_subnet_group_name" {
 variable "predefined_metric_type" {
   description = "The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections."
   default     = "RDSReaderAverageCPUUtilization"
+}
+
+variable "backtrack_window" {
+  description = "The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours)"
+  type        = number
+  default     = 0
+}
+
+variable "copy_tags_to_snapshot" {
+  description = "Copy all Cluster tags to snapshots."
+  type        = bool
+  default     = false
 }

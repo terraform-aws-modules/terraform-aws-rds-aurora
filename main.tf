@@ -2,6 +2,7 @@ locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? random_id.master_password.b64 : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? aws_db_subnet_group.this[0].name : var.db_subnet_group_name
+  backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 }
 
 # Random string to use as master password unless one is specified
@@ -27,6 +28,8 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   global_cluster_identifier           = var.global_cluster_identifier
   cluster_identifier                  = var.name
+  replication_source_identifier       = var.replication_source_identifier
+  source_region                       = var.source_region
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_version
@@ -48,8 +51,22 @@ resource "aws_rds_cluster" "this" {
   apply_immediately                   = var.apply_immediately
   db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
+  backtrack_window                    = local.backtrack_window
+  copy_tags_to_snapshot               = var.copy_tags_to_snapshot
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+
+  dynamic "scaling_configuration" {
+    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
+
+    content {
+      auto_pause               = lookup(scaling_configuration.value, "auto_pause", null)
+      max_capacity             = lookup(scaling_configuration.value, "max_capacity", null)
+      min_capacity             = lookup(scaling_configuration.value, "min_capacity", null)
+      seconds_until_auto_pause = lookup(scaling_configuration.value, "seconds_until_auto_pause", null)
+      timeout_action           = lookup(scaling_configuration.value, "timeout_action", null)
+    }
+  }
 
   tags = var.tags
 }
