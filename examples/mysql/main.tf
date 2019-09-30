@@ -23,7 +23,7 @@ module "aurora" {
   engine_version                      = "5.7.12"
   subnets                             = data.aws_subnet_ids.all.ids
   vpc_id                              = data.aws_vpc.default.id
-  replica_count                       = 1
+  replica_count                       = 0
   instance_type                       = "db.t2.medium"
   apply_immediately                   = true
   skip_final_snapshot                 = true
@@ -31,6 +31,9 @@ module "aurora" {
   db_cluster_parameter_group_name     = aws_rds_cluster_parameter_group.aurora_57_cluster_parameter_group.id
   iam_database_authentication_enabled = true
   enabled_cloudwatch_logs_exports     = ["audit", "error", "general", "slowquery"]
+  allowed_cidr_blocks                 = ["10.20.0.0/20", "20.20.0.0/20"]
+
+  create_security_group = true
 }
 
 resource "aws_db_parameter_group" "aurora_db_57_parameter_group" {

@@ -45,7 +45,7 @@ resource "aws_rds_cluster" "this" {
   preferred_maintenance_window        = var.preferred_maintenance_window
   port                                = local.port
   db_subnet_group_name                = local.db_subnet_group_name
-  vpc_security_group_ids              = concat([aws_security_group.this.id], var.vpc_security_group_ids)
+  vpc_security_group_ids              = compact(concat([aws_security_group.this[0].id], var.vpc_security_group_ids))
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
@@ -160,6 +160,8 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
+  count = var.create_security_group ? 1 : 0
+
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
 
@@ -167,12 +169,23 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_security_group_rule" "default_ingress" {
-  count = var.allowed_security_groups_count
+  count = var.create_security_group ? length(var.allowed_security_groups) : 0
 
   type                     = "ingress"
   from_port                = aws_rds_cluster.this.port
   to_port                  = aws_rds_cluster.this.port
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
-  security_group_id        = aws_security_group.this.id
+  security_group_id        = aws_security_group.this[0].id
+}
+
+resource "aws_security_group_rule" "cidr_ingress" {
+  count = var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+
+  type              = "ingress"
+  from_port         = aws_rds_cluster.this.port
+  to_port           = aws_rds_cluster.this.port
+  protocol          = "tcp"
+  cidr_blocks       = var.allowed_cidr_blocks
+  security_group_id = aws_security_group.this[0].id
 }
