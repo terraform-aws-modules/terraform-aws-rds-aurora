@@ -99,10 +99,12 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not. | bool | `"false"` | no |
 | performance\_insights\_kms\_key\_id | The ARN for the KMS key to encrypt Performance Insights data. | string | `""` | no |
 | port | The port on which to accept connections | string | `""` | no |
+| predefined\_metric\_type | The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections. | string | `"RDSReaderAverageCPUUtilization"` | no |
 | preferred\_backup\_window | When to perform DB backups | string | `"02:00-03:00"` | no |
 | preferred\_maintenance\_window | When to perform DB maintenance | string | `"sun:05:00-sun:06:00"` | no |
 | publicly\_accessible | Whether the DB should have a public IP address | bool | `"false"` | no |
 | replica\_count | Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead. | string | `"1"` | no |
+| replica\_scale\_connections | Average number of connections to trigger autoscaling at. Default value is 70% of db.r4.large's default max_connections: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Performance.html."| number | `"700"` | no |
 | replica\_scale\_cpu | CPU usage to trigger autoscaling at | number | `"70"` | no |
 | replica\_scale\_enabled | Whether to enable autoscaling for RDS Aurora (MySQL) read replicas | bool | `"false"` | no |
 | replica\_scale\_in\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale in | number | `"300"` | no |
