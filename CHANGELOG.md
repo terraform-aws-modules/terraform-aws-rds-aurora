@@ -3,9 +3,16 @@
 
 
 
+<a name="v2.6.0"></a>
+## [v2.6.0] - 2019-09-30
+
+- Added support for conditional creation of SG and allowed CIDR blocks ([#71](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/71))
+
+
 <a name="v2.5.0"></a>
 ## [v2.5.0] - 2019-09-30
 
+- Updated CHANGELOG
 - Updated README
 - Add option to customise predefined_metric_type ([#66](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/66))
 
@@ -228,7 +235,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.6.0...HEAD
+[v2.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.5.0...v2.6.0
 [v2.5.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.4.0...v2.5.0
 [v2.4.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.19.0...v2.4.0
 [v1.19.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.18.0...v1.19.0
