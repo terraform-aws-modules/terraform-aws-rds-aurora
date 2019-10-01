@@ -81,8 +81,8 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | bool | `"false"` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | bool | `"true"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
-| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
-| db\_parameter\_group\_name | The name of a DB parameter group to use | string | `"default.aurora5.6"` | no |
+| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `null` | no |
+| db\_parameter\_group\_name | The name of a DB parameter group to use | string | `null` | no |
 | db\_subnet\_group\_name | The existing subnet group name to use | string | `""` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | bool | `"false"` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | list(string) | `[]` | no |
