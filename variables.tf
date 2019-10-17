@@ -295,3 +295,8 @@ variable "copy_tags_to_snapshot" {
   type        = bool
   default     = false
 }
+variable "iam_roles" {
+  description = "A List of ARNs for the IAM roles to associate to the RDS Cluster."
+  type        = list(string)
+  default     = []
+}

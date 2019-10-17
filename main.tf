@@ -53,6 +53,7 @@ resource "aws_rds_cluster" "this" {
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
+  iam_roles                           = var.iam_roles
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
