@@ -90,8 +90,8 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = count.index + 1
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
-
-  tags = var.tags
+  iam_roles                       = var.iam_roles
+  tags                            = var.tags
 }
 
 resource "random_id" "snapshot_identifier" {

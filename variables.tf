@@ -295,3 +295,9 @@ variable "copy_tags_to_snapshot" {
   type        = bool
   default     = false
 }
+
+variable "iam_roles" {
+  description = "IAM roles assingn to DB cluster"
+  type = list(string)
+  default = []
+}
