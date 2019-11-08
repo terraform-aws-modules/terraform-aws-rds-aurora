@@ -128,13 +128,13 @@ variable "auto_minor_version_upgrade" {
 variable "db_parameter_group_name" {
   description = "The name of a DB parameter group to use"
   type        = string
-  default     = "default.aurora5.6"
+  default     = null
 }
 
 variable "db_cluster_parameter_group_name" {
   description = "The name of a DB Cluster parameter group to use"
   type        = string
-  default     = "default.aurora5.6"
+  default     = null
 }
 
 variable "scaling_configuration" {
