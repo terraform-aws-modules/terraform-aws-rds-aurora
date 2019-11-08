@@ -3,9 +3,16 @@
 
 
 
+<a name="v2.8.0"></a>
+## [v2.8.0] - 2019-11-08
+
+- Support setting aws_rds_cluster iam roles ([#74](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/74))
+
+
 <a name="v2.7.0"></a>
 ## [v2.7.0] - 2019-11-08
 
+- Updated CHANGELOG
 - Fix the error when "create_security_group" is false ([#75](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/75))
 
 
@@ -242,7 +249,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.8.0...HEAD
+[v2.8.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.7.0...v2.8.0
 [v2.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.6.0...v2.7.0
 [v2.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.5.0...v2.6.0
 [v2.5.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.4.0...v2.5.0
