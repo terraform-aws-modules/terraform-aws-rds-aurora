@@ -3,6 +3,8 @@ locals {
   master_password      = var.password == "" ? random_id.master_password.b64 : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? aws_db_subnet_group.this[0].name : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
+
+  name = "aurora-${var.name}"
 }
 
 # Random string to use as master password unless one is specified
@@ -17,12 +19,9 @@ resource "aws_db_subnet_group" "this" {
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
 
-  tags = merge(
-    var.tags,
-    {
-      "Name" = "aurora-${var.name}"
-    },
-  )
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 resource "aws_rds_cluster" "this" {
@@ -58,7 +57,8 @@ resource "aws_rds_cluster" "this" {
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   dynamic "scaling_configuration" {
-    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
+    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [
+    var.scaling_configuration]
 
     content {
       auto_pause               = lookup(scaling_configuration.value, "auto_pause", null)
@@ -166,11 +166,17 @@ resource "aws_security_group" "this" {
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
 
-  tags = var.tags
+  description = "Control traffic to/from RDS Aurora ${var.name}"
+
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 resource "aws_security_group_rule" "default_ingress" {
   count = var.create_security_group ? length(var.allowed_security_groups) : 0
+
+  description = "From allowed SGs"
 
   type                     = "ingress"
   from_port                = aws_rds_cluster.this.port
@@ -182,6 +188,8 @@ resource "aws_security_group_rule" "default_ingress" {
 
 resource "aws_security_group_rule" "cidr_ingress" {
   count = var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+
+  description = "From allowed CIDRs"
 
   type              = "ingress"
   from_port         = aws_rds_cluster.this.port
