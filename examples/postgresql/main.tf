@@ -31,6 +31,8 @@ module "aurora" {
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
   //  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
 }
+  
+# If you want to use newest parameter group family just use value "aurora-postgresql10" for family variable below.
 
 resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
   name        = "test-aurora-db-postgres96-parameter-group"
