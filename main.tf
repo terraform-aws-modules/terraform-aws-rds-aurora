@@ -1,7 +1,7 @@
 locals {
-  port              = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
-  master_password   = "${var.password == "" ? random_id.master_password.b64 : var.password}"
-  backtrack_window  = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
+  port             = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
+  master_password  = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  backtrack_window = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
 }
 
 # Random string to use as master password unless one is specified
