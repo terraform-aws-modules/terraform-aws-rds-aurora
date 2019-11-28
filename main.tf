@@ -45,7 +45,6 @@ resource "aws_rds_cluster" "this" {
   db_cluster_parameter_group_name     = "${var.db_cluster_parameter_group_name}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
   backtrack_window                    = "${local.backtrack_window}"
-  ca_cert_identifier                  = "${var.ca_cert_identifier}"
 
   enabled_cloudwatch_logs_exports = "${var.enabled_cloudwatch_logs_exports}"
 
