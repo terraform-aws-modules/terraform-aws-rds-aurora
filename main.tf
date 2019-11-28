@@ -1,8 +1,15 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? random_id.master_password.b64 : var.password
-  db_subnet_group_name = var.db_subnet_group_name == "" ? aws_db_subnet_group.this[0].name : var.db_subnet_group_name
+  db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
+
+  rds_enhanced_monitoring_arn  = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
+  rds_enhanced_monitoring_name = join("", aws_iam_role.rds_enhanced_monitoring.*.name)
+
+  rds_security_group_id = join("", aws_security_group.this.*.id)
+
+  name = "aurora-${var.name}"
 }
 
 # Random string to use as master password unless one is specified
@@ -17,12 +24,9 @@ resource "aws_db_subnet_group" "this" {
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
 
-  tags = merge(
-    var.tags,
-    {
-      "Name" = "aurora-${var.name}"
-    },
-  )
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 resource "aws_rds_cluster" "this" {
@@ -58,7 +62,8 @@ resource "aws_rds_cluster" "this" {
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   dynamic "scaling_configuration" {
-    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
+    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [
+    var.scaling_configuration]
 
     content {
       auto_pause               = lookup(scaling_configuration.value, "auto_pause", null)
@@ -85,7 +90,7 @@ resource "aws_rds_cluster_instance" "this" {
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
   apply_immediately               = var.apply_immediately
-  monitoring_role_arn             = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
+  monitoring_role_arn             = local.rds_enhanced_monitoring_arn
   monitoring_interval             = var.monitoring_interval
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
   promotion_tier                  = count.index + 1
@@ -124,7 +129,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
   count = var.monitoring_interval > 0 ? 1 : 0
 
-  role       = aws_iam_role.rds_enhanced_monitoring[0].name
+  role       = local.rds_enhanced_monitoring_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
@@ -166,27 +171,35 @@ resource "aws_security_group" "this" {
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
 
-  tags = var.tags
+  description = "Control traffic to/from RDS Aurora ${var.name}"
+
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 resource "aws_security_group_rule" "default_ingress" {
   count = var.create_security_group ? length(var.allowed_security_groups) : 0
+
+  description = "From allowed SGs"
 
   type                     = "ingress"
   from_port                = aws_rds_cluster.this.port
   to_port                  = aws_rds_cluster.this.port
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
-  security_group_id        = aws_security_group.this[0].id
+  security_group_id        = local.rds_security_group_id
 }
 
 resource "aws_security_group_rule" "cidr_ingress" {
   count = var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+
+  description = "From allowed CIDRs"
 
   type              = "ingress"
   from_port         = aws_rds_cluster.this.port
   to_port           = aws_rds_cluster.this.port
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
-  security_group_id = aws_security_group.this[0].id
+  security_group_id = local.rds_security_group_id
 }
