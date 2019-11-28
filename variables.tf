@@ -244,3 +244,8 @@ variable "copy_tags_to_snapshot" {
   description = "Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance."
   default     = false
 }
+
+variable "ca_cert_identifier" {
+  description = "Specifies the identifier of the CA certificate for the DB instance. Possible values `rds-ca-2015` | `rds-ca-2019`"
+  default     = "rds-ca-2015"
+}
