@@ -74,6 +74,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | string | `"true"` | no |
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | string | `"0"` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | string | `"7"` | no |
+| ca\_cert\_identifier | Specifies the identifier of the CA certificate for the DB instance | string | `"rds-ca-2015"` | no |
 | copy\_tags\_to\_snapshot | Indicates whether to copy all of the user-defined tags from the DB instance to snapshots of the DB instance. | string | `"false"` | no |
 | database\_name | Name for an automatically created database on cluster creation | string | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | string | `"default.aurora5.6"` | no |
