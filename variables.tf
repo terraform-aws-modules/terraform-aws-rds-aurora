@@ -295,8 +295,15 @@ variable "copy_tags_to_snapshot" {
   type        = bool
   default     = false
 }
+
 variable "iam_roles" {
   description = "A List of ARNs for the IAM roles to associate to the RDS Cluster."
   type        = list(string)
   default     = []
+}
+
+variable "security_group_description" {
+  description = "The description of the security group. If value is set to empty string it will contain cluster name in the description."
+  type        = string
+  default     = "Managed by Terraform"
 }

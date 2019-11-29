@@ -115,6 +115,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | number | `"300"` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | string | `""` | no |
 | scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless` | map(string) | `{}` | no |
+| security\_group\_description | The description of the security group. If value is set to empty string it will contain cluster name in the description. | string | `"Managed by Terraform"` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | bool | `"false"` | no |
 | snapshot\_identifier | DB snapshot to create this database from | string | `""` | no |
 | source\_region | The source region for an encrypted replica DB cluster. | string | `""` | no |
