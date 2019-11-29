@@ -295,8 +295,15 @@ variable "copy_tags_to_snapshot" {
   type        = bool
   default     = false
 }
+
 variable "iam_roles" {
   description = "A List of ARNs for the IAM roles to associate to the RDS Cluster."
   type        = list(string)
   default     = []
+}
+
+variable "security_group_description" {
+  description = "The descriptiont text to be set on the security group. This flag can make upgrading the module easier by preventing a recration of the SG when the description changes"
+  type        = string
+  default     = null
 }
