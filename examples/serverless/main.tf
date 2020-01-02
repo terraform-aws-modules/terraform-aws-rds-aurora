@@ -19,8 +19,9 @@ data "aws_subnet_ids" "all" {
 module "aurora" {
   source                = "../../"
   name                  = "aurora-serverless"
-  engine                = "aurora"
+  engine                = "aurora-postgresql"
   engine_mode           = "serverless"
+  engine_version        = "10.7"
   replica_scale_enabled = false
   replica_count         = 0
 
@@ -29,12 +30,12 @@ module "aurora" {
   subnets                         = data.aws_subnet_ids.all.ids
   vpc_id                          = data.aws_vpc.default.id
   monitoring_interval             = 60
-  instance_type                   = "db.r4.large"
+  instance_type                   = "db.r4.large" # ignored for serverless
   apply_immediately               = true
   skip_final_snapshot             = true
   storage_encrypted               = true
-  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
+  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgresql10_parameter_group.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgresql10_parameter_group.id
 
   scaling_configuration = {
     auto_pause               = true
@@ -45,16 +46,16 @@ module "aurora" {
   }
 }
 
-resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora56-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora56-parameter-group"
+resource "aws_db_parameter_group" "aurora_db_postgresql10_parameter_group" {
+  name        = "test-postgresql10-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "test-postgresql10-parameter-group"
 }
 
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora56-cluster-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora56-cluster-parameter-group"
+resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgresql10_parameter_group" {
+  name        = "test-postgresql10-cluster-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "test-postgresql10-cluster-parameter-group"
 }
 
 ############################
