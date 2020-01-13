@@ -307,3 +307,9 @@ variable "security_group_description" {
   type        = string
   default     = "Managed by Terraform"
 }
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
+}

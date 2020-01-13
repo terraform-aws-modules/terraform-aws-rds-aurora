@@ -96,6 +96,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = count.index + 1
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
+  ca_cert_identifier              = var.ca_cert_identifier
 
   tags = var.tags
 }
