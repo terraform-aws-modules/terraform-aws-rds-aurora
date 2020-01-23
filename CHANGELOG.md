@@ -3,9 +3,17 @@
 
 
 
+<a name="v2.12.0"></a>
+## [v2.12.0] - 2020-01-23
+
+- Updated pre-commit-terraform to support terraform-docs 0.8
+- Hide sensitive password data from cli output ([#89](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/89))
+
+
 <a name="v2.11.0"></a>
 ## [v2.11.0] - 2019-11-29
 
+- Updated CHANGELOG
 - Made description of security group backward compatible (and optional) ([#87](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/87))
 - Updated CHANGELOG
 - Add security group name and description ([#80](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/80))
@@ -387,7 +395,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.11.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.12.0...HEAD
+[v2.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.11.0...v2.12.0
 [v2.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.21.0...v2.11.0
 [v1.21.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.10.0...v1.21.0
 [v2.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.20.0...v2.10.0
