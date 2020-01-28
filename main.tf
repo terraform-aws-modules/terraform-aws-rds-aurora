@@ -15,7 +15,7 @@ locals {
 # Random string to use as master password unless one is specified
 resource "random_password" "master_password" {
   length  = 10
-  special = true
+  special = false
 }
 
 resource "aws_db_subnet_group" "this" {
