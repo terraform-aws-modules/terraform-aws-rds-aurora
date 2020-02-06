@@ -56,6 +56,21 @@ module "db" {
 }
 ```
 
+## Conditional creation
+
+Sometimes you need to have a way to create RDS Aurora resources conditionally but Terraform does not allow to use `count` inside `module` block, so the solution is to specify argument `create_cluster`.
+
+```hcl
+# This RDS cluster will not be created
+module "db" {
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 2.0"
+
+  create_cluster = false
+  # ... omitted
+}
+```
+
 ## Examples
 
 - [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
