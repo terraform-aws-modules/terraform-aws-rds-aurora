@@ -86,6 +86,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
+| create\_cluster | Controls if RDS cluster should be created (it affects almost all resources) | `bool` | `true` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | n/a | yes |

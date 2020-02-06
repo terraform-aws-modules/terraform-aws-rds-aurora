@@ -1,3 +1,9 @@
+variable "create_cluster" {
+  description = "Controls if RDS cluster should be created (it affects almost all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "create_security_group" {
   description = "Whether to create security group for RDS cluster"
   type        = bool
