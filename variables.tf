@@ -22,6 +22,7 @@ variable "replica_count" {
 
 variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to."
+  type        = list(string)
   default     = []
 }
 
