@@ -4,6 +4,9 @@ locals {
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
+  preferred_cluster_maintenance_window  = var.preferred_maintenance_window == "" ? var.preferred_cluster_maintenance_window : var.preferred_maintenance_window
+  preferred_instance_maintenance_window = var.preferred_maintenance_window == "" ? var.preferred_instance_maintenance_window : var.preferred_maintenance_window
+
   rds_enhanced_monitoring_arn  = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
   rds_enhanced_monitoring_name = join("", aws_iam_role.rds_enhanced_monitoring.*.name)
 
@@ -47,7 +50,7 @@ resource "aws_rds_cluster" "this" {
   deletion_protection                 = var.deletion_protection
   backup_retention_period             = var.backup_retention_period
   preferred_backup_window             = var.preferred_backup_window
-  preferred_maintenance_window        = var.preferred_maintenance_window
+  preferred_maintenance_window        = local.preferred_cluster_maintenance_window
   port                                = local.port
   db_subnet_group_name                = local.db_subnet_group_name
   vpc_security_group_ids              = compact(concat(aws_security_group.this.*.id, var.vpc_security_group_ids))
@@ -89,7 +92,7 @@ resource "aws_rds_cluster_instance" "this" {
   publicly_accessible             = var.publicly_accessible
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
-  preferred_maintenance_window    = var.preferred_maintenance_window
+  preferred_maintenance_window    = local.preferred_instance_maintenance_window
   apply_immediately               = var.apply_immediately
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
   monitoring_interval             = var.monitoring_interval

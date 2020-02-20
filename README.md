@@ -110,7 +110,9 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | port | The port on which to accept connections | `string` | `""` | no |
 | predefined\_metric\_type | The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections. | `string` | `"RDSReaderAverageCPUUtilization"` | no |
 | preferred\_backup\_window | When to perform DB backups | `string` | `"02:00-03:00"` | no |
-| preferred\_maintenance\_window | When to perform DB maintenance | `string` | `"sun:05:00-sun:06:00"` | no |
+| preferred\_maintenance\_window | When to perform DB maintenance - Deprecated use specific cluster/instance maintenance window instead| `string` | `"sun:05:00-sun:06:00"` | no |
+| preferred\_cluster_maintenance\_window | When to perform DB maintenance on the cluster | `string` | `"sun:05:00-sun:06:00"` | no |
+| preferred\_instance_maintenance\_window | When to perform DB maintenance on the instances| `string` | `"sun:05:00-sun:06:00"` | no |
 | publicly\_accessible | Whether the DB should have a public IP address | `bool` | `false` | no |
 | replica\_count | Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead. | `number` | `1` | no |
 | replica\_scale\_connections | Average number of connections to trigger autoscaling at. Default value is 70% of db.r4.large's default max\_connections | `number` | `700` | no |

@@ -32,6 +32,7 @@ module "aurora" {
   iam_database_authentication_enabled = true
   enabled_cloudwatch_logs_exports     = ["audit", "error", "general", "slowquery"]
   allowed_cidr_blocks                 = ["10.20.0.0/20", "20.20.0.0/20"]
+  preferred_maintenance_window        = "wed:04:00-wed:04:30"
 
   create_security_group = true
 }

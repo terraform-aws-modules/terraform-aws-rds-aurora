@@ -97,7 +97,19 @@ variable "preferred_backup_window" {
 }
 
 variable "preferred_maintenance_window" {
-  description = "When to perform DB maintenance"
+  description = "DEPRECATED, use cluster/instance maintenance window instead. Kept a little longer for backwards compatibility."
+  type        = string
+  default     = ""
+}
+
+variable "preferred_cluster_maintenance_window" {
+  description = "When to perform maintenance on the cluster"
+  type        = string
+  default     = "sun:05:00-sun:06:00"
+}
+
+variable "preferred_instance_maintenance_window" {
+  description = "When to perform maintenance on the instances"
   type        = string
   default     = "sun:05:00-sun:06:00"
 }
