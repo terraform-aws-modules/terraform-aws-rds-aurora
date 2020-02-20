@@ -46,9 +46,13 @@ output "this_rds_cluster_instance_endpoints" {
   value       = module.aurora.this_rds_cluster_instance_endpoints
 }
 
+output "this_rds_cluster_instance_ids" {
+  description = "A list of all cluster instance ids"
+  value       = module.aurora.this_rds_cluster_instance_ids
+}
+
 // aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.this_security_group_id
 }
-
