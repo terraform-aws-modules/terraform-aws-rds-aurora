@@ -203,3 +203,8 @@ variable "engine_mode" {
   description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
   default     = "provisioned"
 }
+
+variable "timeouts" {
+  description = "Sets timeout for create/update/delete of cluster and instances"
+  default     = "120"
+}

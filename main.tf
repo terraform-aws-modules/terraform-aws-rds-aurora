@@ -43,6 +43,12 @@ resource "aws_rds_cluster" "this" {
 
   enabled_cloudwatch_logs_exports = "${var.enabled_cloudwatch_logs_exports}"
 
+  timeouts {
+    create = "${var.timeouts}"
+    update = "${var.timeouts}"
+    delete = "${var.timeouts}"
+  }
+
   tags = "${var.tags}"
 }
 
@@ -65,6 +71,12 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = "${count.index + 1}"
   performance_insights_enabled    = "${var.performance_insights_enabled}"
   performance_insights_kms_key_id = "${var.performance_insights_kms_key_id}"
+
+  timeouts {
+    create = "${var.timeouts}"
+    update = "${var.timeouts}"
+    delete = "${var.timeouts}"
+  }
 
   tags = "${var.tags}"
 }
