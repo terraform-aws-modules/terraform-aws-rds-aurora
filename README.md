@@ -103,7 +103,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | string | `"true"` | no |
 | subnets | List of subnet IDs to use | list | n/a | yes |
 | tags | A map of tags to add to all resources. | map | `{}` | no |
-| timeouts | Set how many minutes to wait for DB resources to be created/updated/deleted. | int | `"120"` | no |
+| timeouts | Set how many minutes to wait for DB resources to be created/updated/deleted. | int | `"120m"` | no |
 | username | Master DB username | string | `"root"` | no |
 | vpc\_id | VPC ID | string | n/a | yes |
 
