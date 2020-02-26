@@ -206,5 +206,5 @@ variable "engine_mode" {
 
 variable "timeouts" {
   description = "Sets timeout for create/update/delete of cluster and instances"
-  default     = "120"
+  default     = "120m"
 }
