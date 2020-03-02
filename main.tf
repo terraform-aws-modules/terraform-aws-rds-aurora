@@ -132,9 +132,9 @@ resource "aws_rds_cluster_instance" "this" {
 
   # Updating engine version forces replacement of instances, and they shouldn't be replaced
   # because cluster will update them if engine version is changed
-  lifecycle {
+  lifecycle { # We do not want to change password, nor store the current in code nor state so ignoring changes from here
     ignore_changes = [
-      engine_version
+      master_password,
     ]
   }
 
