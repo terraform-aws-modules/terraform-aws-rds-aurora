@@ -28,6 +28,7 @@ variable "replica_count" {
 
 variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to."
+  type        = list(string)
   default     = []
 }
 
@@ -312,4 +313,10 @@ variable "security_group_description" {
   description = "The description of the security group. If value is set to empty string it will contain cluster name in the description."
   type        = string
   default     = "Managed by Terraform"
+}
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
 }

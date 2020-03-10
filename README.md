@@ -95,11 +95,12 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
 | allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | `list(string)` | `[]` | no |
-| allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list` | `[]` | no |
+| allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list(string)` | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | `bool` | `false` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | `bool` | `true` | no |
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
+| ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_cluster | Controls if RDS cluster should be created (it affects almost all resources) | `bool` | `true` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
