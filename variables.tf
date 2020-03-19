@@ -22,6 +22,7 @@ variable "replica_count" {
 
 variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to."
+  type        = list(string)
   default     = []
 }
 
@@ -312,4 +313,10 @@ variable "permissions_boundary" {
   description = "The ARN of the policy that is used to set the permissions boundary for the role."
   type        = string
   default     = ""
+}
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
 }
