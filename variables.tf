@@ -208,3 +208,9 @@ variable "timeouts" {
   description = "Sets timeout for create/update/delete of cluster and instances"
   default     = "120m"
 }
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
+}
