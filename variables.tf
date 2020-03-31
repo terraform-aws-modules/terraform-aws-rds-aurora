@@ -42,6 +42,11 @@ variable "instance_type" {
   type        = string
 }
 
+variable "instances_parameters" {
+  description = "Individual settings for instances"
+  default = []
+}
+
 variable "publicly_accessible" {
   description = "Whether the DB should have a public IP address"
   type        = bool
