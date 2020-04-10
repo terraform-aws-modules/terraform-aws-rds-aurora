@@ -235,6 +235,11 @@ variable "vpc_security_group_ids" {
   default     = []
 }
 
+variable "db_subnet_group_name" {
+  description = "The existing subnet group name to use"
+  default     = ""
+}
+
 variable "backtrack_window" {
   description = "The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours)"
   default     = "0"
