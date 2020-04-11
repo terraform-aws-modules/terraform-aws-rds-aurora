@@ -68,17 +68,25 @@ module "db" {
 Terraform documentation is generated automatically using [pre-commit hooks](http://www.pre-commit.com/). Follow installation instructions [here](https://pre-commit.com/#install).
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | ~> 0.12.6 |
+| aws | ~> 2.45 |
+| random | ~> 2.2 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.0 |
+| aws | ~> 2.45 |
 | random | ~> 2.2 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | `list(string)` | `[]` | no |
 | allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list(string)` | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | `bool` | `false` | no |
@@ -89,10 +97,11 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
-| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | n/a | yes |
-| db\_parameter\_group\_name | The name of a DB parameter group to use | `string` | n/a | yes |
+| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | `null` | no |
+| db\_parameter\_group\_name | The name of a DB parameter group to use | `string` | `null` | no |
 | db\_subnet\_group\_name | The existing subnet group name to use | `string` | `""` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | `bool` | `false` | no |
+| enable\_http\_endpoint | Whether or not to enable the Data API for a serverless Aurora database engine. | `bool` | `false` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | `list(string)` | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | `string` | `"aurora"` | no |
 | engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | `string` | `"provisioned"` | no |
