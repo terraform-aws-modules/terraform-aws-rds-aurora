@@ -1,6 +1,7 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? random_password.master_password.result : var.password
+  name = "aurora-${var.name}"
 }
 
 
@@ -42,14 +43,13 @@ resource "aws_rds_cluster" "this" {
   preferred_backup_window             = var.preferred_backup_window
   preferred_maintenance_window        = var.preferred_maintenance_window
   port                                = local.port
-  db_subnet_group_name                = local.db_subnet_group_name
+  db_subnet_group_name                = aws_db_subnet_group.this.name
   vpc_security_group_ids              = var.vpc_security_groups
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
   db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
-  backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
   iam_roles                           = var.iam_roles
 
@@ -86,7 +86,7 @@ resource "aws_rds_cluster_instance" "this" {
   engine_version                  = var.engine_version
   instance_class                  = var.instance_type
   publicly_accessible             = var.publicly_accessible
-  db_subnet_group_name            = local.db_subnet_group_name
+  db_subnet_group_name            = aws_db_subnet_group.this.name
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
   apply_immediately               = var.apply_immediately
