@@ -1,16 +1,8 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? random_password.master_password.result : var.password
-  db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
-
-  rds_enhanced_monitoring_arn  = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
-  rds_enhanced_monitoring_name = join("", aws_iam_role.rds_enhanced_monitoring.*.name)
-
-  rds_security_group_id = join("", aws_security_group.this.*.id)
-
-  name = "aurora-${var.name}"
 }
+
 
 # Random string to use as master password unless one is specified
 resource "random_password" "master_password" {
