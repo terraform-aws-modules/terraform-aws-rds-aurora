@@ -12,7 +12,6 @@ resource "random_password" "master_password" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  count = var.db_subnet_group_name == "" ? 1 : 0
 
   name        = var.name
   description = "For Aurora cluster ${var.name}"
@@ -21,6 +20,7 @@ resource "aws_db_subnet_group" "this" {
   tags = merge(var.tags, {
     Name = local.name
   })
+  
 }
 
 resource "aws_rds_cluster" "this" {
