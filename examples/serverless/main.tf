@@ -17,35 +17,44 @@ data "aws_subnet_ids" "all" {
 # RDS Aurora
 #############
 module "aurora" {
-  source                          = "../../"
-  name                            = "aurora-example"
-  engine                          = "aurora-postgresql"
-  engine_version                  = "10.4"
+  source                = "../../"
+  name                  = "aurora-serverless"
+  engine                = "aurora"
+  engine_mode           = "serverless"
+  replica_scale_enabled = false
+  replica_count         = 0
+
+  backtrack_window = 10 # ignored in serverless
+
   subnets                         = data.aws_subnet_ids.all.ids
   vpc_id                          = data.aws_vpc.default.id
-  replica_count                   = 1
-  replica_scale_enabled           = true
-  replica_scale_min               = 1
-  replica_scale_max               = 5
   monitoring_interval             = 60
   instance_type                   = "db.r4.large"
   apply_immediately               = true
   skip_final_snapshot             = true
+  storage_encrypted               = true
   db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
-  //  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+
+  scaling_configuration = {
+    auto_pause               = true
+    max_capacity             = 256
+    min_capacity             = 2
+    seconds_until_auto_pause = 300
+    timeout_action           = "ForceApplyCapacityChange"
+  }
 }
 
 resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora-db-postgres10-parameter-group"
-  family      = "aurora-postgresql10"
-  description = "test-aurora-db-postgres10-parameter-group"
+  name        = "test-aurora56-parameter-group"
+  family      = "aurora5.6"
+  description = "test-aurora56-parameter-group"
 }
 
 resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora-postgres10-cluster-parameter-group"
-  family      = "aurora-postgresql10"
-  description = "test-aurora-postgres10-cluster-parameter-group"
+  name        = "test-aurora56-cluster-parameter-group"
+  family      = "aurora5.6"
+  description = "test-aurora56-cluster-parameter-group"
 }
 
 ############################
