@@ -77,6 +77,10 @@ resource "aws_rds_cluster" "this" {
   }
 
   tags = var.tags
+  
+  lifecycle {
+    ignore_changes = snapshot_identifier
+  }
 }
 
 resource "aws_rds_cluster_instance" "this" {
