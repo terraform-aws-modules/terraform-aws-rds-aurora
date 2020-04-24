@@ -52,6 +52,10 @@ output "this_rds_cluster_instance_endpoints" {
   value       = aws_rds_cluster_instance.this.*.endpoint
 }
 
+output "this_rds_cluster_hosted_zone_id" {
+  value = aws_rds_cluster.this.hosted_zone_id
+}
+
 // aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
