@@ -131,10 +131,15 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | `number` | `2` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | `number` | `300` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | `string` | `""` | no |
+| s3_import_bucket_name | The bucket name where your backup is stored. Currently, this only works for the MySQL engine. This cannot be used in conjunction with the variable `snapshot_identifier`. | `string` | `""` |
+| s3_import_bucket_prefix | Path to your backup within your S3 bucket. Can we blank. | `string` | `""` |
+| s3_import_ingestion_role | The role ARN to be used to load the data | `string` | `""` |
+| s3_import_source_engine | The engine of your source database. Currently, only one value accepted: `mysql` | `string` | `"mysql"` |
+| s3_import_source_engine_version | Version of your source engine used to make the backup. Specify the minor version as well. E.g.: `5.6.41` | `string` | `""` |
 | scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine\_mode is set to `serverless` | `map(string)` | `{}` | no |
 | security\_group\_description | The description of the security group. If value is set to empty string it will contain cluster name in the description. | `string` | `"Managed by Terraform"` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | `bool` | `false` | no |
-| snapshot\_identifier | DB snapshot to create this database from | `string` | `""` | no |
+| snapshot\_identifier |DB snapshot to create this database from. This cannot be defined if you are trying to import your database from an S3 bucket | `string` | `""` | no |
 | source\_region | The source region for an encrypted replica DB cluster. | `string` | `""` | no |
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | `bool` | `true` | no |
 | subnets | List of subnet IDs to use | `list(string)` | `[]` | no |
@@ -142,11 +147,6 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | username | Master DB username | `string` | `"root"` | no |
 | vpc\_id | VPC ID | `string` | n/a | yes |
 | vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | `list(string)` | `[]` | no |
-| s3_import_bucket_name | The bucket name where your backup is stored. Currently, this only works for the MySQL engine | `string` | `""` |
-| s3_import_bucket_prefix | Path to your backup within your S3 bucket. Can we blank. | `string` | `""` |
-| s3_import_ingestion_role | The role ARN to be used to load the data | `string` | `""` |
-| s3_import_source_engine | The engine of your source database. Currently, only one value accepted: `mysql` | `string` | `"mysql"` |
-| s3_import_source_engine_version | Version of your source engine used to make the backup. Specify the minor version as well. E.g.: `5.6.41` | `string` | `""` |
 
 
 ## Outputs
