@@ -9,6 +9,10 @@ locals {
 
   rds_security_group_id = join("", aws_security_group.this.*.id)
 
+  enable_s3_import = var.s3_import_bucket_name != "" && (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" && var.snapshot_identifier == "" ? true : false
+  # Source engine version for s3 import must match the destination engine version
+  s3_import_source_engine_version = local.enable_s3_import && (substr(var.s3_import_source_engine_version, 0, 3) == substr(var.engine_version, 0, 3)) ? var.s3_import_source_engine_version : ""
+  
   name = "aurora-${var.name}"
 }
 
@@ -31,6 +35,8 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_rds_cluster" "this" {
+  count = local.enable_s3_import ? 0 : 1
+
   global_cluster_identifier           = var.global_cluster_identifier
   cluster_identifier                  = var.name
   replication_source_identifier       = var.replication_source_identifier
@@ -79,11 +85,69 @@ resource "aws_rds_cluster" "this" {
   tags = var.tags
 }
 
+resource "aws_rds_cluster" "this-s3-restore" {
+  count = local.enable_s3_import ? 1 : 0
+
+  global_cluster_identifier           = var.global_cluster_identifier
+  cluster_identifier                  = var.name
+  replication_source_identifier       = var.replication_source_identifier
+  source_region                       = var.source_region
+  engine                              = var.engine
+  engine_mode                         = var.engine_mode
+  engine_version                      = var.engine_version
+  enable_http_endpoint                = var.enable_http_endpoint
+  kms_key_id                          = var.kms_key_id
+  database_name                       = var.database_name
+  master_username                     = var.username
+  master_password                     = local.master_password
+  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${random_id.snapshot_identifier.hex}"
+  skip_final_snapshot                 = var.skip_final_snapshot
+  deletion_protection                 = var.deletion_protection
+  backup_retention_period             = var.backup_retention_period
+  preferred_backup_window             = var.preferred_backup_window
+  preferred_maintenance_window        = var.preferred_maintenance_window
+  port                                = local.port
+  db_subnet_group_name                = local.db_subnet_group_name
+  vpc_security_group_ids              = compact(concat(aws_security_group.this.*.id, var.vpc_security_group_ids))
+  storage_encrypted                   = var.storage_encrypted
+  apply_immediately                   = var.apply_immediately
+  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
+  iam_database_authentication_enabled = var.iam_database_authentication_enabled
+  backtrack_window                    = local.backtrack_window
+  copy_tags_to_snapshot               = var.copy_tags_to_snapshot
+  iam_roles                           = var.iam_roles
+
+  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+
+  dynamic "scaling_configuration" {
+    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [
+    var.scaling_configuration]
+
+    content {
+      auto_pause               = lookup(scaling_configuration.value, "auto_pause", null)
+      max_capacity             = lookup(scaling_configuration.value, "max_capacity", null)
+      min_capacity             = lookup(scaling_configuration.value, "min_capacity", null)
+      seconds_until_auto_pause = lookup(scaling_configuration.value, "seconds_until_auto_pause", null)
+      timeout_action           = lookup(scaling_configuration.value, "timeout_action", null)
+    }
+  }
+
+  s3_import {
+    bucket_name = var.s3_import_bucket_name
+    bucket_prefix = var.s3_import_bucket_prefix
+    source_engine = var.s3_import_source_engine
+    source_engine_version = local.s3_import_source_engine_version
+    ingestion_role = var.s3_import_ingestion_role
+  }
+
+  tags = var.tags
+}
+
 resource "aws_rds_cluster_instance" "this" {
   count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
 
   identifier                      = "${var.name}-${count.index + 1}"
-  cluster_identifier              = aws_rds_cluster.this.id
+  cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, aws_rds_cluster.this-s3-restore.*.id), 0)
   engine                          = var.engine
   engine_version                  = var.engine_version
   instance_class                  = var.instance_type
@@ -141,7 +205,7 @@ resource "aws_appautoscaling_target" "read_replica_count" {
 
   max_capacity       = var.replica_scale_max
   min_capacity       = var.replica_scale_min
-  resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
+  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, aws_rds_cluster.this-s3-restore.*.cluster_identifier), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 }
@@ -151,7 +215,7 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
-  resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
+  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, aws_rds_cluster.this-s3-restore.*.cluster_identifier), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 
@@ -187,8 +251,8 @@ resource "aws_security_group_rule" "default_ingress" {
   description = "From allowed SGs"
 
   type                     = "ingress"
-  from_port                = aws_rds_cluster.this.port
-  to_port                  = aws_rds_cluster.this.port
+  from_port                = element(concat(aws_rds_cluster.this.*.port, aws_rds_cluster.this-s3-restore.*.port), 0)
+  to_port                  = element(concat(aws_rds_cluster.this.*.port, aws_rds_cluster.this-s3-restore.*.port), 0)
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = local.rds_security_group_id
@@ -200,8 +264,8 @@ resource "aws_security_group_rule" "cidr_ingress" {
   description = "From allowed CIDRs"
 
   type              = "ingress"
-  from_port         = aws_rds_cluster.this.port
-  to_port           = aws_rds_cluster.this.port
+  from_port         = element(concat(aws_rds_cluster.this.*.port, aws_rds_cluster.this-s3-restore.*.port), 0)
+  to_port           = element(concat(aws_rds_cluster.this.*.port, aws_rds_cluster.this-s3-restore.*.port), 0)
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id

@@ -142,6 +142,12 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | username | Master DB username | `string` | `"root"` | no |
 | vpc\_id | VPC ID | `string` | n/a | yes |
 | vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | `list(string)` | `[]` | no |
+| s3_import_bucket_name | The bucket name where your backup is stored. Currently, this only works for the MySQL engine | `string` | `""` |
+| s3_import_bucket_prefix | Path to your backup within your S3 bucket. Can we blank. | `string` | `""` |
+| s3_import_ingestion_role | The role ARN to be used to load the data | `string` | `""` |
+| s3_import_source_engine | The engine of your source database. Currently, only one value accepted: `mysql` | `string` | `"mysql"` |
+| s3_import_source_engine_version | Version of your source engine used to make the backup. Specify the minor version as well. E.g.: `5.6.41` | `string` | `""` |
+
 
 ## Outputs
 

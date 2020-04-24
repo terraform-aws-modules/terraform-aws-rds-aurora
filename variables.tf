@@ -320,3 +320,33 @@ variable "ca_cert_identifier" {
   type        = string
   default     = "rds-ca-2019"
 }
+
+variable "s3_import_bucket_name" {
+  description = "(Optional) The name of the S3 bucket to restore the database from"
+  type        = string
+  default     = ""
+}
+
+variable "s3_import_bucket_prefix" {
+  description = "(Optional) Can be blank, but is the path in s3 to your backup"
+  type        = string
+  default     = ""
+}
+
+variable "s3_import_ingestion_role" {
+  description = "Role applied to load the data from s3"
+  type        = string
+  default     = ""
+}
+
+variable "s3_import_source_engine" {
+  description = "Source engine for the backup. The only value accepted currently is: mysql"
+  type        = string
+  default     = "mysql"
+}
+
+variable "s3_import_source_engine_version" {
+  description = "Source engine version for the backup. The only value accepted currently is: mysql"
+  type        = string
+  default     = ""
+}
