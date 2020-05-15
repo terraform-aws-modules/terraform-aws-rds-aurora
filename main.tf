@@ -90,6 +90,7 @@ resource "aws_rds_cluster_instance" "this" {
   publicly_accessible             = var.publicly_accessible
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
+  preferred_backup_window         = var.preferred_backup_window
   preferred_maintenance_window    = var.preferred_maintenance_window
   apply_immediately               = var.apply_immediately
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
