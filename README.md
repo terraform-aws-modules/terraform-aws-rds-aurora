@@ -62,6 +62,7 @@ module "db" {
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
 - [Serverless](examples/serverless): Serverless PostgreSQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
+- [Custom Instance Settings](examples/custom_instance_settings): A PostgreSQL cluster with custom instance settings.
 
 ## Documentation
 
@@ -111,6 +112,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | `bool` | `false` | no |
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
 | instance\_type | Instance type to use | `string` | n/a | yes |
+| instance\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier | `list(map(string))` | [] | no
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
 | name | Name given resources | `string` | n/a | yes |

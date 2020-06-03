@@ -320,3 +320,9 @@ variable "ca_cert_identifier" {
   type        = string
   default     = "rds-ca-2019"
 }
+
+variable "instances_parameters" {
+  description = "Individual settings for instances"
+  type        = list(map(string))
+  default     = []
+}
