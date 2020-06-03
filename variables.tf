@@ -179,6 +179,12 @@ variable "engine_version" {
   default     = "5.6.10a"
 }
 
+variable "enable_http_endpoint" {
+  description = "Whether or not to enable the Data API for a serverless Aurora database engine."
+  type        = bool
+  default     = false
+}
+
 variable "replica_scale_enabled" {
   description = "Whether to enable autoscaling for RDS Aurora (MySQL) read replicas"
   type        = bool
