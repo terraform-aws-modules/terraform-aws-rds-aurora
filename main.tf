@@ -127,6 +127,8 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
+
+  permissions_boundary = var.permissions_boundary
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {

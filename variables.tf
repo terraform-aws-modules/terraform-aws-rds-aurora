@@ -315,6 +315,12 @@ variable "security_group_description" {
   default     = "Managed by Terraform"
 }
 
+variable "permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role."
+  type        = string
+  default     = null
+}
+
 variable "ca_cert_identifier" {
   description = "The identifier of the CA certificate for the DB instance"
   type        = string
