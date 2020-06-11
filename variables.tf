@@ -259,7 +259,7 @@ variable "global_cluster_identifier" {
 }
 
 variable "engine_mode" {
-  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster."
   type        = string
   default     = "provisioned"
 }
