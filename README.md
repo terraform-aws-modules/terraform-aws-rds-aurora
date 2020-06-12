@@ -68,33 +68,43 @@ module "db" {
 Terraform documentation is generated automatically using [pre-commit hooks](http://www.pre-commit.com/). Follow installation instructions [here](https://pre-commit.com/#install).
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | ~> 0.12.6 |
+| aws | ~> 2.45 |
+| random | ~> 2.2 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.0 |
+| aws | ~> 2.45 |
 | random | ~> 2.2 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | `list(string)` | `[]` | no |
-| allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list` | `[]` | no |
+| allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list(string)` | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | `bool` | `false` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | `bool` | `true` | no |
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
+| ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
-| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | n/a | yes |
-| db\_parameter\_group\_name | The name of a DB parameter group to use | `string` | n/a | yes |
+| db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | `null` | no |
+| db\_parameter\_group\_name | The name of a DB parameter group to use | `string` | `null` | no |
 | db\_subnet\_group\_name | The existing subnet group name to use | `string` | `""` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | `bool` | `false` | no |
+| enable\_http\_endpoint | Whether or not to enable the Data API for a serverless Aurora database engine. | `bool` | `false` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | `list(string)` | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | `string` | `"aurora"` | no |
-| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | `string` | `"provisioned"` | no |
+| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster. | `string` | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | `string` | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | `string` | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
@@ -107,6 +117,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | password | Master DB password | `string` | `""` | no |
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not. | `bool` | `false` | no |
 | performance\_insights\_kms\_key\_id | The ARN for the KMS key to encrypt Performance Insights data. | `string` | `""` | no |
+| permissions\_boundary | The ARN of the policy that is used to set the permissions boundary for the role. | `string` | `null` | no |
 | port | The port on which to accept connections | `string` | `""` | no |
 | predefined\_metric\_type | The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections. | `string` | `"RDSReaderAverageCPUUtilization"` | no |
 | preferred\_backup\_window | When to perform DB backups | `string` | `"02:00-03:00"` | no |

@@ -38,6 +38,7 @@ resource "aws_rds_cluster" "this" {
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_version
+  enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
   database_name                       = var.database_name
   master_username                     = var.username
@@ -97,6 +98,7 @@ resource "aws_rds_cluster_instance" "this" {
   promotion_tier                  = count.index + 1
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
+  ca_cert_identifier              = var.ca_cert_identifier
 
   tags = var.tags
 }
@@ -125,6 +127,8 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
+
+  permissions_boundary = var.permissions_boundary
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {

@@ -174,6 +174,12 @@ variable "engine_version" {
   default     = "5.6.10a"
 }
 
+variable "enable_http_endpoint" {
+  description = "Whether or not to enable the Data API for a serverless Aurora database engine."
+  type        = bool
+  default     = false
+}
+
 variable "replica_scale_enabled" {
   description = "Whether to enable autoscaling for RDS Aurora (MySQL) read replicas"
   type        = bool
@@ -253,7 +259,7 @@ variable "global_cluster_identifier" {
 }
 
 variable "engine_mode" {
-  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster."
   type        = string
   default     = "provisioned"
 }
@@ -307,4 +313,16 @@ variable "security_group_description" {
   description = "The description of the security group. If value is set to empty string it will contain cluster name in the description."
   type        = string
   default     = "Managed by Terraform"
+}
+
+variable "permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role."
+  type        = string
+  default     = null
+}
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
 }
