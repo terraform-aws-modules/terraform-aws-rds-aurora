@@ -104,7 +104,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | enable\_http\_endpoint | Whether or not to enable the Data API for a serverless Aurora database engine. | `bool` | `false` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | `list(string)` | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | `string` | `"aurora"` | no |
-| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | `string` | `"provisioned"` | no |
+| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster. | `string` | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | `string` | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | `string` | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
