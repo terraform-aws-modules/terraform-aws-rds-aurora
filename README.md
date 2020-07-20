@@ -72,7 +72,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.6 |
+| terraform | >= 0.12.6, < 0.14 |
 | aws | ~> 2.45 |
 | random | ~> 2.2 |
 
