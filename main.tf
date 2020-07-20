@@ -129,6 +129,10 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
 
   permissions_boundary = var.permissions_boundary
+  
+  tags = merge(var.tags, {
+    Name = local.name
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
