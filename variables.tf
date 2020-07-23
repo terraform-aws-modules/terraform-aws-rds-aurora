@@ -259,7 +259,7 @@ variable "global_cluster_identifier" {
 }
 
 variable "engine_mode" {
-  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster."
   type        = string
   default     = "provisioned"
 }
@@ -313,6 +313,12 @@ variable "security_group_description" {
   description = "The description of the security group. If value is set to empty string it will contain cluster name in the description."
   type        = string
   default     = "Managed by Terraform"
+}
+
+variable "permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role."
+  type        = string
+  default     = null
 }
 
 variable "ca_cert_identifier" {

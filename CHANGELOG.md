@@ -7,6 +7,27 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v2.20.0"></a>
+## [v2.20.0] - 2020-07-20
+
+- feat: Add tags to RDS enhanced monitoring IAM role ([#136](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/136))
+- Upgraded Terraform version supported
+
+
+<a name="v2.19.0"></a>
+## [v2.19.0] - 2020-06-12
+
+- feat: add "this_rds_cluster_instance_ids" to module outputs ([#107](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/107))
+- docs: Add "multimaster" to engine_mode docs ([#133](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/133))
+
+
+<a name="v2.18.0"></a>
+## [v2.18.0] - 2020-06-10
+
+- feat: Add permissions boundary for IAM role ([#104](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/104))
+- Updated README
+
+
 <a name="v2.17.0"></a>
 ## [v2.17.0] - 2020-04-11
 
@@ -367,7 +388,10 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.17.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.20.0...HEAD
+[v2.20.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.19.0...v2.20.0
+[v2.19.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.18.0...v2.19.0
+[v2.18.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.17.0...v2.18.0
 [v2.17.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.16.0...v2.17.0
 [v2.16.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.15.0...v2.16.0
 [v2.15.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.14.0...v2.15.0
