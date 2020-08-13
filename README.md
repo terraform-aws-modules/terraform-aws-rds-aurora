@@ -12,7 +12,7 @@ These types of resources are supported:
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.12 and newer. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
 
 Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
 
@@ -73,14 +73,14 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.6, < 0.14 |
-| aws | ~> 2.45 |
+| aws | >= 2.45, < 4.0 |
 | random | ~> 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.45 |
+| aws | >= 2.45, < 4.0 |
 | random | ~> 2.2 |
 
 ## Inputs
