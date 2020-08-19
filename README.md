@@ -151,6 +151,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | this\_rds\_cluster\_arn | The ID of the cluster |
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
+| this\_rds\_cluster\_hosted\_zone\_id | Route53 hosted zone id of the created cluster |
 | this\_rds\_cluster\_id | The ID of the cluster |
 | this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
 | this\_rds\_cluster\_instance\_ids | A list of all cluster instance ids |
