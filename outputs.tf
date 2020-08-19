@@ -59,7 +59,7 @@ output "this_rds_cluster_instance_ids" {
 
 output "this_rds_cluster_hosted_zone_id" {
   description = "Route53 hosted zone id of the created cluster"
-  value       = aws_rds_cluster.this[*].hosted_zone_id
+  value       = aws_rds_cluster.this.hosted_zone_id
 }
 
 // aws_security_group
