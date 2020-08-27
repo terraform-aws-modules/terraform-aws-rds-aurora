@@ -37,8 +37,14 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "instance_type_replica" {
+  description = "Instance type to use at replica instance"
+  type        = string
+  default     = null
+}
+
 variable "instance_type" {
-  description = "Instance type to use"
+  description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
   type        = string
 }
 
