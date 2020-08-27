@@ -51,10 +51,6 @@ resource "aws_rds_cluster" "this" {
   tags = var.tags
 }
 
-locals {
-  instance_type_replica = var.instance_type_replica != "unset" ? var.instance_type_replica : var.instance_type
-}
-
 resource "aws_rds_cluster_instance" "this" {
   count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
 
@@ -62,7 +58,7 @@ resource "aws_rds_cluster_instance" "this" {
   cluster_identifier              = aws_rds_cluster.this.id
   engine                          = var.engine
   engine_version                  = var.engine_version
-  instance_class                  = count.index > 0 ? local.instance_type_replica : var.instance_type
+  instance_class                  = count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
   publicly_accessible             = var.publicly_accessible
   db_subnet_group_name            = aws_db_subnet_group.this.name
   db_parameter_group_name         = var.db_parameter_group_name

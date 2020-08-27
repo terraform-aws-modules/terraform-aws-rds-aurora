@@ -31,7 +31,7 @@ variable "vpc_id" {
 variable "instance_type_replica" {
   description = "Instance type to use at replica instance"
   type        = string
-  default     = "unset"
+  default     = null
 }
 
 variable "instance_type" {
