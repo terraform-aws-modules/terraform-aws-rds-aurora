@@ -20,7 +20,7 @@ module "aurora" {
   source                          = "../../"
   name                            = "aurora-example-postgresql"
   engine                          = "aurora-postgresql"
-  engine_version                  = "9.6.9"
+  engine_version                  = "11.6"
   subnets                         = data.aws_subnet_ids.all.ids
   vpc_id                          = data.aws_vpc.default.id
   replica_count                   = 2
@@ -28,21 +28,22 @@ module "aurora" {
   instance_type_replica           = "db.t3.medium"
   apply_immediately               = true
   skip_final_snapshot             = true
-  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
+  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres11_parameter_group.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres11_parameter_group.id
   //  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  security_group_description = ""
 }
 
-resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora-db-postgres96-parameter-group"
-  family      = "aurora-postgresql9.6"
-  description = "test-aurora-db-postgres96-parameter-group"
+resource "aws_db_parameter_group" "aurora_db_postgres11_parameter_group" {
+  name        = "test-aurora-db-postgres11-parameter-group"
+  family      = "aurora-postgresql11"
+  description = "test-aurora-db-postgres11-parameter-group"
 }
 
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora-postgres96-cluster-parameter-group"
-  family      = "aurora-postgresql9.6"
-  description = "test-aurora-postgres96-cluster-parameter-group"
+resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres11_parameter_group" {
+  name        = "test-aurora-postgres11-cluster-parameter-group"
+  family      = "aurora-postgresql11"
+  description = "test-aurora-postgres11-cluster-parameter-group"
 }
 
 ############################

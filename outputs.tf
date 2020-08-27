@@ -33,6 +33,7 @@ output "this_rds_cluster_database_name" {
 output "this_rds_cluster_master_password" {
   description = "The master password"
   value       = aws_rds_cluster.this.master_password
+  sensitive   = true
 }
 
 output "this_rds_cluster_port" {
@@ -45,15 +46,24 @@ output "this_rds_cluster_master_username" {
   value       = aws_rds_cluster.this.master_username
 }
 
+output "this_rds_cluster_hosted_zone_id" {
+  description = "Route53 hosted zone id of the created cluster"
+  value       = aws_rds_cluster.this.hosted_zone_id
+}
+
 // aws_rds_cluster_instance
 output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
   value       = aws_rds_cluster_instance.this.*.endpoint
 }
 
+output "this_rds_cluster_instance_ids" {
+  description = "A list of all cluster instance ids"
+  value       = aws_rds_cluster_instance.this.*.id
+}
+
 // aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
-  value       = aws_security_group.this.id
+  value       = local.rds_security_group_id
 }
-
