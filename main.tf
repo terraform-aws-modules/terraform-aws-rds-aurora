@@ -1,5 +1,6 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
+  master_username      = var.replication_source_identifier == "" ? var.username : ""
   master_password      = var.replication_source_identifier == "" ? (var.password == "" ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password) : ""
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
@@ -18,6 +19,11 @@ resource "random_password" "master_password" {
 
   length  = 10
   special = false
+}
+
+resource "aws_rds_global_cluster" "global_cluster" {
+  count                     = var.create_global_cluster ? 1 : 0
+  global_cluster_identifier = var.global_cluster_identifier
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -45,7 +51,7 @@ resource "aws_rds_cluster" "this" {
   enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
   database_name                       = var.database_name
-  master_username                     = var.username
+  master_username                     = local.master_username
   master_password                     = local.master_password
   final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
