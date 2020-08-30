@@ -21,7 +21,7 @@ resource "random_password" "master_password" {
   special = false
 }
 
-resource "aws_rds_global_cluster" "global_cluster" {
+resource "aws_rds_global_cluster" "this" {
   count                     = var.create_global_cluster ? 1 : 0
   global_cluster_identifier = var.global_cluster_identifier
 }
@@ -85,7 +85,8 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
-  tags = var.tags
+  depends_on = [aws_rds_global_cluster.this]
+  tags       = var.tags
 }
 
 resource "aws_rds_cluster_instance" "this" {
