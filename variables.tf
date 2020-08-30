@@ -280,6 +280,12 @@ variable "enabled_cloudwatch_logs_exports" {
   default     = []
 }
 
+variable "is_primary_region" {
+  description = "False when this is either a cross-region replica database, or is a secondary region in a global table"
+  type        = bool
+  default     = true
+}
+
 variable "create_global_cluster" {
   description = "Whether to create a global cluster or not. If true, the cluster will be named var.global_cluster_identifier"
   type        = bool
