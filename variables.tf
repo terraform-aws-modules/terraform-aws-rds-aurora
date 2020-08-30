@@ -280,6 +280,12 @@ variable "enabled_cloudwatch_logs_exports" {
   default     = []
 }
 
+variable "create_global_cluster" {
+  description = "Whether to create a global cluster or not. If true, the cluster will be named var.global_cluster_identifier"
+  type        = bool
+  default     = false
+}
+
 variable "global_cluster_identifier" {
   description = "The global cluster identifier specified on aws_rds_global_cluster"
   type        = string
