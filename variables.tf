@@ -48,6 +48,12 @@ variable "instance_type" {
   type        = string
 }
 
+variable "instance_identifier" {
+  description = "Identifier for any instances created.  This will be suffixed with '-<index+1>'. If instance_identifier is not set, it will use var.name value"
+  type        = string
+  default     = ""
+}
+
 variable "publicly_accessible" {
   description = "Whether the DB should have a public IP address"
   type        = bool

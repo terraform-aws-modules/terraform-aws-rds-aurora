@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
-
+- feat: Allows override of instance identifier ([#143](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/143))
 
 <a name="v2.23.0"></a>
 ## [v2.23.0] - 2020-08-27

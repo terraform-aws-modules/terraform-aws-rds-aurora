@@ -4,6 +4,8 @@ locals {
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
+  db_instance_identifier = var.instance_identifier == "" ? var.name : var.instance_identifier
+
   rds_enhanced_monitoring_arn  = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
   rds_enhanced_monitoring_name = join("", aws_iam_role.rds_enhanced_monitoring.*.name)
 
@@ -82,7 +84,7 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
 
-  identifier                      = "${var.name}-${count.index + 1}"
+  identifier                      = "${local.db_instance_identifier}-${count.index + 1}"
   cluster_identifier              = aws_rds_cluster.this.id
   engine                          = var.engine
   engine_version                  = var.engine_version
