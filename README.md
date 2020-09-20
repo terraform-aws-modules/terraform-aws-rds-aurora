@@ -88,7 +88,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | allowed\_cidr\_blocks | A list of CIDR blocks which are allowed to access the database | `list(string)` | `[]` | no |
-| allowed\_security\_groups | A list of Security Group ID's to allow access to. | `list(string)` | `[]` | no |
+| allowed\_security\_groups | A list of Security Group ID's to allow access from. | `list(string)` | `[]` | no |
 | apply\_immediately | Determines whether or not any DB modifications are applied immediately, or during the maintenance window | `bool` | `false` | no |
 | auto\_minor\_version\_upgrade | Determines whether minor engine upgrades will be performed automatically in the maintenance window | `bool` | `true` | no |
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
