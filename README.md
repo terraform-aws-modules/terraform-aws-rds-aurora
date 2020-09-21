@@ -113,7 +113,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
 | instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | n/a | yes |
 | instance\_type\_replica | Instance type to use at replica instance | `string` | `null` | no |
-| instance\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier | `list(map(string))` | [] | no
+| instance\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier | publicly\_accessible | `list(map(string))` | [] | no
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
 | name | Name given resources | `string` | n/a | yes |

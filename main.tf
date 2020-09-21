@@ -86,7 +86,7 @@ resource "aws_rds_cluster_instance" "this" {
   engine                          = var.engine
   engine_version                  = var.engine_version
   instance_class                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_type", var.instance_type) : count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
-  publicly_accessible             = var.publicly_accessible
+  publicly_accessible             = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "publicly_accessible", var.publicly_accessible) : var.publicly_accessible
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
