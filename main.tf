@@ -64,8 +64,7 @@ resource "aws_rds_cluster" "this" {
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   dynamic "scaling_configuration" {
-    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [
-    var.scaling_configuration]
+    for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
 
     content {
       auto_pause               = lookup(scaling_configuration.value, "auto_pause", null)
@@ -82,11 +81,11 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
 
-  identifier                      = "${var.name}-${count.index + 1}"
+  identifier                      = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_name", "${var.name}-${count.index + 1}") : "${var.name}-${count.index + 1}"
   cluster_identifier              = aws_rds_cluster.this.id
   engine                          = var.engine
   engine_version                  = var.engine_version
-  instance_class                  = count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
+  instance_class                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_type", var.instance_type) : count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
   publicly_accessible             = var.publicly_accessible
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
@@ -95,7 +94,7 @@ resource "aws_rds_cluster_instance" "this" {
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
   monitoring_interval             = var.monitoring_interval
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-  promotion_tier                  = count.index + 1
+  promotion_tier                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_promotion_tier", count.index + 1) : count.index + 1
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   ca_cert_identifier              = var.ca_cert_identifier
