@@ -120,6 +120,18 @@ variable "apply_immediately" {
   default     = false
 }
 
+variable "monitoring_role_arn" {
+  description = "IAM role for RDS to send enhanced monitoring metrics to CloudWatch"
+  type        = string
+  default     = ""
+}
+
+variable "create_monitoring_role" {
+  description = "Whether to create the IAM role for RDS enhanced monitoring"
+  type        = bool
+  default     = true
+}
+
 variable "monitoring_interval" {
   description = "The interval (seconds) between points when Enhanced Monitoring metrics are collected"
   type        = number
