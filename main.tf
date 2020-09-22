@@ -4,7 +4,7 @@ locals {
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
-  rds_enhanced_monitoring_arn  = join("", aws_iam_role.rds_enhanced_monitoring.*.arn)
+  rds_enhanced_monitoring_arn  = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
   rds_enhanced_monitoring_name = join("", aws_iam_role.rds_enhanced_monitoring.*.name)
 
   rds_security_group_id = join("", aws_security_group.this.*.id)
@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = var.monitoring_interval > 0 ? 1 : 0
+  count = var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
@@ -136,7 +136,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = var.monitoring_interval > 0 ? 1 : 0
+  count = var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   role       = local.rds_enhanced_monitoring_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
