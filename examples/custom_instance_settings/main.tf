@@ -36,11 +36,11 @@ module "aurora" {
     // List index should be equal to `replica_count`
     // Omitted keys replaced by module defaults
     {
-      instance_type           = "db.r5.2xlarge"
-      publicly_accessible     = true
+      instance_type       = "db.r5.2xlarge"
+      publicly_accessible = true
     },
     {
-      instance_type           = "db.r5.2xlarge"
+      instance_type = "db.r5.2xlarge"
     },
     {
       instance_name           = "reporting"
