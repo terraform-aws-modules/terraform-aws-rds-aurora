@@ -344,3 +344,9 @@ variable "ca_cert_identifier" {
   type        = string
   default     = "rds-ca-2019"
 }
+
+variable "instances_parameters" {
+  description = "Customized instance settings. Supported keys: instance_name, instance_type, instance_promotion_tier, publicly_accessible"
+  type        = list(map(string))
+  default     = []
+}
