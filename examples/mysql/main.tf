@@ -23,7 +23,7 @@ module "aurora" {
   engine_version                      = "5.7.12"
   subnets                             = data.aws_subnet_ids.all.ids
   vpc_id                              = data.aws_vpc.default.id
-  replica_count                       = 0
+  replica_count                       = 1
   instance_type                       = "db.t2.medium"
   apply_immediately                   = true
   skip_final_snapshot                 = true
