@@ -37,8 +37,14 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "instance_type_replica" {
+  description = "Instance type to use at replica instance"
+  type        = string
+  default     = null
+}
+
 variable "instance_type" {
-  description = "Instance type to use"
+  description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
   type        = string
 }
 
@@ -112,6 +118,18 @@ variable "apply_immediately" {
   description = "Determines whether or not any DB modifications are applied immediately, or during the maintenance window"
   type        = bool
   default     = false
+}
+
+variable "monitoring_role_arn" {
+  description = "IAM role for RDS to send enhanced monitoring metrics to CloudWatch"
+  type        = string
+  default     = ""
+}
+
+variable "create_monitoring_role" {
+  description = "Whether to create the IAM role for RDS enhanced monitoring"
+  type        = bool
+  default     = true
 }
 
 variable "monitoring_interval" {
@@ -259,7 +277,7 @@ variable "global_cluster_identifier" {
 }
 
 variable "engine_mode" {
-  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster."
   type        = string
   default     = "provisioned"
 }
@@ -325,4 +343,10 @@ variable "ca_cert_identifier" {
   description = "The identifier of the CA certificate for the DB instance"
   type        = string
   default     = "rds-ca-2019"
+}
+
+variable "instances_parameters" {
+  description = "Customized instance settings. Supported keys: instance_name, instance_type, instance_promotion_tier, publicly_accessible"
+  type        = list(map(string))
+  default     = []
 }

@@ -12,7 +12,7 @@ These types of resources are supported:
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.12 and newer. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
 
 Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
 
@@ -62,6 +62,7 @@ module "db" {
 - [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
 - [Serverless](examples/serverless): Serverless PostgreSQL cluster.
 - [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
+- [Custom Instance Settings](examples/custom_instance_settings): A PostgreSQL cluster with custom instance settings.
 
 ## Documentation
 
@@ -72,15 +73,15 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.6 |
-| aws | ~> 2.45 |
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.45, < 4.0 |
 | random | ~> 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.45 |
+| aws | >= 2.45, < 4.0 |
 | random | ~> 2.2 |
 
 ## Inputs
@@ -95,6 +96,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
 | ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
+| create\_monitoring\_role | Whether to create the IAM role for RDS enhanced monitoring | `bool` | `true` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | `null` | no |
@@ -104,15 +106,18 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | enable\_http\_endpoint | Whether or not to enable the Data API for a serverless Aurora database engine. | `bool` | `false` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | `list(string)` | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | `string` | `"aurora"` | no |
-| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless. | `string` | `"provisioned"` | no |
+| engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster. | `string` | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | `string` | `"5.6.10a"` | no |
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | `string` | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | `bool` | `false` | no |
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
-| instance\_type | Instance type to use | `string` | n/a | yes |
+| instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | n/a | yes |
+| instance\_type\_replica | Instance type to use at replica instance | `string` | `null` | no |
+| instances\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier, publicly\_accessible | `list(map(string))` | `[]` | no |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
+| monitoring\_role\_arn | IAM role for RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
 | name | Name given resources | `string` | n/a | yes |
 | password | Master DB password | `string` | `""` | no |
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not. | `bool` | `false` | no |
@@ -151,8 +156,10 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | this\_rds\_cluster\_arn | The ID of the cluster |
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
+| this\_rds\_cluster\_hosted\_zone\_id | Route53 hosted zone id of the created cluster |
 | this\_rds\_cluster\_id | The ID of the cluster |
 | this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
+| this\_rds\_cluster\_instance\_ids | A list of all cluster instance ids |
 | this\_rds\_cluster\_master\_password | The master password |
 | this\_rds\_cluster\_master\_username | The master username |
 | this\_rds\_cluster\_port | The port |
