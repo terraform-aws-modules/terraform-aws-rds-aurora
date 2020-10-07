@@ -1,4 +1,4 @@
-// aws_rds_cluster
+# aws_rds_cluster
 output "this_rds_cluster_id" {
   description = "The ID of the cluster"
   value       = module.aurora.this_rds_cluster_id
@@ -40,13 +40,13 @@ output "this_rds_cluster_master_username" {
   value       = module.aurora.this_rds_cluster_master_username
 }
 
-// aws_rds_cluster_instance
+# aws_rds_cluster_instance
 output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
   value       = module.aurora.this_rds_cluster_instance_endpoints
 }
 
-// aws_security_group
+# aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.this_security_group_id

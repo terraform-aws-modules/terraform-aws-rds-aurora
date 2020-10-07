@@ -29,12 +29,12 @@ module "aurora" {
   skip_final_snapshot             = true
   db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres11_parameter_group.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres11_parameter_group.id
-  //  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  #  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
   security_group_description = ""
 
   instances_parameters = [
-    // List index should be equal to `replica_count`
-    // Omitted keys replaced by module defaults
+    # List index should be equal to `replica_count`
+    # Omitted keys replaced by module defaults
     {
       instance_type       = "db.r5.2xlarge"
       publicly_accessible = true
