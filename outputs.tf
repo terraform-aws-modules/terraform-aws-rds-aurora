@@ -1,4 +1,4 @@
-// aws_rds_cluster
+# aws_rds_cluster
 output "this_rds_cluster_arn" {
   description = "The ID of the cluster"
   value       = aws_rds_cluster.this.arn
@@ -24,7 +24,7 @@ output "this_rds_cluster_reader_endpoint" {
   value       = aws_rds_cluster.this.reader_endpoint
 }
 
-// database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
+# database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
 output "this_rds_cluster_database_name" {
   description = "Name for an automatically created database on cluster creation"
   value       = var.database_name
@@ -51,7 +51,7 @@ output "this_rds_cluster_hosted_zone_id" {
   value       = aws_rds_cluster.this.hosted_zone_id
 }
 
-// aws_rds_cluster_instance
+# aws_rds_cluster_instance
 output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
   value       = aws_rds_cluster_instance.this.*.endpoint
@@ -62,7 +62,7 @@ output "this_rds_cluster_instance_ids" {
   value       = aws_rds_cluster_instance.this.*.id
 }
 
-// aws_security_group
+# aws_security_group
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = local.rds_security_group_id
