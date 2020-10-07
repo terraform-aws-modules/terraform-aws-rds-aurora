@@ -99,6 +99,14 @@ resource "aws_rds_cluster_instance" "this" {
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   ca_cert_identifier              = var.ca_cert_identifier
 
+  # Updating engine version forces replacement of instances, and they shouldn't be replaced
+  # because cluster will update them if engine version is changed
+  lifecycle {
+    ignore_changes = [
+      engine_version
+    ]
+  }
+
   tags = var.tags
 }
 
