@@ -73,6 +73,7 @@ variable "password" {
   default     = ""
 }
 
+# This can be used in addition to username = "" to provide no credentials when creating a non-primary cluster of a Global database
 variable "is_primary_cluster" {
   description = "Set this to false if creating a non-primary cluster as part of a Global database"
   type        = bool
