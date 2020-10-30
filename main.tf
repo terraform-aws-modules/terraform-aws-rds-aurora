@@ -136,7 +136,7 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = var.create_cluster && var.monitoring_interval > 0 ? 1 : 0
+  count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
