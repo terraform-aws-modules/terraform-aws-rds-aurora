@@ -21,7 +21,7 @@ output "this_rds_cluster_endpoint" {
 
 output "this_rds_cluster_engine_version" {
   description = "The cluster engine version"
-  value       = aws_rds_cluster.this.engine_version
+  value       = element(concat(aws_rds_cluster.this.*.engine_version, [""]), 0)
 }
 
 output "this_rds_cluster_reader_endpoint" {
@@ -53,7 +53,8 @@ output "this_rds_cluster_master_username" {
 
 output "this_rds_cluster_hosted_zone_id" {
   description = "Route53 hosted zone id of the created cluster"
-  value       = aws_rds_cluster.this.hosted_zone_id
+  value       = element(concat(aws_rds_cluster.this.*.hosted_zone_id, [""]), 0)
+
 }
 
 # aws_rds_cluster_instance

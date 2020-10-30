@@ -88,16 +88,16 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.6, < 0.14 |
-| aws | >= 2.45, < 4.0 |
-| random | ~> 2.2 |
+| terraform | >= 0.12.6 |
+| aws | >= 2.45 |
+| random | >= 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.45, < 4.0 |
-| random | ~> 2.2 |
+| aws | >= 2.45 |
+| random | >= 2.2 |
 
 ## Inputs
 
@@ -128,13 +128,13 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | `bool` | `false` | no |
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
-| instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | n/a | yes |
+| instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | `""` | no |
 | instance\_type\_replica | Instance type to use at replica instance | `string` | `null` | no |
 | instances\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier, publicly\_accessible | `list(map(string))` | `[]` | no |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
 | monitoring\_role\_arn | IAM role for RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
-| name | Name given resources | `string` | n/a | yes |
+| name | Name given resources | `string` | `""` | no |
 | password | Master DB password | `string` | `""` | no |
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not. | `bool` | `false` | no |
 | performance\_insights\_kms\_key\_id | The ARN for the KMS key to encrypt Performance Insights data. | `string` | `""` | no |
@@ -162,7 +162,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | subnets | List of subnet IDs to use | `list(string)` | `[]` | no |
 | tags | A map of tags to add to all resources. | `map(string)` | `{}` | no |
 | username | Master DB username | `string` | `"root"` | no |
-| vpc\_id | VPC ID | `string` | n/a | yes |
+| vpc\_id | VPC ID | `string` | `""` | no |
 | vpc\_security\_group\_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | `list(string)` | `[]` | no |
 
 ## Outputs

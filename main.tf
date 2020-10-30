@@ -1,6 +1,6 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
-  master_password      = var.password == "" ? random_password.master_password.result : var.password
+  master_password      = var.password == "" ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
@@ -14,6 +14,8 @@ locals {
 
 # Random string to use as master password unless one is specified
 resource "random_password" "master_password" {
+  count = var.create_cluster ? 1 : 0
+
   length  = 10
   special = false
 }
@@ -45,7 +47,7 @@ resource "aws_rds_cluster" "this" {
   database_name                       = var.database_name
   master_username                     = var.username
   master_password                     = local.master_password
-  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${random_id.snapshot_identifier.hex}"
+  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
   backup_retention_period             = var.backup_retention_period
@@ -81,7 +83,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.create_cluster && var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
+  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
 
   identifier                      = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_name", "${var.name}-${count.index + 1}") : "${var.name}-${count.index + 1}"
   cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
@@ -113,6 +115,8 @@ resource "aws_rds_cluster_instance" "this" {
 }
 
 resource "random_id" "snapshot_identifier" {
+  count = var.create_cluster ? 1 : 0
+
   keepers = {
     id = var.name
   }
