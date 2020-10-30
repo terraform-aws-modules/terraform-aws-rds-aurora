@@ -1,6 +1,6 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
-  master_password      = var.password == "" ? random_password.master_password.result : var.password
+  master_password      = var.password == "" ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
@@ -14,12 +14,14 @@ locals {
 
 # Random string to use as master password unless one is specified
 resource "random_password" "master_password" {
+  count = var.create_cluster ? 1 : 0
+
   length  = 10
   special = false
 }
 
 resource "aws_db_subnet_group" "this" {
-  count = var.db_subnet_group_name == "" ? 1 : 0
+  count = var.create_cluster && var.db_subnet_group_name == "" ? 1 : 0
 
   name        = var.name
   description = "For Aurora cluster ${var.name}"
@@ -31,6 +33,8 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_rds_cluster" "this" {
+  count = var.create_cluster ? 1 : 0
+
   global_cluster_identifier           = var.global_cluster_identifier
   cluster_identifier                  = var.name
   replication_source_identifier       = var.replication_source_identifier
@@ -43,7 +47,7 @@ resource "aws_rds_cluster" "this" {
   database_name                       = var.database_name
   master_username                     = var.username
   master_password                     = local.master_password
-  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${random_id.snapshot_identifier.hex}"
+  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
   backup_retention_period             = var.backup_retention_period
@@ -79,10 +83,10 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
+  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
 
   identifier                      = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_name", "${var.name}-${count.index + 1}") : "${var.name}-${count.index + 1}"
-  cluster_identifier              = aws_rds_cluster.this.id
+  cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
   engine                          = var.engine
   engine_version                  = var.engine_version
   instance_class                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_type", var.instance_type) : count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
@@ -111,6 +115,8 @@ resource "aws_rds_cluster_instance" "this" {
 }
 
 resource "random_id" "snapshot_identifier" {
+  count = var.create_cluster ? 1 : 0
+
   keepers = {
     id = var.name
   }
@@ -130,7 +136,7 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   name               = "rds-enhanced-monitoring-${var.name}"
   assume_role_policy = data.aws_iam_policy_document.monitoring_rds_assume_role.json
@@ -143,28 +149,28 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   role       = local.rds_enhanced_monitoring_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
 resource "aws_appautoscaling_target" "read_replica_count" {
-  count = var.replica_scale_enabled ? 1 : 0
+  count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
 
   max_capacity       = var.replica_scale_max
   min_capacity       = var.replica_scale_min
-  resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
+  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 }
 
 resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
-  count = var.replica_scale_enabled ? 1 : 0
+  count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
 
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
-  resource_id        = "cluster:${aws_rds_cluster.this.cluster_identifier}"
+  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 
@@ -182,7 +188,7 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
 }
 
 resource "aws_security_group" "this" {
-  count = var.create_security_group ? 1 : 0
+  count = var.create_cluster && var.create_security_group ? 1 : 0
 
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
@@ -195,26 +201,26 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_security_group_rule" "default_ingress" {
-  count = var.create_security_group ? length(var.allowed_security_groups) : 0
+  count = var.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
 
   description = "From allowed SGs"
 
   type                     = "ingress"
-  from_port                = aws_rds_cluster.this.port
-  to_port                  = aws_rds_cluster.this.port
+  from_port                = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
+  to_port                  = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = local.rds_security_group_id
 }
 
 resource "aws_security_group_rule" "cidr_ingress" {
-  count = var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+  count = var.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
 
   description = "From allowed CIDRs"
 
   type              = "ingress"
-  from_port         = aws_rds_cluster.this.port
-  to_port           = aws_rds_cluster.this.port
+  from_port         = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
+  to_port           = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id

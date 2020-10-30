@@ -1,32 +1,32 @@
 # aws_rds_cluster
 output "this_rds_cluster_arn" {
   description = "The ID of the cluster"
-  value       = aws_rds_cluster.this.arn
+  value       = element(concat(aws_rds_cluster.this.*.arn, [""]), 0)
 }
 
 output "this_rds_cluster_id" {
   description = "The ID of the cluster"
-  value       = aws_rds_cluster.this.id
+  value       = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
 }
 
 output "this_rds_cluster_resource_id" {
   description = "The Resource ID of the cluster"
-  value       = aws_rds_cluster.this.cluster_resource_id
+  value       = element(concat(aws_rds_cluster.this.*.cluster_resource_id, [""]), 0)
 }
 
 output "this_rds_cluster_endpoint" {
   description = "The cluster endpoint"
-  value       = aws_rds_cluster.this.endpoint
+  value       = element(concat(aws_rds_cluster.this.*.endpoint, [""]), 0)
 }
 
 output "this_rds_cluster_engine_version" {
   description = "The cluster engine version"
-  value       = aws_rds_cluster.this.engine_version
+  value       = element(concat(aws_rds_cluster.this.*.engine_version, [""]), 0)
 }
 
 output "this_rds_cluster_reader_endpoint" {
   description = "The cluster reader endpoint"
-  value       = aws_rds_cluster.this.reader_endpoint
+  value       = element(concat(aws_rds_cluster.this.*.reader_endpoint, [""]), 0)
 }
 
 # database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
@@ -37,23 +37,24 @@ output "this_rds_cluster_database_name" {
 
 output "this_rds_cluster_master_password" {
   description = "The master password"
-  value       = aws_rds_cluster.this.master_password
+  value       = element(concat(aws_rds_cluster.this.*.master_password, [""]), 0)
   sensitive   = true
 }
 
 output "this_rds_cluster_port" {
   description = "The port"
-  value       = aws_rds_cluster.this.port
+  value       = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
 }
 
 output "this_rds_cluster_master_username" {
   description = "The master username"
-  value       = aws_rds_cluster.this.master_username
+  value       = element(concat(aws_rds_cluster.this.*.master_username, [""]), 0)
 }
 
 output "this_rds_cluster_hosted_zone_id" {
   description = "Route53 hosted zone id of the created cluster"
-  value       = aws_rds_cluster.this.hosted_zone_id
+  value       = element(concat(aws_rds_cluster.this.*.hosted_zone_id, [""]), 0)
+
 }
 
 # aws_rds_cluster_instance

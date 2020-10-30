@@ -1,3 +1,9 @@
+variable "create_cluster" {
+  description = "Controls if RDS cluster should be created (it affects almost all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "create_security_group" {
   description = "Whether to create security group for RDS cluster"
   type        = bool
@@ -7,6 +13,7 @@ variable "create_security_group" {
 variable "name" {
   description = "Name given resources"
   type        = string
+  default     = ""
 }
 
 variable "subnets" {
@@ -36,6 +43,7 @@ variable "allowed_cidr_blocks" {
 variable "vpc_id" {
   description = "VPC ID"
   type        = string
+  default     = ""
 }
 
 variable "instance_type_replica" {
@@ -47,6 +55,7 @@ variable "instance_type_replica" {
 variable "instance_type" {
   description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
   type        = string
+  default     = ""
 }
 
 variable "publicly_accessible" {
