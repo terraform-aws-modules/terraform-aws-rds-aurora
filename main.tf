@@ -46,7 +46,7 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   count = var.create_cluster ? 1 : 0
 
-  global_cluster_identifier           = try(aws_rds_global_cluster.this[0].global_cluster_identifier, "")
+  global_cluster_identifier           = try(aws_rds_global_cluster.this[0].id, "")
   cluster_identifier                  = var.name
   replication_source_identifier       = var.replication_source_identifier
   source_region                       = var.source_region
