@@ -90,7 +90,6 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
-  depends_on = [aws_rds_global_cluster.this]
   tags       = var.tags
 }
 
