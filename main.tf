@@ -22,14 +22,15 @@ resource "random_password" "master_password" {
 }
 
 resource "aws_rds_global_cluster" "this" {
-  count                     = var.create_global_cluster ? 1 : 0
-  global_cluster_identifier = var.global_cluster_identifier
-  database_name             = var.database_name
-  deletion_protection       = var.deletion_protection
-  engine                    = var.engine
-  engine_version            = var.engine_version
-  storage_encrypted         = var.storage_encrypted
+  count                        = var.create_global_cluster ? 1 : 0
+  global_cluster_identifier    = var.global_cluster_identifier
+  database_name                = var.database_name
+  deletion_protection          = var.deletion_protection
+  engine                       = var.engine
+  engine_version               = var.engine_version
+  storage_encrypted            = var.storage_encrypted
   source_db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
+  force_destroy                = false
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -90,7 +91,7 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
-  tags       = var.tags
+  tags = var.tags
 }
 
 resource "aws_rds_cluster_instance" "this" {
