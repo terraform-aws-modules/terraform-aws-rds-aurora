@@ -29,6 +29,7 @@ resource "aws_rds_global_cluster" "this" {
   engine                    = var.engine
   engine_version            = var.engine_version
   storage_encrypted         = var.storage_encrypted
+  source_db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -46,7 +47,6 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   count = var.create_cluster ? 1 : 0
 
-  global_cluster_identifier           = try(aws_rds_global_cluster.this[0].id, "")
   cluster_identifier                  = var.name
   replication_source_identifier       = var.replication_source_identifier
   source_region                       = var.source_region
