@@ -25,7 +25,7 @@ resource "aws_rds_global_cluster" "this" {
   count                        = var.create_global_cluster ? 1 : 0
   global_cluster_identifier    = var.global_cluster_identifier
   deletion_protection          = var.deletion_protection
-  source_db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
+  source_db_cluster_identifier = try(aws_rds_cluster.this[0].arn, "")
   force_destroy                = false
 }
 
