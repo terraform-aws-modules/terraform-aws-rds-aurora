@@ -9,6 +9,11 @@ output "this_rds_cluster_id" {
   value       = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
 }
 
+output "this_rds_cluster_global_id" {
+  description = "The ID of the global cluster. Only present if this is the primary subcluster"
+  value = element(concat(aws_rds_global_cluster.this.*.id, [""]), 0)
+}
+
 output "this_rds_cluster_resource_id" {
   description = "The Resource ID of the cluster"
   value       = element(concat(aws_rds_cluster.this.*.cluster_resource_id, [""]), 0)

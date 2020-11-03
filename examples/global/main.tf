@@ -39,7 +39,7 @@ data "aws_subnet_ids" "ohio" {
 }
 
 data "aws_kms_key" "key" {
-  key_id = "alias/aws/rds"
+  key_id   = "alias/aws/rds"
   provider = aws.ohio
 }
 
@@ -54,6 +54,7 @@ module "virginia_aurora" {
   engine_mode               = "provisioned"
   subnets                   = data.aws_subnet_ids.virginia.ids
   vpc_id                    = data.aws_vpc.virginia.id
+  is_primary_region         = true
   replica_count             = 2
   instance_type             = "db.r5.large"
   apply_immediately         = true
@@ -67,21 +68,21 @@ module "virginia_aurora" {
 }
 
 module "ohio_aurora" {
-  source                    = "../../"
-  name                      = "aurora-example-global-ohio"
-  engine                    = "aurora-postgresql"
-  engine_version            = "11.7"
-  engine_mode               = "provisioned"
-  subnets                   = data.aws_subnet_ids.ohio.ids
-  vpc_id                    = data.aws_vpc.ohio.id
-  replica_count             = 2
-  instance_type             = "db.r5.large"
-  apply_immediately         = true
-  skip_final_snapshot       = true
+  source              = "../../"
+  name                = "aurora-example-global-ohio"
+  engine              = "aurora-postgresql"
+  engine_version      = "11.7"
+  engine_mode         = "provisioned"
+  subnets             = data.aws_subnet_ids.ohio.ids
+  vpc_id              = data.aws_vpc.ohio.id
+  replica_count       = 2
+  instance_type       = "db.r5.large"
+  apply_immediately   = true
+  skip_final_snapshot = true
 
-  create_global_cluster     = false
-  global_cluster_identifier = "aurora-example-global"
-  is_primary_region = false
+  create_global_cluster         = false
+  global_cluster_identifier     = module.virginia_aurora.this_rds_cluster_global_id
+  is_primary_region             = false
   kms_key_id                    = data.aws_kms_key.key.arn
   replication_source_identifier = module.virginia_aurora.this_rds_cluster_arn
   source_region                 = "us-east-1"

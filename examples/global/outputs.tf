@@ -16,7 +16,7 @@ output "this_rds_cluster_endpoint" {
 
 output "this_rds_cluster_reader_endpoints" {
   description = "The cluster reader endpoint"
-  value       = [
+  value = [
     module.virginia_aurora.this_rds_cluster_reader_endpoint,
     module.ohio_aurora.this_rds_cluster_reader_endpoint,
   ]
@@ -46,7 +46,7 @@ output "this_rds_cluster_master_username" {
 // aws_rds_cluster_instance
 output "this_rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
-  value       = concat(
+  value = concat(
     module.virginia_aurora.this_rds_cluster_instance_endpoints,
     module.ohio_aurora.this_rds_cluster_instance_endpoints,
   )
@@ -54,7 +54,7 @@ output "this_rds_cluster_instance_endpoints" {
 
 output "this_rds_cluster_instance_ids" {
   description = "A list of all cluster instance ids"
-  value       = concat(
+  value = concat(
     module.virginia_aurora.this_rds_cluster_instance_ids,
     module.ohio_aurora.this_rds_cluster_instance_ids,
   )

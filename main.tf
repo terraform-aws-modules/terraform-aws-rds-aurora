@@ -25,8 +25,13 @@ resource "aws_rds_global_cluster" "this" {
   count                        = var.create_global_cluster ? 1 : 0
   global_cluster_identifier    = var.global_cluster_identifier
   deletion_protection          = var.deletion_protection
-  source_db_cluster_identifier = try(aws_rds_cluster.this[0].arn, "")
+  source_db_cluster_identifier = element(concat(aws_rds_cluster.this.*.arn, [""]), 0)
   force_destroy                = false
+
+  # There is no API for reading source_db_cluster_identifier
+  lifecycle {
+    ignore_changes = [source_db_cluster_identifier]
+  }
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -72,6 +77,10 @@ resource "aws_rds_cluster" "this" {
   backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
   iam_roles                           = var.iam_roles
+
+  # The primary cluster is registered alongside the creation of the global cluster. All other replica
+  # clusters can be registered to a global cluster as a secondary cluster via this param.
+  global_cluster_identifier           = var.is_primary_region ? "" : var.global_cluster_identifier
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
