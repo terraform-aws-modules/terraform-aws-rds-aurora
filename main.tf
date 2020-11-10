@@ -1,3 +1,5 @@
+data "aws_partition" "current" {}
+
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password
@@ -10,6 +12,8 @@ locals {
   rds_security_group_id = join("", aws_security_group.this.*.id)
 
   name = "aurora-${var.name}"
+
+  partition = data.aws_partition.current.partition
 }
 
 # Random string to use as master password unless one is specified
@@ -152,7 +156,7 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
   count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   role       = local.rds_enhanced_monitoring_name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+  policy_arn = "arn:${local.partition}:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
 resource "aws_appautoscaling_target" "read_replica_count" {
