@@ -1,6 +1,7 @@
 data "aws_partition" "current" {}
 
 locals {
+  partition = data.aws_partition.current.partition
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
   master_password      = var.password == "" ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
@@ -13,7 +14,6 @@ locals {
 
   name = "aurora-${var.name}"
 
-  partition = data.aws_partition.current.partition
 }
 
 # Random string to use as master password unless one is specified
