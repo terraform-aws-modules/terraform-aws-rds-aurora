@@ -94,6 +94,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
 | ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
+| cluster\_identifier | Name given to your Aurora cluster. If unspecified, defaults to value of name variable. | `string` | `""` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
@@ -110,6 +111,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | `bool` | `false` | no |
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
+| instance\_identifier\_prefix | Name prefix given to each RDS instance in your Aurora cluster. If unspecified, defaults to value of name variable. | `string` | `""` | no |
 | instance\_type | Instance type to use | `string` | n/a | yes |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
