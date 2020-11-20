@@ -9,8 +9,8 @@ locals {
 
   rds_security_group_id = join("", aws_security_group.this.*.id)
 
-  cluster_identifier         = var.cluster_identifier == "" ? "${var.name}-" : var.cluster_identifier
-  instance_identifier_prefix = var.instance_identifier_prefix == "" ? var.name : var.instance_identifier_prefix
+  cluster_identifier         = var.cluster_identifier == "" ? var.name : var.cluster_identifier
+  instance_identifier_prefix = var.instance_identifier_prefix == "" ? "${var.name}-" : var.instance_identifier_prefix
 
   name = "aurora-${var.name}"
 }
