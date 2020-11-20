@@ -80,6 +80,10 @@ resource "aws_rds_cluster" "this" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [master_username, master_password]
+  }
 }
 
 resource "aws_rds_cluster_instance" "this" {
