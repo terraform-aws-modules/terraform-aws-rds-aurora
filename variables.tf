@@ -9,6 +9,16 @@ variable "name" {
   type        = string
 }
 
+variable "cluster_identifier" {
+  description = "Name given to your Aurora cluster. If unspecified, defaults to value of name variable"
+  type        = string
+}
+
+variable "instance_identifier_prefix" {
+  description = "Name prefix given to each RDS instance in your Aurora cluster. If unspecified, defaults to value of name variable"
+  type        = string
+}
+
 variable "subnets" {
   description = "List of subnet IDs to use"
   type        = list(string)

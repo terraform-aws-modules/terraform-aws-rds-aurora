@@ -9,6 +9,9 @@ locals {
 
   rds_security_group_id = join("", aws_security_group.this.*.id)
 
+  cluster_identifier         = var.cluster_identifier == "" ? var.name : var.cluster_identifier
+  instance_identifier_prefix = var.instance_identifier_prefix == "" ? var.name : var.instance_identifier_prefix
+
   name = "aurora-${var.name}"
 }
 
@@ -32,7 +35,7 @@ resource "aws_db_subnet_group" "this" {
 
 resource "aws_rds_cluster" "this" {
   global_cluster_identifier           = var.global_cluster_identifier
-  cluster_identifier                  = var.name
+  cluster_identifier                  = local.cluster_identifier
   replication_source_identifier       = var.replication_source_identifier
   source_region                       = var.source_region
   engine                              = var.engine
@@ -82,7 +85,7 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   count = var.replica_scale_enabled ? var.replica_scale_min : var.replica_count
 
-  identifier                      = "${var.name}-${count.index + 1}"
+  identifier                      = "${local.instance_identifier_prefix}-${count.index + 1}"
   cluster_identifier              = aws_rds_cluster.this.id
   engine                          = var.engine
   engine_version                  = var.engine_version
