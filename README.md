@@ -47,7 +47,7 @@ module "db" {
   db_parameter_group_name         = "default"
   db_cluster_parameter_group_name = "default"
 
-  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
   tags                            = {
     Environment = "dev"
@@ -120,7 +120,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | db\_subnet\_group\_name | The existing subnet group name to use | `string` | `""` | no |
 | deletion\_protection | If the DB instance should have deletion protection enabled | `bool` | `false` | no |
 | enable\_http\_endpoint | Whether or not to enable the Data API for a serverless Aurora database engine. | `bool` | `false` | no |
-| enabled\_cloudwatch\_logs\_exports | List of log types to export to cloudwatch | `list(string)` | `[]` | no |
+| enabled\_cloudwatch\_logs\_exports | List of log types to export to AWS CloudWatch | `list(string)` | `[]` | no |
 | engine | Aurora database engine type, currently aurora, aurora-mysql or aurora-postgresql | `string` | `"aurora"` | no |
 | engine\_mode | The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster. | `string` | `"provisioned"` | no |
 | engine\_version | Aurora database engine version. | `string` | `"5.6.10a"` | no |
