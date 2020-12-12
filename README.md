@@ -208,7 +208,9 @@ No modules.
 | <a name="output_rds_cluster_master_username"></a> [rds\_cluster\_master\_username](#output\_rds\_cluster\_master\_username) | The master username |
 | <a name="output_rds_cluster_port"></a> [rds\_cluster\_port](#output\_rds\_cluster\_port) | The port |
 | <a name="output_rds_cluster_reader_endpoint"></a> [rds\_cluster\_reader\_endpoint](#output\_rds\_cluster\_reader\_endpoint) | The cluster reader endpoint |
+| <a name="output_rds_cluster_reader_instance_ids"></a> [rds\_cluster\_reader\_instance\_ids](#output\_rds\_cluster\_reader\_instance\_ids) | A list of all cluster read only instance ids |
 | <a name="output_rds_cluster_resource_id"></a> [rds\_cluster\_resource\_id](#output\_rds\_cluster\_resource\_id) | The Resource ID of the cluster |
+| <a name="output_rds_cluster_writer_instance_ids"></a> [rds\_cluster\_writer\_instance\_ids](#output\_rds\_cluster\_writer\_instance\_ids) | A list of all cluster writer instance ids |
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | The security group ID of the cluster |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

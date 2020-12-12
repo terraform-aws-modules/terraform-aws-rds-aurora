@@ -60,12 +60,12 @@ output "rds_cluster_hosted_zone_id" {
 # aws_rds_cluster_instance
 output "rds_cluster_instance_endpoints" {
   description = "A list of all cluster instance endpoints"
-  value       = aws_rds_cluster_instance.this.*.endpoint
+  value       = [for i in aws_rds_cluster_instance.this : i.endpoint]
 }
 
 output "rds_cluster_instance_ids" {
   description = "A list of all cluster instance ids"
-  value       = aws_rds_cluster_instance.this.*.id
+  value       = [for i in aws_rds_cluster_instance.this : i.id]
 }
 
 output "rds_cluster_instance_dbi_resource_ids" {
@@ -93,4 +93,13 @@ output "enhanced_monitoring_iam_role_arn" {
 output "enhanced_monitoring_iam_role_unique_id" {
   description = "Stable and unique string identifying the enhanced monitoring role"
   value       = element(concat(aws_iam_role.rds_enhanced_monitoring.*.unique_id, [""]), 0)
+}
+output "rds_cluster_reader_instance_ids" {
+  description = "A list of all cluster read only instance ids"
+  value       = [for i in aws_rds_cluster_instance.this : i.id if !i.writer]
+}
+
+output "rds_cluster_writer_instance_ids" {
+  description = "A list of all cluster writer instance ids"
+  value       = [for i in aws_rds_cluster_instance.this : i.id if i.writer]
 }
