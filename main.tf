@@ -105,9 +105,12 @@ resource "aws_rds_cluster_instance" "this" {
 
   # Updating engine version forces replacement of instances, and they shouldn't be replaced
   # because cluster will update them if engine version is changed
+  # Updating copy tags will be set to false after apply on a cluster, but terraform will store true. 
+  # The instances themselves will have the snapshots as true, but the cluster itself will be set to false. 
   lifecycle {
     ignore_changes = [
-      engine_version
+      engine_version,
+      copy_tags_to_snapshot
     ]
   }
 
