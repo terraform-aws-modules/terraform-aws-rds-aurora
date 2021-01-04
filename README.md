@@ -12,9 +12,9 @@ These types of resources are supported:
 
 ## Terraform versions
 
-Terraform 0.12 and newer. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.12 and newer. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
 
-Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+Terraform 0.11. Pin module version to `~> v1.0`.
 
 ## Available features
 
@@ -26,7 +26,7 @@ Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraf
 ```hcl
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   name                            = "test-aurora-db-postgres96"
 
@@ -64,7 +64,7 @@ Sometimes you need to have a way to create RDS Aurora resources conditionally bu
 # This RDS cluster will not be created
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   create_cluster = false
   # ... omitted
@@ -131,6 +131,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | `""` | no |
 | instance\_type\_replica | Instance type to use at replica instance | `string` | `null` | no |
 | instances\_parameters | Customized instance settings. Supported keys: instance\_name, instance\_type, instance\_promotion\_tier, publicly\_accessible | `list(map(string))` | `[]` | no |
+| is\_primary\_cluster | Whether to create a primary cluster (set to false to be a part of a Global database) | `bool` | `true` | no |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
 | monitoring\_role\_arn | IAM role for RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
