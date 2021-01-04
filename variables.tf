@@ -82,6 +82,12 @@ variable "password" {
   default     = ""
 }
 
+variable "is_primary_cluster" {
+  description = "Whether to create a primary cluster (set to false to be a part of a Global database)"
+  type        = bool
+  default     = true
+}
+
 variable "final_snapshot_identifier_prefix" {
   description = "The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too."
   type        = string
