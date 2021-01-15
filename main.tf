@@ -14,7 +14,7 @@ locals {
 
 # Random string to use as master password unless one is specified
 resource "random_password" "master_password" {
-  count = var.create_cluster ? 1 : 0
+  count = var.create_cluster && var.password == "" && var.is_primary_cluster ? 1 : 0
 
   length  = 10
   special = false
