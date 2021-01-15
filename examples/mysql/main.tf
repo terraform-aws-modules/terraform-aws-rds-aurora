@@ -87,3 +87,9 @@ resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
 }
 POLICY
 }
+
+module "disabled_aurora" {
+  source = "../../"
+
+  create_cluster = false
+}

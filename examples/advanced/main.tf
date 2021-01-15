@@ -29,11 +29,12 @@ module "aurora" {
   replica_scale_max               = 5
   monitoring_interval             = 60
   instance_type                   = "db.r4.large"
+  instance_type_replica           = "db.t3.large"
   apply_immediately               = true
   skip_final_snapshot             = true
   db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
-  //  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  #  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
 }
 
 resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {

@@ -1,37 +1,165 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+
+<a name="v3.2.0"></a>
+## [v3.2.0] - 2021-01-15
+
+- fix: Added possibility to specify partition used in iam role policy attachment ([#182](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/182))
+
+
+<a name="v3.1.0"></a>
+## [v3.1.0] - 2021-01-15
+
+- fix: Create random_password only when necessary ([#181](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/181))
+
+
+<a name="v3.0.0"></a>
+## [v3.0.0] - 2021-01-04
+
+- feat: Added conditional creation of RDS Aurora cluster ([#180](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/180))
+
+
+<a name="v2.29.0"></a>
+## [v2.29.0] - 2020-10-30
+
+- feat: Added conditional creation of RDS Aurora cluster ([#159](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/159))
+
+
+<a name="v2.28.0"></a>
+## [v2.28.0] - 2020-10-13
+
+- Updated docs
+- feat: add output engine_version to force provider order ([#152](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/152))
+
+
+<a name="v2.27.0"></a>
+## [v2.27.0] - 2020-10-07
+
+- feat: Updated pre-commit with tflint ([#150](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/150))
+- fix: Ignore instance engine version updates ([#134](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/134))
+
+
+<a name="v2.26.0"></a>
+## [v2.26.0] - 2020-09-22
+
+- feat: Allow to customizable instance settings ([#146](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/146))
+
+
+<a name="v2.25.0"></a>
+## [v2.25.0] - 2020-09-22
+
+
+
+<a name="v2.24.0"></a>
+## [v2.24.0] - 2020-09-22
+
+- feat: Add support for existing IAM role for enhanced monitoring ([#79](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/79))
+
+
+<a name="v2.23.0"></a>
+## [v2.23.0] - 2020-08-27
+
+- feat: Allows different instance_size for replicas ([#61](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/61))
+
+
+<a name="v2.22.0"></a>
+## [v2.22.0] - 2020-08-19
+
+- feat: Add output aws_rds_cluster.this.hosted_zone_id ([#125](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/125))
+
+
+<a name="v2.21.0"></a>
+## [v2.21.0] - 2020-08-13
+
+- Updated version requirements for AWS provider v3
+
+
+<a name="v2.20.0"></a>
+## [v2.20.0] - 2020-07-20
+
+- feat: Add tags to RDS enhanced monitoring IAM role ([#136](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/136))
+- Upgraded Terraform version supported
+
+
+<a name="v2.19.0"></a>
+## [v2.19.0] - 2020-06-12
+
+- feat: add "this_rds_cluster_instance_ids" to module outputs ([#107](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/107))
+- docs: Add "multimaster" to engine_mode docs ([#133](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/133))
+
+
+<a name="v2.18.0"></a>
+## [v2.18.0] - 2020-06-10
+
+- feat: Add permissions boundary for IAM role ([#104](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/104))
+- Updated README
+
+
+<a name="v2.17.0"></a>
+## [v2.17.0] - 2020-04-11
+
+- feat: Support enable_http_endpoint - Data API ([#117](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/117))
+- Updated postgres example to latest engine_version
+
+
+<a name="v2.16.0"></a>
+## [v2.16.0] - 2020-02-26
+
+- Updated pre-commit-terraform with README
+- Updated pre-commit-terraform with README
+- Adding support for ca_cert_identifier for the upcoming RDS cert update on 5 March 2020 ([#91](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/91)) ([#98](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/98))
+- Added missing type type for allowed_security_groups variable ([#97](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/97))
+
+
+<a name="v2.15.0"></a>
+## [v2.15.0] - 2020-01-28
+
+- Disabled special characters in random_password ([#101](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/101))
+
+
+<a name="v2.14.0"></a>
+## [v2.14.0] - 2020-01-23
+
+- Changed random_id to random_password resource ([#99](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/99))
+
+
+<a name="v2.13.0"></a>
+## [v2.13.0] - 2020-01-23
+
+- Adding version requirements
+
+
+<a name="v2.12.0"></a>
+## [v2.12.0] - 2020-01-23
+
+- Updated pre-commit-terraform to support terraform-docs 0.8
+- Hide sensitive password data from cli output ([#89](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/89))
 
 
 <a name="v2.11.0"></a>
 ## [v2.11.0] - 2019-11-29
 
 - Made description of security group backward compatible (and optional) ([#87](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/87))
-- Updated CHANGELOG
 - Add security group name and description ([#80](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/80))
-- Updated CHANGELOG
 - Updated README
 - Set null as default db_parameter_group_name ([#72](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/72))
-- Updated CHANGELOG
 - Support setting aws_rds_cluster iam roles ([#74](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/74))
-- Updated CHANGELOG
 - Fix the error when "create_security_group" is false ([#75](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/75))
-- Updated CHANGELOG
 - Added support for conditional creation of SG and allowed CIDR blocks ([#71](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/71))
-- Updated CHANGELOG
 - Updated README
 - Add option to customise predefined_metric_type ([#66](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/66))
-- Updated CHANGELOG
 - Added support for backtrack_window, cross region read replicas, copy_tags_to_snapshots, scaling_configurations ([#70](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/70))
-- Updated CHANGELOG
 - Fixes after [#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64) (subnets are optional now), updated pre-commit hooks and docs
 - Add support to use existing subnet group name ([#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64))
 - Fix PostgreSQL example link ([#52](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/52))
-- Updated CHANGELOG
 - Support using previously created SG for Aurora cluster - TF 0.12 ([#49](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/49))
-- Updated CHANGELOG
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 ### 
@@ -51,18 +179,12 @@ when calling import with this module in the configuration.
 <a name="v1.21.0"></a>
 ## [v1.21.0] - 2019-11-28
 
-- Updated CHANGELOG
 - Revert "add support for ca_cert_identifier option ([#83](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/83))" ([#85](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/85))
-- Updated CHANGELOG
 - add support for ca_cert_identifier option ([#83](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/83))
-- Updated CHANGELOG
 - Updated docs
 - Add scaling_configuration ([#63](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/63))
-- Updated CHANGELOG
 - Added ability to deploy a cross region Aurora Cluster Read Replica ([#69](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/69))
-- Updated CHANGELOG
 - Added backtrack_windows for Aurora ([#57](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/57))
-- Updated CHANGELOG
 - Added changelog
 - Added copy_tags_to_snapshot (closes [#60](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/60))
 - Allow the addition of IP-based ingress rules ([#51](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/51))
@@ -72,31 +194,20 @@ when calling import with this module in the configuration.
 <a name="v2.10.0"></a>
 ## [v2.10.0] - 2019-11-28
 
-- Updated CHANGELOG
 - Add security group name and description ([#80](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/80))
-- Updated CHANGELOG
 - Updated README
 - Set null as default db_parameter_group_name ([#72](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/72))
-- Updated CHANGELOG
 - Support setting aws_rds_cluster iam roles ([#74](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/74))
-- Updated CHANGELOG
 - Fix the error when "create_security_group" is false ([#75](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/75))
-- Updated CHANGELOG
 - Added support for conditional creation of SG and allowed CIDR blocks ([#71](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/71))
-- Updated CHANGELOG
 - Updated README
 - Add option to customise predefined_metric_type ([#66](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/66))
-- Updated CHANGELOG
 - Added support for backtrack_window, cross region read replicas, copy_tags_to_snapshots, scaling_configurations ([#70](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/70))
-- Updated CHANGELOG
 - Fixes after [#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64) (subnets are optional now), updated pre-commit hooks and docs
 - Add support to use existing subnet group name ([#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64))
 - Fix PostgreSQL example link ([#52](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/52))
-- Updated CHANGELOG
 - Support using previously created SG for Aurora cluster - TF 0.12 ([#49](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/49))
-- Updated CHANGELOG
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 ### 
@@ -116,16 +227,11 @@ when calling import with this module in the configuration.
 <a name="v1.20.0"></a>
 ## [v1.20.0] - 2019-11-28
 
-- Updated CHANGELOG
 - add support for ca_cert_identifier option ([#83](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/83))
-- Updated CHANGELOG
 - Updated docs
 - Add scaling_configuration ([#63](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/63))
-- Updated CHANGELOG
 - Added ability to deploy a cross region Aurora Cluster Read Replica ([#69](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/69))
-- Updated CHANGELOG
 - Added backtrack_windows for Aurora ([#57](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/57))
-- Updated CHANGELOG
 - Added changelog
 - Added copy_tags_to_snapshot (closes [#60](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/60))
 - Allow the addition of IP-based ingress rules ([#51](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/51))
@@ -135,7 +241,6 @@ when calling import with this module in the configuration.
 <a name="v2.9.0"></a>
 ## [v2.9.0] - 2019-11-08
 
-- Updated CHANGELOG
 - Updated README
 - Set null as default db_parameter_group_name ([#72](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/72))
 
@@ -143,28 +248,24 @@ when calling import with this module in the configuration.
 <a name="v2.8.0"></a>
 ## [v2.8.0] - 2019-11-08
 
-- Updated CHANGELOG
 - Support setting aws_rds_cluster iam roles ([#74](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/74))
 
 
 <a name="v2.7.0"></a>
 ## [v2.7.0] - 2019-11-08
 
-- Updated CHANGELOG
 - Fix the error when "create_security_group" is false ([#75](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/75))
 
 
 <a name="v2.6.0"></a>
 ## [v2.6.0] - 2019-09-30
 
-- Updated CHANGELOG
 - Added support for conditional creation of SG and allowed CIDR blocks ([#71](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/71))
 
 
 <a name="v2.5.0"></a>
 ## [v2.5.0] - 2019-09-30
 
-- Updated CHANGELOG
 - Updated README
 - Add option to customise predefined_metric_type ([#66](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/66))
 
@@ -172,24 +273,18 @@ when calling import with this module in the configuration.
 <a name="v2.4.0"></a>
 ## [v2.4.0] - 2019-09-30
 
-- Updated CHANGELOG
 - Added support for backtrack_window, cross region read replicas, copy_tags_to_snapshots, scaling_configurations ([#70](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/70))
-- Updated CHANGELOG
 - Fixes after [#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64) (subnets are optional now), updated pre-commit hooks and docs
 - Add support to use existing subnet group name ([#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64))
 - Fix PostgreSQL example link ([#52](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/52))
-- Updated CHANGELOG
 - Support using previously created SG for Aurora cluster - TF 0.12 ([#49](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/49))
-- Updated CHANGELOG
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 
 <a name="v1.19.0"></a>
 ## [v1.19.0] - 2019-09-29
 
-- Updated CHANGELOG
 - Updated docs
 - Add scaling_configuration ([#63](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/63))
 
@@ -197,21 +292,18 @@ when calling import with this module in the configuration.
 <a name="v1.18.0"></a>
 ## [v1.18.0] - 2019-09-29
 
-- Updated CHANGELOG
 - Added ability to deploy a cross region Aurora Cluster Read Replica ([#69](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/69))
 
 
 <a name="v1.17.0"></a>
 ## [v1.17.0] - 2019-09-28
 
-- Updated CHANGELOG
 - Added backtrack_windows for Aurora ([#57](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/57))
 
 
 <a name="v1.16.0"></a>
 ## [v1.16.0] - 2019-09-28
 
-- Updated CHANGELOG
 - Added changelog
 - Added copy_tags_to_snapshot (closes [#60](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/60))
 - Allow the addition of IP-based ingress rules ([#51](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/51))
@@ -221,7 +313,6 @@ when calling import with this module in the configuration.
 <a name="v2.3.0"></a>
 ## [v2.3.0] - 2019-08-29
 
-- Updated CHANGELOG
 - Fixes after [#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64) (subnets are optional now), updated pre-commit hooks and docs
 - Add support to use existing subnet group name ([#64](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/64))
 - Fix PostgreSQL example link ([#52](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/52))
@@ -230,11 +321,8 @@ when calling import with this module in the configuration.
 <a name="v2.2.0"></a>
 ## [v2.2.0] - 2019-06-24
 
-- Updated CHANGELOG
 - Support using previously created SG for Aurora cluster - TF 0.12 ([#49](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/49))
-- Updated CHANGELOG
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 
@@ -248,9 +336,7 @@ when calling import with this module in the configuration.
 <a name="v2.1.0"></a>
 ## [v2.1.0] - 2019-06-14
 
-- Updated CHANGELOG
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 
@@ -263,7 +349,6 @@ when calling import with this module in the configuration.
 <a name="v2.0.0"></a>
 ## [v2.0.0] - 2019-06-11
 
-- Updated CHANGELOG
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
 
@@ -299,7 +384,6 @@ when calling import with this module in the configuration.
 <a name="v1.9.0"></a>
 ## [v1.9.0] - 2019-02-16
 
-- Merge pull request [#25](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/25) from Blokje5/add-support-for-database-iam-authentication
 - Remove validation
 - Add support for IAM Database authentication
 
@@ -309,21 +393,18 @@ when calling import with this module in the configuration.
 
 - Updated example with correct allowed_security_groups_count
 - Run pre-commit hooks
-- Merge pull request [#23](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/23) from dekimsey/fix-default-ingress-count-error
 - Hardcode number of allowed_security_groups
 
 
 <a name="v1.7.0"></a>
 ## [v1.7.0] - 2019-01-30
 
-- Merge pull request [#21](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/21) from max-rocket-internet/remove_maintainer
 - Removing myself from README
 
 
 <a name="v1.6.0"></a>
 ## [v1.6.0] - 2019-01-30
 
-- Merge pull request [#22](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/22) from terraform-aws-modules/pr/13
 - Merge remote-tracking branch 'origin/master' into pr-13
 - Added output for database_name
 - add support for database_name argument
@@ -332,7 +413,6 @@ when calling import with this module in the configuration.
 <a name="v1.5.0"></a>
 ## [v1.5.0] - 2019-01-30
 
-- Merge pull request [#15](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/15) from christiangjengedal/support_deletion_protection
 - Merge branch 'master' into support_deletion_protection
 - Added argument deletion_protection
 
@@ -340,7 +420,6 @@ when calling import with this module in the configuration.
 <a name="v1.4.0"></a>
 ## [v1.4.0] - 2019-01-30
 
-- Merge pull request [#20](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/20) from terraform-aws-modules/removed_azs
 - Removed availability_zones var (closes [#10](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/10))
 
 
@@ -348,7 +427,6 @@ when calling import with this module in the configuration.
 ## [v1.3.0] - 2019-01-30
 
 - Run pre-commit hooks
-- Merge pull request [#16](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/16) from terraform-aws-modules/fix_az
 - Merge branch 'master' into fix_az
 - Fixed variable for az
 
@@ -357,7 +435,6 @@ when calling import with this module in the configuration.
 ## [v1.1.0] - 2019-01-30
 
 - Run pre-commit hooks
-- Merge pull request [#17](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/17) from christiangjengedal/mod_securitygroup
 - 3 adjustments: - Avoid description attr on aws_security_group to avoid forcing new instance on changes - Use name-prefix to ensure unique names - Avoid unnecessary name-prefixes
 
 
@@ -365,12 +442,9 @@ when calling import with this module in the configuration.
 ## [v1.0.0] - 2018-12-11
 
 - Updated pre-commit hooks version
-- Merge pull request [#4](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/4) from FutureSharks/example_fix
-- Merge pull request [#3](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/3) from terraform-aws-modules/post_initial_commit
 - Fix for: 'count' cannot be computed
 - Added few files
 - Made small changes to be closer to other terraform-aws-modules
-- Merge pull request [#1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/1) from FutureSharks/initial_commit
 - adding pre commit hooks config
 - updating readme, docs, main.tf etc
 - adding port output
@@ -387,7 +461,28 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.11.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.2.0...HEAD
+[v3.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.1.0...v3.2.0
+[v3.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.0.0...v3.1.0
+[v3.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.29.0...v3.0.0
+[v2.29.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.28.0...v2.29.0
+[v2.28.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.27.0...v2.28.0
+[v2.27.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.26.0...v2.27.0
+[v2.26.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.25.0...v2.26.0
+[v2.25.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.24.0...v2.25.0
+[v2.24.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.23.0...v2.24.0
+[v2.23.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.22.0...v2.23.0
+[v2.22.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.21.0...v2.22.0
+[v2.21.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.20.0...v2.21.0
+[v2.20.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.19.0...v2.20.0
+[v2.19.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.18.0...v2.19.0
+[v2.18.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.17.0...v2.18.0
+[v2.17.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.16.0...v2.17.0
+[v2.16.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.15.0...v2.16.0
+[v2.15.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.14.0...v2.15.0
+[v2.14.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.13.0...v2.14.0
+[v2.13.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.12.0...v2.13.0
+[v2.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.11.0...v2.12.0
 [v2.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.21.0...v2.11.0
 [v1.21.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v2.10.0...v1.21.0
 [v2.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v1.20.0...v2.10.0
