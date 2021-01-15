@@ -136,6 +136,12 @@ variable "apply_immediately" {
   default     = false
 }
 
+variable "iam_partition" {
+  description = "IAM Partition to use when generating ARN's. For most regions this can be left at default. China/Govcloud use different partitions"
+  type        = string
+  default     = "aws"
+}
+
 variable "monitoring_role_arn" {
   description = "IAM role for RDS to send enhanced monitoring metrics to CloudWatch"
   type        = string
