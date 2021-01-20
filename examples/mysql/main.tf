@@ -25,6 +25,8 @@ module "aurora" {
   vpc_id                              = data.aws_vpc.default.id
   replica_count                       = 0
   instance_type                       = "db.t2.medium"
+  password                            = random_password.master.result
+  create_random_password              = false
   apply_immediately                   = true
   skip_final_snapshot                 = true
   db_parameter_group_name             = aws_db_parameter_group.aurora_db_57_parameter_group.id
@@ -86,6 +88,10 @@ resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
   ]
 }
 POLICY
+}
+
+resource "random_password" "master" {
+  length = 10
 }
 
 module "disabled_aurora" {

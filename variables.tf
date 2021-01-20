@@ -10,6 +10,12 @@ variable "create_security_group" {
   default     = true
 }
 
+variable "create_random_password" {
+  description = "Whether to create random password for RDS primary cluster"
+  type        = bool
+  default     = true
+}
+
 variable "name" {
   description = "Name given resources"
   type        = string

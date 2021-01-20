@@ -113,6 +113,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_cluster | Controls if RDS cluster should be created (it affects almost all resources) | `bool` | `true` | no |
 | create\_monitoring\_role | Whether to create the IAM role for RDS enhanced monitoring | `bool` | `true` | no |
+| create\_random\_password | Whether to create random password for RDS primary cluster | `bool` | `true` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | `null` | no |

@@ -1,6 +1,6 @@
 locals {
   port                 = var.port == "" ? var.engine == "aurora-postgresql" ? "5432" : "3306" : var.port
-  master_password      = var.password == "" && var.is_primary_cluster ? element(concat(random_password.master_password.*.result, [""]), 0) : var.password
+  master_password      = var.create_cluster && var.create_random_password && var.is_primary_cluster ? random_password.master_password[0].result : var.password
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
@@ -12,9 +12,9 @@ locals {
   name = "aurora-${var.name}"
 }
 
-# Random string to use as master password unless one is specified
+# Random string to use as master password
 resource "random_password" "master_password" {
-  count = var.create_cluster && var.password == "" && var.is_primary_cluster ? 1 : 0
+  count = var.create_cluster && var.create_random_password ? 1 : 0
 
   length  = 10
   special = false
