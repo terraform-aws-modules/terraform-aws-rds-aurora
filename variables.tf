@@ -166,6 +166,12 @@ variable "monitoring_interval" {
   default     = 0
 }
 
+variable "allow_major_version_upgrade" {
+  description = "Determines whether major engine upgrades are allowed when changing engine version"
+  type        = bool
+  default     = false
+}
+
 variable "auto_minor_version_upgrade" {
   description = "Determines whether minor engine upgrades will be performed automatically in the maintenance window"
   type        = bool
