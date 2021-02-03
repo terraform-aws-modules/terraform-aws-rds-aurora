@@ -1,5 +1,17 @@
+variable "create_cluster" {
+  description = "Controls if RDS cluster should be created (it affects almost all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "create_security_group" {
   description = "Whether to create security group for RDS cluster"
+  type        = bool
+  default     = true
+}
+
+variable "create_random_password" {
+  description = "Whether to create random password for RDS primary cluster"
   type        = bool
   default     = true
 }
@@ -7,6 +19,7 @@ variable "create_security_group" {
 variable "name" {
   description = "Name given resources"
   type        = string
+  default     = ""
 }
 
 variable "subnets" {
@@ -17,6 +30,7 @@ variable "subnets" {
 
 variable "replica_count" {
   description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
+  type        = number
   default     = 1
 }
 
@@ -35,11 +49,19 @@ variable "allowed_cidr_blocks" {
 variable "vpc_id" {
   description = "VPC ID"
   type        = string
+  default     = ""
+}
+
+variable "instance_type_replica" {
+  description = "Instance type to use at replica instance"
+  type        = string
+  default     = null
 }
 
 variable "instance_type" {
-  description = "Instance type to use"
+  description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
   type        = string
+  default     = ""
 }
 
 variable "publicly_accessible" {
@@ -64,6 +86,12 @@ variable "password" {
   description = "Master DB password"
   type        = string
   default     = ""
+}
+
+variable "is_primary_cluster" {
+  description = "Whether to create a primary cluster (set to false to be a part of a Global database)"
+  type        = bool
+  default     = true
 }
 
 variable "final_snapshot_identifier_prefix" {
@@ -126,6 +154,24 @@ variable "apply_immediately" {
   default     = false
 }
 
+variable "iam_partition" {
+  description = "IAM Partition to use when generating ARN's. For most regions this can be left at default. China/Govcloud use different partitions"
+  type        = string
+  default     = "aws"
+}
+
+variable "monitoring_role_arn" {
+  description = "IAM role for RDS to send enhanced monitoring metrics to CloudWatch"
+  type        = string
+  default     = ""
+}
+
+variable "create_monitoring_role" {
+  description = "Whether to create the IAM role for RDS enhanced monitoring"
+  type        = bool
+  default     = true
+}
+
 variable "monitoring_interval" {
   description = "The interval (seconds) between points when Enhanced Monitoring metrics are collected"
   type        = number
@@ -184,6 +230,12 @@ variable "engine_version" {
   description = "Aurora database engine version."
   type        = string
   default     = "5.6.10a"
+}
+
+variable "enable_http_endpoint" {
+  description = "Whether or not to enable the Data API for a serverless Aurora database engine."
+  type        = bool
+  default     = false
 }
 
 variable "replica_scale_enabled" {
@@ -265,18 +317,20 @@ variable "global_cluster_identifier" {
 }
 
 variable "engine_mode" {
-  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless."
+  description = "The database engine mode. Valid values: global, parallelquery, provisioned, serverless, multimaster."
   type        = string
   default     = "provisioned"
 }
 
 variable "replication_source_identifier" {
   description = "ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica."
+  type        = string
   default     = ""
 }
 
 variable "source_region" {
   description = "The source region for an encrypted replica DB cluster."
+  type        = string
   default     = ""
 }
 
@@ -294,6 +348,7 @@ variable "db_subnet_group_name" {
 
 variable "predefined_metric_type" {
   description = "The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections."
+  type        = string
   default     = "RDSReaderAverageCPUUtilization"
 }
 
@@ -319,4 +374,22 @@ variable "security_group_description" {
   description = "The description of the security group. If value is set to empty string it will contain cluster name in the description."
   type        = string
   default     = "Managed by Terraform"
+}
+
+variable "permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role."
+  type        = string
+  default     = null
+}
+
+variable "ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the DB instance"
+  type        = string
+  default     = "rds-ca-2019"
+}
+
+variable "instances_parameters" {
+  description = "Customized instance settings. Supported keys: instance_name, instance_type, instance_promotion_tier, publicly_accessible"
+  type        = list(map(string))
+  default     = []
 }

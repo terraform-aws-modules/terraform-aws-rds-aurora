@@ -17,45 +17,72 @@ data "aws_subnet_ids" "all" {
 # RDS Aurora
 #############
 module "aurora" {
-  source                = "../../"
-  name                  = "aurora-serverless"
-  engine                = "aurora"
+  source = "../../"
+  name   = "aurora"
+
+  # PostgreSQL
+  engine = "aurora-postgresql"
+
+  # MySQL
+  # engine = "aurora"
+
   engine_mode           = "serverless"
+  engine_version        = null
   replica_scale_enabled = false
   replica_count         = 0
 
   backtrack_window = 10 # ignored in serverless
 
-  subnets                         = data.aws_subnet_ids.all.ids
-  vpc_id                          = data.aws_vpc.default.id
-  monitoring_interval             = 60
-  instance_type                   = "db.r4.large"
-  apply_immediately               = true
-  skip_final_snapshot             = true
-  storage_encrypted               = true
-  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
+  subnets             = data.aws_subnet_ids.all.ids
+  vpc_id              = data.aws_vpc.default.id
+  monitoring_interval = 60
+  skip_final_snapshot = true
+  instance_type       = "db.r4.large" # ignored for serverless
+  apply_immediately   = true
+  storage_encrypted   = true
+
+  # PostgreSQL
+  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgresql10_parameter_group.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgresql10_parameter_group.id
+
+  # MySQL
+  #  db_parameter_group_name         = aws_db_parameter_group.aurora_db_aurora56_parameter_group.id
+  #  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_aurora56_parameter_group.id
 
   scaling_configuration = {
     auto_pause               = true
-    max_capacity             = 256
     min_capacity             = 2
+    max_capacity             = 16
     seconds_until_auto_pause = 300
     timeout_action           = "ForceApplyCapacityChange"
   }
 }
 
-resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora56-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora56-parameter-group"
+# PostgreSQL
+resource "aws_db_parameter_group" "aurora_db_postgresql10_parameter_group" {
+  name        = "test-postgresql10-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "test-postgresql10-parameter-group"
 }
 
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora56-cluster-parameter-group"
-  family      = "aurora5.6"
-  description = "test-aurora56-cluster-parameter-group"
+resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgresql10_parameter_group" {
+  name        = "test-postgresql10-cluster-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "test-postgresql10-cluster-parameter-group"
 }
+
+# MySQL
+#resource "aws_db_parameter_group" "aurora_db_aurora56_parameter_group" {
+#  name        = "test-aurora56-parameter-group"
+#  family      = "aurora5.6"
+#  description = "test-aurora56-parameter-group"
+#}
+#
+#resource "aws_rds_cluster_parameter_group" "aurora_cluster_aurora56_parameter_group" {
+#  name        = "test-aurora56-cluster-parameter-group"
+#  family      = "aurora5.6"
+#  description = "test-aurora56-cluster-parameter-group"
+#}
 
 ############################
 # Example of security group
