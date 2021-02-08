@@ -1,8 +1,8 @@
 locals {
-  port             = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
-  master_password  = "${var.password == "" ? random_id.master_password.b64 : var.password}"
+  port                 = "${var.port == "" ? "${var.engine == "aurora-postgresql" ? "5432" : "3306"}" : var.port}"
+  master_password      = "${var.password == "" ? random_id.master_password.b64 : var.password}"
   db_subnet_group_name = "${var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name}"
-  backtrack_window = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
+  backtrack_window     = "${var.backtrack_window == "" ? "${var.engine == "aurora" ? "0" : ""}" : var.backtrack_window}"
 }
 
 # Random string to use as master password unless one is specified
@@ -147,7 +147,9 @@ resource "aws_security_group" "this" {
   name_prefix = "${var.name}-"
   vpc_id      = "${var.vpc_id}"
 
-  tags = "${var.tags}"
+  description = "${var.security_group_description == "" ? "Control traffic to/from RDS Aurora ${var.name}" : var.security_group_description}"
+
+  tags = "${merge(var.tags, map("Name", "${var.name}"))}"
 }
 
 resource "aws_security_group_rule" "default_ingress" {
