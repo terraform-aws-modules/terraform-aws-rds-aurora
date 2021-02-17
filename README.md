@@ -153,8 +153,8 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | replica\_scale\_cpu | CPU usage to trigger autoscaling at | `number` | `70` | no |
 | replica\_scale\_enabled | Whether to enable autoscaling for RDS Aurora (MySQL) read replicas | `bool` | `false` | no |
 | replica\_scale\_in\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale in | `number` | `300` | no |
-| replica\_scale\_max | Maximum number of replicas to allow scaling for | `number` | `0` | no |
-| replica\_scale\_min | Minimum number of replicas to allow scaling for | `number` | `2` | no |
+| replica\_scale\_max | Maximum number of read replicas to allow scaling for | `number` | `0` | no |
+| replica\_scale\_min | Minimum number of read replicas to allow scaling for | `number` | `2` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | `number` | `300` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | `string` | `""` | no |
 | scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine\_mode is set to `serverless` | `map(string)` | `{}` | no |

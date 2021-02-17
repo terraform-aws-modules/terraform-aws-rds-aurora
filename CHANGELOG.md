@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
+- fix: Specify the number of read replicas as one less that total instances ([#190](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/190))
 
 
 <a name="v3.5.0"></a>

@@ -239,13 +239,13 @@ variable "replica_scale_enabled" {
 }
 
 variable "replica_scale_max" {
-  description = "Maximum number of replicas to allow scaling for"
+  description = "Maximum number of read replicas to allow scaling for"
   type        = number
   default     = 0
 }
 
 variable "replica_scale_min" {
-  description = "Minimum number of replicas to allow scaling for"
+  description = "Minimum number of read replicas to allow scaling for"
   type        = number
   default     = 2
 }
