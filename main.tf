@@ -91,7 +91,7 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
-  tags = var.tags
+  tags = merge(var.tags, var.cluster_specific_tags)
 }
 
 resource "aws_rds_cluster_instance" "this" {
