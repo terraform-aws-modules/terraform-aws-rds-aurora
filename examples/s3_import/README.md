@@ -49,32 +49,34 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.26 |
-| aws | >= 2.49 |
-| random | >= 3.0 |
+| aws | >= 3.8 |
+| random | >= 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.49 |
-| random | >= 3.0 |
+| aws | >= 3.8 |
+| random | >= 2.2 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| db | ../../ |  |
-| import_s3_bucket | terraform-aws-modules/s3-bucket/aws | ~> 1.17 |
-| security_group | terraform-aws-modules/security-group/aws | ~> 3.17 |
+| aurora | ../../ |  |
+| import_s3_bucket | terraform-aws-modules/s3-bucket/aws | ~> 1.20 |
 | vpc | terraform-aws-modules/vpc/aws | ~> 2.77 |
 
 ## Resources
 
 | Name |
 |------|
+| [aws_db_parameter_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_parameter_group) |
 | [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
 | [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) |
 | [aws_iam_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) |
+| [aws_rds_cluster_parameter_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) |
+| [random_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) |
 | [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) |
 
 ## Inputs
@@ -85,20 +87,15 @@ No input.
 
 | Name | Description |
 |------|-------------|
-| this\_db\_instance\_address | The address of the RDS instance |
-| this\_db\_instance\_arn | The ARN of the RDS instance |
-| this\_db\_instance\_availability\_zone | The availability zone of the RDS instance |
-| this\_db\_instance\_endpoint | The connection endpoint |
-| this\_db\_instance\_hosted\_zone\_id | The canonical hosted zone ID of the DB instance (to be used in a Route 53 Alias record) |
-| this\_db\_instance\_id | The RDS instance ID |
-| this\_db\_instance\_name | The database name |
-| this\_db\_instance\_password | The database password (this password may be old, because Terraform doesn't track it after initial creation) |
-| this\_db\_instance\_port | The database port |
-| this\_db\_instance\_resource\_id | The RDS Resource ID of this instance |
-| this\_db\_instance\_status | The RDS instance status |
-| this\_db\_instance\_username | The master username for the database |
-| this\_db\_parameter\_group\_arn | The ARN of the db parameter group |
-| this\_db\_parameter\_group\_id | The db parameter group id |
-| this\_db\_subnet\_group\_arn | The ARN of the db subnet group |
-| this\_db\_subnet\_group\_id | The db subnet group name |
+| this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
+| this\_rds\_cluster\_endpoint | The cluster endpoint |
+| this\_rds\_cluster\_id | The ID of the cluster |
+| this\_rds\_cluster\_instance\_endpoints | A list of all cluster instance endpoints |
+| this\_rds\_cluster\_instance\_ids | A list of all cluster instance ids |
+| this\_rds\_cluster\_master\_password | The master password |
+| this\_rds\_cluster\_master\_username | The master username |
+| this\_rds\_cluster\_port | The port |
+| this\_rds\_cluster\_reader\_endpoint | The cluster reader endpoint |
+| this\_rds\_cluster\_resource\_id | The Resource ID of the cluster |
+| this\_security\_group\_id | The security group ID of the cluster |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

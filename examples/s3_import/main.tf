@@ -123,7 +123,6 @@ module "aurora" {
   source = "../../"
 
   name = local.name
-  # create_cluster = false
 
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
@@ -135,7 +134,7 @@ module "aurora" {
   create_random_password              = false
   iam_database_authentication_enabled = true
 
-  # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html
+  # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
     source_engine_version = "5.7.12"
     bucket_name           = module.import_s3_bucket.this_s3_bucket_id
