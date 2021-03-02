@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v3.7.0"></a>
+## [v3.7.0] - 2021-03-02
+
+- feat: add S3 import functionality which is supported for MySQL instances ([#197](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/197))
+- chore: add ci-cd workflow for pre-commit checks ([#195](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/195))
+
+
 <a name="v3.6.0"></a>
 ## [v3.6.0] - 2021-02-20
 
@@ -485,7 +492,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.6.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.7.0...HEAD
+[v3.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.5.0...v3.6.0
 [v3.5.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.4.0...v3.5.0
 [v3.4.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.3.0...v3.4.0

@@ -107,18 +107,18 @@ No Modules.
 
 | Name |
 |------|
-| [aws_appautoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/appautoscaling_policy) |
-| [aws_appautoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/appautoscaling_target) |
-| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/db_subnet_group) |
-| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/data-sources/iam_policy_document) |
-| [aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/iam_role_policy_attachment) |
-| [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/iam_role) |
-| [aws_rds_cluster_instance](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/rds_cluster_instance) |
-| [aws_rds_cluster](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/rds_cluster) |
-| [aws_security_group_rule](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/security_group_rule) |
-| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/3.8/docs/resources/security_group) |
-| [random_id](https://registry.terraform.io/providers/hashicorp/random/2.2/docs/resources/id) |
-| [random_password](https://registry.terraform.io/providers/hashicorp/random/2.2/docs/resources/password) |
+| [aws_appautoscaling_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_policy) |
+| [aws_appautoscaling_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target) |
+| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) |
+| [aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) |
+| [aws_rds_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) |
+| [aws_rds_cluster_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) |
+| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) |
+| [aws_security_group_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) |
+| [random_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) |
 
 ## Inputs
 
@@ -178,10 +178,11 @@ No Modules.
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | `number` | `2` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | `number` | `300` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | `string` | `""` | no |
+| s3\_import | Restore from a Percona Xtrabackup in S3 (only MySQL is supported) | `map(string)` | `null` | no |
 | scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine\_mode is set to `serverless` | `map(string)` | `{}` | no |
 | security\_group\_description | The description of the security group. If value is set to empty string it will contain cluster name in the description. | `string` | `"Managed by Terraform"` | no |
 | skip\_final\_snapshot | Should a final snapshot be created on cluster destroy | `bool` | `false` | no |
-| snapshot\_identifier | DB snapshot to create this database from | `string` | `""` | no |
+| snapshot\_identifier | DB snapshot to create this database from | `string` | `null` | no |
 | source\_region | The source region for an encrypted replica DB cluster. | `string` | `""` | no |
 | storage\_encrypted | Specifies whether the underlying storage layer should be encrypted | `bool` | `true` | no |
 | subnets | List of subnet IDs to use | `list(string)` | `[]` | no |

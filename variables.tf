@@ -199,7 +199,7 @@ variable "scaling_configuration" {
 variable "snapshot_identifier" {
   description = "DB snapshot to create this database from"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "storage_encrypted" {
@@ -386,4 +386,10 @@ variable "instances_parameters" {
   description = "Customized instance settings. Supported keys: instance_name, instance_type, instance_promotion_tier, publicly_accessible"
   type        = list(map(string))
   default     = []
+}
+
+variable "s3_import" {
+  description = "Restore from a Percona Xtrabackup in S3 (only MySQL is supported)"
+  type        = map(string)
+  default     = null
 }
