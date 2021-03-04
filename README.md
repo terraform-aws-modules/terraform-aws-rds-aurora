@@ -89,14 +89,14 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.6 |
-| aws | >= 3.8 |
+| aws | >= 3.19 |
 | random | >= 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 3.8 |
+| aws | >= 3.19 |
 | random | >= 2.2 |
 
 ## Modules
@@ -179,6 +179,7 @@ No Modules.
 | replica\_scale\_min | Minimum number of replicas to allow scaling for | `number` | `2` | no |
 | replica\_scale\_out\_cooldown | Cooldown in seconds before allowing further scaling operations after a scale out | `number` | `300` | no |
 | replication\_source\_identifier | ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica. | `string` | `""` | no |
+| restore\_to\_point\_in\_time | Map of nested attributes for cloning Aurora cluster. | `map(string)` | `{}` | no |
 | s3\_import | Restore from a Percona Xtrabackup in S3 (only MySQL is supported) | `map(string)` | `null` | no |
 | scaling\_configuration | Map of nested attributes with scaling properties. Only valid when engine\_mode is set to `serverless` | `map(string)` | `{}` | no |
 | security\_group\_description | The description of the security group. If value is set to empty string it will contain cluster name in the description. | `string` | `"Managed by Terraform"` | no |
