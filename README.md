@@ -132,6 +132,7 @@ No Modules.
 | backtrack\_window | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Defaults to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
 | ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
+| cluster\_specific\_tags | A map of tags to add to only the RDS cluster. Used for AWS Instance Scheduler tagging. | `map(string)` | `{}` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
 | create\_cluster | Controls if RDS cluster should be created (it affects almost all resources) | `bool` | `true` | no |
 | create\_monitoring\_role | Whether to create the IAM role for RDS enhanced monitoring | `bool` | `true` | no |
