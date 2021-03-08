@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file.
 - fix: Specify the number of read replicas as one less that total instances ([#190](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/190))
 
 
+<a name="v3.8.0"></a>
+## [v3.8.0] - 2021-03-08
+
+- feat: AWS Instance Scheduler Tagging Support ([#198](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/198))
+
+
 <a name="v3.7.0"></a>
 ## [v3.7.0] - 2021-03-02
 
@@ -493,7 +499,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.7.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...HEAD
+[v3.8.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.5.0...v3.6.0
 [v3.5.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.4.0...v3.5.0
