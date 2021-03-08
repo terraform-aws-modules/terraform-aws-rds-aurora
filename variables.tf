@@ -280,7 +280,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "cluster_specific_tags" {
+variable "cluster_tags" {
   description = "A map of tags to add to only the RDS cluster. Used for AWS Instance Scheduler tagging."
   type        = map(string)
   default     = {}
