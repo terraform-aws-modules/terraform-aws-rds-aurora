@@ -196,6 +196,12 @@ variable "scaling_configuration" {
   default     = {}
 }
 
+variable "restore_to_point_in_time" {
+  description = "Map of nested attributes for cloning Aurora cluster."
+  type        = map(string)
+  default     = {}
+}
+
 variable "snapshot_identifier" {
   description = "DB snapshot to create this database from"
   type        = string
