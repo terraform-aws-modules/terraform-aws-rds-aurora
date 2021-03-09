@@ -57,7 +57,7 @@ resource "aws_rds_cluster" "this" {
   port                                = local.port
   db_subnet_group_name                = local.db_subnet_group_name
   vpc_security_group_ids              = compact(concat(aws_security_group.this.*.id, var.vpc_security_group_ids))
-  snapshot_identifier                 = length(keys(var.restore_to_point_in_time)) == 0 ? var.snapshot_identifier : null
+  snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
   db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
@@ -95,7 +95,7 @@ resource "aws_rds_cluster" "this" {
     for_each = length(keys(var.restore_to_point_in_time)) == 0 ? [] : [var.restore_to_point_in_time]
 
     content {
-      source_cluster_identifier  = lookup(restore_to_point_in_time.value, "source_cluster_identifier", null)
+      source_cluster_identifier  = restore_to_point_in_time.value.source_cluster_identifier
       restore_type               = lookup(restore_to_point_in_time.value, "restore_type", null)
       use_latest_restorable_time = lookup(restore_to_point_in_time.value, "use_latest_restorable_time", null)
       restore_to_time            = lookup(restore_to_point_in_time.value, "restore_to_time", null)
