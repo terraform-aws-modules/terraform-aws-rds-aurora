@@ -1,69 +1,88 @@
 provider "aws" {
-  region = "us-east-1"
+  region = local.region
 }
 
-######################################
-# Data sources to get VPC and subnets
-######################################
-data "aws_vpc" "default" {
-  default = true
+locals {
+  name   = "advanced"
+  region = "eu-west-1"
+  tags = {
+    Owner       = "user"
+    Environment = "dev"
+  }
 }
 
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.default.id
+################################################################################
+# Supporting Resources
+################################################################################
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 2"
+
+  name = local.name
+  cidr = "10.99.0.0/18"
+
+  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+
+  create_database_subnet_group = true
+
+  tags = local.tags
 }
 
-#############
-# RDS Aurora
-#############
+################################################################################
+# RDS Aurora Module
+################################################################################
+
 module "aurora" {
-  source                          = "../../"
-  name                            = "aurora-example"
-  engine                          = "aurora-postgresql"
-  engine_version                  = "10.4"
-  subnets                         = data.aws_subnet_ids.all.ids
-  vpc_id                          = data.aws_vpc.default.id
-  replica_count                   = 1
-  replica_scale_enabled           = true
-  replica_scale_min               = 1
-  replica_scale_max               = 5
-  monitoring_interval             = 60
-  instance_type                   = "db.r4.large"
-  instance_type_replica           = "db.t3.large"
+  source = "../../"
+
+  name                  = local.name
+  engine                = "aurora-postgresql"
+  engine_version        = "11.9"
+  instance_type         = "db.r5.large"
+  instance_type_replica = "db.t3.large"
+
+  vpc_id                = module.vpc.vpc_id
+  subnets               = module.vpc.database_subnets
+  create_security_group = true
+  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+
+  replica_count         = 1
+  replica_scale_enabled = true
+  replica_scale_min     = 1
+  replica_scale_max     = 5
+
+  monitoring_interval = 60
+
   apply_immediately               = true
   skip_final_snapshot             = true
-  db_parameter_group_name         = aws_db_parameter_group.aurora_db_postgres96_parameter_group.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_cluster_postgres96_parameter_group.id
-  #  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  db_subnet_group_name            = local.name
+  db_parameter_group_name         = aws_db_parameter_group.example.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+
+  tags = local.tags
 }
 
-resource "aws_db_parameter_group" "aurora_db_postgres96_parameter_group" {
-  name        = "test-aurora-db-postgres10-parameter-group"
-  family      = "aurora-postgresql10"
-  description = "test-aurora-db-postgres10-parameter-group"
+resource "aws_db_parameter_group" "example" {
+  name_prefix = "${local.name}-aurora-db-postgres11-parameter-group"
+  family      = "aurora-postgresql11"
+  description = "${local.name}-aurora-db-postgres11-parameter-group"
+  tags        = local.tags
 }
 
-resource "aws_rds_cluster_parameter_group" "aurora_cluster_postgres96_parameter_group" {
-  name        = "test-aurora-postgres10-cluster-parameter-group"
-  family      = "aurora-postgresql10"
-  description = "test-aurora-postgres10-cluster-parameter-group"
+resource "aws_rds_cluster_parameter_group" "example" {
+  name_prefix = "${local.name}-aurora-postgres11-cluster-parameter-group"
+  family      = "aurora-postgresql11"
+  description = "${local.name}-aurora-postgres11-cluster-parameter-group"
+  tags        = local.tags
 }
 
-############################
-# Example of security group
-############################
-resource "aws_security_group" "app_servers" {
-  name        = "app-servers"
-  description = "For application servers"
-  vpc_id      = data.aws_vpc.default.id
-}
+module "disabled_aurora" {
+  source = "../../"
 
-resource "aws_security_group_rule" "allow_access" {
-  type                     = "ingress"
-  from_port                = module.aurora.this_rds_cluster_port
-  to_port                  = module.aurora.this_rds_cluster_port
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.app_servers.id
-  security_group_id        = module.aurora.this_security_group_id
+  create_cluster = false
 }
-

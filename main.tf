@@ -91,6 +91,8 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
+  depends_on = [aws_db_subnet_group.this]
+
   tags = merge(var.tags, var.cluster_tags)
 }
 
@@ -122,6 +124,8 @@ resource "aws_rds_cluster_instance" "this" {
       engine_version
     ]
   }
+
+  depends_on = [aws_db_subnet_group.this]
 
   tags = var.tags
 }

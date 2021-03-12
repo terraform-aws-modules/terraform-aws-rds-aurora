@@ -64,8 +64,8 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Source | Version |
 |------|--------|---------|
 | aurora | ../../ |  |
-| import_s3_bucket | terraform-aws-modules/s3-bucket/aws | ~> 1.20 |
-| vpc | terraform-aws-modules/vpc/aws | ~> 2.77 |
+| import_s3_bucket | terraform-aws-modules/s3-bucket/aws | ~> 1 |
+| vpc | terraform-aws-modules/vpc/aws | ~> 2 |
 
 ## Resources
 

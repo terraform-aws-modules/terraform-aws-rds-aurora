@@ -56,6 +56,31 @@ module "db" {
 }
 ```
 
+
+```hcl
+# IAM Policy for use with iam_database_authentication_enabled = true
+resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
+  name = "test-aurora-db-57-policy-iam-auth"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": [
+        "arn:aws:rds-db:us-east-1:123456789012:dbuser:${module.aurora.this_rds_cluster_resource_id}/jane_doe"
+      ]
+    }
+  ]
+}
+POLICY
+}
+```
+
 ## Conditional creation
 
 Sometimes you need to have a way to create RDS Aurora resources conditionally but Terraform does not allow to use `count` inside `module` block, so the solution is to specify argument `create_cluster`.
