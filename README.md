@@ -4,17 +4,11 @@ Terraform module which creates RDS Aurora resources on AWS.
 
 These types of resources are supported:
 
-* [RDS Cluster](https://www.terraform.io/docs/providers/aws/r/rds_cluster.html)
-* [RDS Cluster Instance](https://www.terraform.io/docs/providers/aws/r/rds_cluster_instance.html)
-* [DB Subnet Group](https://www.terraform.io/docs/providers/aws/r/db_subnet_group.html)
-* [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
-* [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
-
-## Terraform versions
-
-Terraform 0.12 and newer. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
-
-Terraform 0.11. Pin module version to `~> v1.0`.
+- [RDS Cluster](https://www.terraform.io/docs/providers/aws/r/rds_cluster.html)
+- [RDS Cluster Instance](https://www.terraform.io/docs/providers/aws/r/rds_cluster_instance.html)
+- [DB Subnet Group](https://www.terraform.io/docs/providers/aws/r/db_subnet_group.html)
+- [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
+- [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
 
 ## Available features
 
@@ -218,4 +212,4 @@ Currently maintained by [Anton Babenko](https://github.com/antonbabenko) and [th
 
 ## License
 
-MIT Licensed. See [LICENSE](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/LICENSE) for full details.
+Apache 2 Licensed. See [LICENSE](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/LICENSE) for full details.
