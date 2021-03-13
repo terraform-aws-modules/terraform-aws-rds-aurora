@@ -33,17 +33,16 @@ module "vpc" {
 }
 
 ################################################################################
-# RDS Aurora Module
+# RDS Aurora Module - PostgreSQL
 ################################################################################
 
-module "aurora" {
+module "aurora_postgresql" {
   source = "../../"
 
-  name              = local.name
+  name              = "${local.name}-postgresql"
   engine            = "aurora-postgresql"
   engine_mode       = "serverless"
   engine_version    = null
-  instance_type     = "db.r5.large" # ignored for serverless
   storage_encrypted = true
 
   vpc_id                = module.vpc.vpc_id
@@ -54,15 +53,14 @@ module "aurora" {
   replica_scale_enabled = false
   replica_count         = 0
 
-  backtrack_window    = 10 # ignored in serverless
   monitoring_interval = 60
 
-  apply_immediately               = true
-  skip_final_snapshot             = true
-  db_subnet_group_name            = local.name
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
-  enabled_cloudwatch_logs_exports = ["postgresql"]
+  apply_immediately   = true
+  skip_final_snapshot = true
+
+  db_parameter_group_name         = aws_db_parameter_group.example_postgresql.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_postgresql.id
+  # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
 
   scaling_configuration = {
     auto_pause               = true
@@ -73,16 +71,69 @@ module "aurora" {
   }
 }
 
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-postgres11-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-db-postgres11-parameter-group"
+resource "aws_db_parameter_group" "example_postgresql" {
+  name        = "${local.name}-aurora-db-postgres-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "${local.name}-aurora-db-postgres-parameter-group"
   tags        = local.tags
 }
 
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-postgres11-cluster-parameter-group"
+resource "aws_rds_cluster_parameter_group" "example_postgresql" {
+  name        = "${local.name}-aurora-postgres-cluster-parameter-group"
+  family      = "aurora-postgresql10"
+  description = "${local.name}-aurora-postgres-cluster-parameter-group"
+  tags        = local.tags
+}
+
+################################################################################
+# RDS Aurora Module - MySQL
+################################################################################
+
+module "aurora_mysql" {
+  source = "../../"
+
+  name              = "${local.name}-mysql"
+  engine            = "aurora-mysql"
+  engine_mode       = "serverless"
+  engine_version    = null
+  storage_encrypted = true
+
+  vpc_id                = module.vpc.vpc_id
+  subnets               = module.vpc.database_subnets
+  create_security_group = true
+  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+
+  replica_scale_enabled = false
+  replica_count         = 0
+
+  monitoring_interval = 60
+
+  apply_immediately   = true
+  skip_final_snapshot = true
+
+  db_parameter_group_name         = aws_db_parameter_group.example_mysql.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_mysql.id
+  # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
+
+  scaling_configuration = {
+    auto_pause               = true
+    min_capacity             = 2
+    max_capacity             = 16
+    seconds_until_auto_pause = 300
+    timeout_action           = "ForceApplyCapacityChange"
+  }
+}
+
+resource "aws_db_parameter_group" "example_mysql" {
+  name        = "${local.name}-aurora-db-mysql-parameter-group"
+  family      = "aurora-mysql5.7"
+  description = "${local.name}-aurora-db-mysql-parameter-group"
+  tags        = local.tags
+}
+
+resource "aws_rds_cluster_parameter_group" "example_mysql" {
+  name        = "${local.name}-aurora-mysql-cluster-parameter-group"
+  family      = "aurora-mysql5.7"
+  description = "${local.name}-aurora-mysql-cluster-parameter-group"
   tags        = local.tags
 }
