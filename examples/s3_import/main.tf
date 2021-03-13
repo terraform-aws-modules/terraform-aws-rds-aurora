@@ -126,7 +126,7 @@ module "aurora" {
   engine_version = "5.7.12"
   instance_type  = "db.t3.large"
 
-  replica_count = 0
+  replica_count = 1
 
   username                            = "s3_import_user"
   password                            = random_password.master.result

@@ -59,9 +59,9 @@ module "aurora" {
   password                            = random_password.master.result
   create_random_password              = false
 
-  apply_immediately               = true
-  skip_final_snapshot             = true
-  db_subnet_group_name            = local.name
+  apply_immediately   = true
+  skip_final_snapshot = true
+
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["postgresql"]
