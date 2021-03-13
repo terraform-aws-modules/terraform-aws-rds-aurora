@@ -22,28 +22,28 @@ module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 3.0"
 
-  name                            = "test-aurora-db-postgres96"
+  name           = "test-aurora-db-postgres96"
+  engine         = "aurora-postgresql"
+  engine_version = "11.9"
+  instance_type  = "db.r5.large"
 
-  engine                          = "aurora-postgresql"
-  engine_version                  = "9.6.9"
+  vpc_id  = "vpc-12345678"
+  subnets = ["subnet-12345678", "subnet-87654321"]
 
-  vpc_id                          = "vpc-12345678"
-  subnets                         = ["subnet-12345678", "subnet-87654321"]
+  replica_count           = 1
+  allowed_security_groups = ["sg-12345678"]
+  allowed_cidr_blocks     = ["10.20.0.0/20"]
 
-  replica_count                   = 1
-  allowed_security_groups         = ["sg-12345678"]
-  allowed_cidr_blocks             = ["10.20.0.0/20"]
-  instance_type                   = "db.r4.large"
-  storage_encrypted               = true
-  apply_immediately               = true
-  monitoring_interval             = 10
+  storage_encrypted   = true
+  apply_immediately   = true
+  monitoring_interval = 10
 
   db_parameter_group_name         = "default"
   db_cluster_parameter_group_name = "default"
 
-  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
-  tags                            = {
+  tags = {
     Environment = "dev"
     Terraform   = "true"
   }
@@ -67,11 +67,12 @@ module "db" {
 
 ## Examples
 
-- [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
-- [MySQL](examples/mysql): A simple example with VPC and MySQL cluster.
-- [Serverless](examples/serverless): Serverless PostgreSQL cluster.
-- [Advanced](examples/advanced): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled.
-- [Custom Instance Settings](examples/custom_instance_settings): A PostgreSQL cluster with custom instance settings.
+- [Autoscaling](examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
+- [Custom Instance Settings](examples/custom_instance_settings): A PostgreSQL cluster with multiple replics configured using custom settings
+- [MySQL](examples/mysql): A simple MySQL cluster
+- [PostgreSQL](examples/postgresql): A simple PostgreSQL cluster
+- [S3 Import](examples/s3_import): A MySQL cluster created from a Percona Xtrabackup stored in S3
+- [Serverless](examples/serverless): Serverless PostgreSQL and MySQL clusters
 
 ## Documentation
 
@@ -82,7 +83,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.6 |
+| terraform | >= 0.12.26 |
 | aws | >= 3.8 |
 | random | >= 2.2 |
 
