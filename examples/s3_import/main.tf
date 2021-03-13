@@ -122,7 +122,7 @@ module "aurora" {
 
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
-  instance_type  = "db.t3.large"
+  instance_type  = "db.r5.large"
 
   replica_count = 1
 
