@@ -118,18 +118,20 @@ resource "aws_iam_role_policy" "s3_import" {
 module "aurora" {
   source = "../../"
 
-  name = local.name
-
+  name           = local.name
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
   instance_type  = "db.r5.large"
 
-  replica_count = 1
+  vpc_id                = module.vpc.vpc_id
+  db_subnet_group_name  = module.vpc.database_subnet_group_name
+  create_security_group = true
+  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
-  username                            = "s3_import_user"
+  replica_count                       = 1
+  iam_database_authentication_enabled = true
   password                            = random_password.master.result
   create_random_password              = false
-  iam_database_authentication_enabled = true
 
   # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
@@ -138,14 +140,9 @@ module "aurora" {
     ingestion_role        = aws_iam_role.s3_import.arn
   }
 
-  vpc_id                = module.vpc.vpc_id
-  subnets               = module.vpc.database_subnets
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  apply_immediately   = true
+  skip_final_snapshot = true
 
-  apply_immediately               = true
-  skip_final_snapshot             = true
-  db_subnet_group_name            = local.name
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
