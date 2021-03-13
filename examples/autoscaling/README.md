@@ -51,6 +51,9 @@ No input.
 
 | Name | Description |
 |------|-------------|
+| this\_enhanced\_monitoring\_iam\_role\_arn | The Amazon Resource Name (ARN) specifying the enhanced monitoring role |
+| this\_enhanced\_monitoring\_iam\_role\_name | The name of the enhanced monitoring role |
+| this\_enhanced\_monitoring\_iam\_role\_unique\_id | Stable and unique string identifying the enhanced monitoring role |
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |
 | this\_rds\_cluster\_id | The ID of the cluster |

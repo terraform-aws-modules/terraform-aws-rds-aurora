@@ -56,3 +56,19 @@ output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.this_security_group_id
 }
+
+# Enhanced monitoring role
+output "this_enhanced_monitoring_iam_role_name" {
+  description = "The name of the enhanced monitoring role"
+  value       = module.aurora.this_enhanced_monitoring_iam_role_name
+}
+
+output "this_enhanced_monitoring_iam_role_arn" {
+  description = "The Amazon Resource Name (ARN) specifying the enhanced monitoring role"
+  value       = module.aurora.this_enhanced_monitoring_iam_role_arn
+}
+
+output "this_enhanced_monitoring_iam_role_unique_id" {
+  description = "Stable and unique string identifying the enhanced monitoring role"
+  value       = module.aurora.this_enhanced_monitoring_iam_role_unique_id
+}

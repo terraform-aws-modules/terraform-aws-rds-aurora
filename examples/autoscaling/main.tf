@@ -53,7 +53,12 @@ module "aurora" {
   replica_scale_min     = 1
   replica_scale_max     = 5
 
-  monitoring_interval = 60
+  monitoring_interval           = 60
+  iam_role_name                 = "${local.name}-enhanced-monitoring"
+  iam_role_use_name_prefix      = true
+  iam_role_description          = "${local.name} RDS enhanced monitoring IAM role"
+  iam_role_path                 = "/autoscaling/"
+  iam_role_max_session_duration = 7200
 
   apply_immediately   = true
   skip_final_snapshot = true
