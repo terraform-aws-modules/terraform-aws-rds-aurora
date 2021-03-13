@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v3.9.0"></a>
+## [v3.9.0] - 2021-03-13
+
+- chore: update examples to to be self-sufficient and using latest practices/versions ([#200](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/200))
+- chore: update README documentation and reference to license ([#199](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/199))
+
+
 <a name="v3.8.0"></a>
 ## [v3.8.0] - 2021-03-08
 
@@ -498,7 +505,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.9.0...HEAD
+[v3.9.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...v3.9.0
 [v3.8.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.5.0...v3.6.0
