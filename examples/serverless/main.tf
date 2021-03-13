@@ -27,8 +27,6 @@ module "vpc" {
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
-  create_database_subnet_group = true
-
   tags = local.tags
 }
 

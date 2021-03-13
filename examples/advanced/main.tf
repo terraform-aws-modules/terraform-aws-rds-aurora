@@ -27,8 +27,6 @@ module "vpc" {
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
-  create_database_subnet_group = true
-
   tags = local.tags
 }
 
@@ -46,7 +44,7 @@ module "aurora" {
   instance_type_replica = "db.t3.large"
 
   vpc_id                = module.vpc.vpc_id
-  subnets               = module.vpc.database_subnets
+  db_subnet_group_name  = module.vpc.database_subnet_group_name
   create_security_group = true
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
@@ -57,9 +55,9 @@ module "aurora" {
 
   monitoring_interval = 60
 
-  apply_immediately               = true
-  skip_final_snapshot             = true
-  db_subnet_group_name            = local.name
+  apply_immediately   = true
+  skip_final_snapshot = true
+
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["postgresql"]

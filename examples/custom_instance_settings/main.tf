@@ -27,8 +27,6 @@ module "vpc" {
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
-  create_database_subnet_group = true
-
   enable_dns_hostnames = true
   enable_dns_support   = true
 
@@ -47,8 +45,11 @@ module "aurora" {
   engine_version = "11.9"
   instance_type  = "db.r5.large"
 
-  subnets = module.vpc.database_subnets
-  vpc_id  = module.vpc.vpc_id
+  vpc_id                     = module.vpc.vpc_id
+  db_subnet_group_name       = module.vpc.database_subnet_group_name
+  create_security_group      = true
+  security_group_description = ""
+  allowed_cidr_blocks        = module.vpc.private_subnets_cidr_blocks
 
   replica_count = 3
 
@@ -58,7 +59,6 @@ module "aurora" {
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["postgresql"]
-  security_group_description      = ""
 
   instances_parameters = [
     # List index should be equal to `replica_count`
