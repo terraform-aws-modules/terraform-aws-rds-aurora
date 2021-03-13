@@ -1,6 +1,6 @@
-# Aurora Serverless Example
+# Serverless Example
 
-Configuration in this directory creates a set of RDS Aurora serverless resources for both PostgreSQL and MySQL.
+Configuration in this directory creates Aurora serverless clusters for both PostgreSQL and MySQL.
 
 ## Usage
 

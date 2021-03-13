@@ -4,11 +4,11 @@ Terraform module which creates RDS Aurora resources on AWS.
 
 These types of resources are supported:
 
-* [RDS Cluster](https://www.terraform.io/docs/providers/aws/r/rds_cluster.html)
-* [RDS Cluster Instance](https://www.terraform.io/docs/providers/aws/r/rds_cluster_instance.html)
-* [DB Subnet Group](https://www.terraform.io/docs/providers/aws/r/db_subnet_group.html)
-* [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
-* [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
+- [RDS Cluster](https://www.terraform.io/docs/providers/aws/r/rds_cluster.html)
+- [RDS Cluster Instance](https://www.terraform.io/docs/providers/aws/r/rds_cluster_instance.html)
+- [DB Subnet Group](https://www.terraform.io/docs/providers/aws/r/db_subnet_group.html)
+- [Application AutoScaling Policy](https://www.terraform.io/docs/providers/aws/r/appautoscaling_policy.html)
+- [Application AutoScaling Target](https://www.terraform.io/docs/providers/aws/r/appautoscaling_target.html)
 
 ## Terraform versions
 
@@ -53,31 +53,6 @@ module "db" {
     Environment = "dev"
     Terraform   = "true"
   }
-}
-```
-
-
-```hcl
-# IAM Policy for use with iam_database_authentication_enabled = true
-resource "aws_iam_policy" "aurora_mysql_policy_iam_auth" {
-  name = "test-aurora-db-57-policy-iam-auth"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "rds-db:connect"
-      ],
-      "Resource": [
-        "arn:aws:rds-db:us-east-1:123456789012:dbuser:${module.aurora.this_rds_cluster_resource_id}/jane_doe"
-      ]
-    }
-  ]
-}
-POLICY
 }
 ```
 
