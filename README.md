@@ -108,6 +108,7 @@ No Modules.
 | [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
 | [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) |
 | [aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) |
+| [aws_partition](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) |
 | [aws_rds_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) |
 | [aws_rds_cluster_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) |
 | [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) |
@@ -146,7 +147,14 @@ No Modules.
 | final\_snapshot\_identifier\_prefix | The prefix name to use when creating a final snapshot on cluster destroy, appends a random 8 digits to name to ensure it's unique too. | `string` | `"final"` | no |
 | global\_cluster\_identifier | The global cluster identifier specified on aws\_rds\_global\_cluster | `string` | `""` | no |
 | iam\_database\_authentication\_enabled | Specifies whether IAM Database authentication should be enabled or not. Not all versions and instances are supported. Refer to the AWS documentation to see which versions are supported. | `bool` | `false` | no |
-| iam\_partition | IAM Partition to use when generating ARN's. For most regions this can be left at default. China/Govcloud use different partitions | `string` | `"aws"` | no |
+| iam\_role\_description | Description of the role | `string` | `null` | no |
+| iam\_role\_force\_detach\_policies | Whether to force detaching any policies the role has before destroying it | `bool` | `null` | no |
+| iam\_role\_managed\_policy\_arns | Set of exclusive IAM managed policy ARNs to attach to the IAM role | `list(string)` | `null` | no |
+| iam\_role\_max\_session\_duration | Maximum session duration (in seconds) that you want to set for the role | `number` | `null` | no |
+| iam\_role\_name | Friendly name of the role | `string` | `null` | no |
+| iam\_role\_path | Path to the role | `string` | `null` | no |
+| iam\_role\_permissions\_boundary | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
+| iam\_role\_use\_name\_prefix | Whether to use `iam_role_name` as is or create a unique name beginning with the `iam_role_name` as the prefix | `bool` | `false` | no |
 | iam\_roles | A List of ARNs for the IAM roles to associate to the RDS Cluster. | `list(string)` | `[]` | no |
 | instance\_type | Instance type to use at master instance. If instance\_type\_replica is not set it will use the same type for replica instances | `string` | `""` | no |
 | instance\_type\_replica | Instance type to use at replica instance | `string` | `null` | no |
@@ -154,12 +162,11 @@ No Modules.
 | is\_primary\_cluster | Whether to create a primary cluster (set to false to be a part of a Global database) | `bool` | `true` | no |
 | kms\_key\_id | The ARN for the KMS encryption key if one is set to the cluster. | `string` | `""` | no |
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
-| monitoring\_role\_arn | IAM role for RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
-| name | Name given resources | `string` | `""` | no |
+| monitoring\_role\_arn | IAM role used by RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
+| name | Name used across resources created | `string` | `""` | no |
 | password | Master DB password | `string` | `""` | no |
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not. | `bool` | `false` | no |
 | performance\_insights\_kms\_key\_id | The ARN for the KMS key to encrypt Performance Insights data. | `string` | `""` | no |
-| permissions\_boundary | The ARN of the policy that is used to set the permissions boundary for the role. | `string` | `null` | no |
 | port | The port on which to accept connections | `string` | `""` | no |
 | predefined\_metric\_type | The metric type to scale on. Valid values are RDSReaderAverageCPUUtilization and RDSReaderAverageDatabaseConnections. | `string` | `"RDSReaderAverageCPUUtilization"` | no |
 | preferred\_backup\_window | When to perform DB backups | `string` | `"02:00-03:00"` | no |
@@ -191,6 +198,9 @@ No Modules.
 
 | Name | Description |
 |------|-------------|
+| this\_enhanced\_monitoring\_iam\_role\_arn | The Amazon Resource Name (ARN) specifying the enhanced monitoring role |
+| this\_enhanced\_monitoring\_iam\_role\_name | The name of the enhanced monitoring role |
+| this\_enhanced\_monitoring\_iam\_role\_unique\_id | Stable and unique string identifying the enhanced monitoring role |
 | this\_rds\_cluster\_arn | The ID of the cluster |
 | this\_rds\_cluster\_database\_name | Name for an automatically created database on cluster creation |
 | this\_rds\_cluster\_endpoint | The cluster endpoint |

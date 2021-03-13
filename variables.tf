@@ -17,7 +17,7 @@ variable "create_random_password" {
 }
 
 variable "name" {
-  description = "Name given resources"
+  description = "Name used across resources created"
   type        = string
   default     = ""
 }
@@ -140,24 +140,6 @@ variable "apply_immediately" {
   description = "Determines whether or not any DB modifications are applied immediately, or during the maintenance window"
   type        = bool
   default     = false
-}
-
-variable "iam_partition" {
-  description = "IAM Partition to use when generating ARN's. For most regions this can be left at default. China/Govcloud use different partitions"
-  type        = string
-  default     = "aws"
-}
-
-variable "monitoring_role_arn" {
-  description = "IAM role for RDS to send enhanced monitoring metrics to CloudWatch"
-  type        = string
-  default     = ""
-}
-
-variable "create_monitoring_role" {
-  description = "Whether to create the IAM role for RDS enhanced monitoring"
-  type        = bool
-  default     = true
 }
 
 variable "monitoring_interval" {
@@ -376,12 +358,6 @@ variable "security_group_description" {
   default     = "Managed by Terraform"
 }
 
-variable "permissions_boundary" {
-  description = "The ARN of the policy that is used to set the permissions boundary for the role."
-  type        = string
-  default     = null
-}
-
 variable "ca_cert_identifier" {
   description = "The identifier of the CA certificate for the DB instance"
   type        = string
@@ -397,5 +373,66 @@ variable "instances_parameters" {
 variable "s3_import" {
   description = "Restore from a Percona Xtrabackup in S3 (only MySQL is supported)"
   type        = map(string)
+  default     = null
+}
+
+# Enhanced monitoring role
+variable "create_monitoring_role" {
+  description = "Whether to create the IAM role for RDS enhanced monitoring"
+  type        = bool
+  default     = true
+}
+
+variable "monitoring_role_arn" {
+  description = "IAM role used by RDS to send enhanced monitoring metrics to CloudWatch"
+  type        = string
+  default     = ""
+}
+
+variable "iam_role_name" {
+  description = "Friendly name of the role"
+  type        = string
+  default     = null
+}
+
+variable "iam_role_use_name_prefix" {
+  description = "Whether to use `iam_role_name` as is or create a unique name beginning with the `iam_role_name` as the prefix"
+  type        = bool
+  default     = false
+}
+
+variable "iam_role_description" {
+  description = "Description of the role"
+  type        = string
+  default     = null
+}
+
+variable "iam_role_path" {
+  description = "Path to the role"
+  type        = string
+  default     = null
+}
+
+variable "iam_role_managed_policy_arns" {
+  description = "Set of exclusive IAM managed policy ARNs to attach to the IAM role"
+  type        = list(string)
+  default     = null
+}
+
+variable "iam_role_permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role"
+  type        = string
+  default     = null
+}
+
+variable "iam_role_force_detach_policies" {
+  description = "Whether to force detaching any policies the role has before destroying it"
+  type        = bool
+  default     = null
+}
+
+variable "iam_role_max_session_duration" {
+  description = "Maximum session duration (in seconds) that you want to set for the role"
+  type        = number
   default     = null
 }
