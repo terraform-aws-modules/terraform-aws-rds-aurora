@@ -10,12 +10,6 @@ variable "create_security_group" {
   default     = true
 }
 
-variable "create_random_password" {
-  description = "Whether to create random password for RDS primary cluster"
-  type        = bool
-  default     = true
-}
-
 variable "name" {
   description = "Name used across resources created"
   type        = string
@@ -82,8 +76,14 @@ variable "username" {
   default     = "root"
 }
 
+variable "create_random_password" {
+  description = "Whether to create random password for RDS primary cluster"
+  type        = bool
+  default     = true
+}
+
 variable "password" {
-  description = "Master DB password"
+  description = "Master DB password. Note - when specifying a value here, 'create_random_password' should be set to `false`"
   type        = string
   default     = ""
 }

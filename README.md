@@ -164,7 +164,7 @@ No Modules.
 | monitoring\_interval | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
 | monitoring\_role\_arn | IAM role used by RDS to send enhanced monitoring metrics to CloudWatch | `string` | `""` | no |
 | name | Name used across resources created | `string` | `""` | no |
-| password | Master DB password | `string` | `""` | no |
+| password | Master DB password. Note - when specifying a value here, 'create\_random\_password' should be set to `false` | `string` | `""` | no |
 | performance\_insights\_enabled | Specifies whether Performance Insights is enabled or not | `bool` | `false` | no |
 | performance\_insights\_kms\_key\_id | The ARN for the KMS key to encrypt Performance Insights data | `string` | `""` | no |
 | port | The port on which to accept connections | `string` | `""` | no |
