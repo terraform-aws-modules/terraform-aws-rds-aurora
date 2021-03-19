@@ -40,7 +40,6 @@ module "aurora_postgresql" {
   name              = "${local.name}-postgresql"
   engine            = "aurora-postgresql"
   engine_mode       = "serverless"
-  engine_version    = null
   storage_encrypted = true
 
   vpc_id                = module.vpc.vpc_id
@@ -93,7 +92,6 @@ module "aurora_mysql" {
   name              = "${local.name}-mysql"
   engine            = "aurora-mysql"
   engine_mode       = "serverless"
-  engine_version    = null
   storage_encrypted = true
 
   vpc_id                = module.vpc.vpc_id
