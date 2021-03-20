@@ -268,6 +268,12 @@ variable "cluster_tags" {
   default     = {}
 }
 
+variable "security_group_tags" {
+  description = "A map of tags to add to created security group, in addition to the other tags."
+  type        = map(string)
+  default     = {}
+}
+
 variable "performance_insights_enabled" {
   description = "Specifies whether Performance Insights is enabled or not"
   type        = bool
