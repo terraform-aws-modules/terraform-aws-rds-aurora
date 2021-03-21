@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v3.13.0"></a>
+## [v3.13.0] - 2021-03-21
+
+- feat: Additional tags for security group ([#205](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/205))
+
+
 <a name="v3.12.0"></a>
 ## [v3.12.0] - 2021-03-19
 
@@ -523,7 +529,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.12.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.13.0...HEAD
+[v3.13.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.12.0...v3.13.0
 [v3.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.11.0...v3.12.0
 [v3.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.10.0...v3.11.0
 [v3.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.9.0...v3.10.0
