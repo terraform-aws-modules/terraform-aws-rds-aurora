@@ -269,7 +269,7 @@ variable "cluster_tags" {
 }
 
 variable "security_group_tags" {
-  description = "A map of tags to add to created security group, in addition to the other tags."
+  description = "Additional tags for the security group"
   type        = map(string)
   default     = {}
 }
