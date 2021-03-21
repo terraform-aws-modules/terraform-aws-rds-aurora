@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v3.12.0"></a>
+## [v3.12.0] - 2021-03-19
+
+- fix: when `engine_mode` is `serverless`, set `engine_version` to `null` ([#204](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/204))
+
+
 <a name="v3.11.0"></a>
 ## [v3.11.0] - 2021-03-18
 
@@ -517,7 +523,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.11.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.12.0...HEAD
+[v3.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.11.0...v3.12.0
 [v3.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.10.0...v3.11.0
 [v3.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.9.0...v3.10.0
 [v3.9.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...v3.9.0
