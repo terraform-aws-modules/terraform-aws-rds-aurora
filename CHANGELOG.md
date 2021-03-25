@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.0.0"></a>
+## [v4.0.0] - 2021-03-25
+
+- feat: Simplify instrance_parameters (Terraform 0.13) ([#206](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/206))
+
+
 <a name="v3.13.0"></a>
 ## [v3.13.0] - 2021-03-21
 
@@ -529,7 +535,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.13.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.0.0...HEAD
+[v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.13.0...v4.0.0
 [v3.13.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.12.0...v3.13.0
 [v3.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.11.0...v3.12.0
 [v3.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.10.0...v3.11.0
