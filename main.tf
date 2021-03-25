@@ -112,12 +112,12 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
 
-  identifier                      = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_name", "${var.name}-${count.index + 1}") : "${var.name}-${count.index + 1}"
+  identifier                      = try(lookup(var.instances_parameters[count.index], "instance_name"), "${var.name}-${count.index + 1}")
   cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
   engine                          = var.engine
   engine_version                  = var.engine_version
-  instance_class                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_type", var.instance_type) : count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
-  publicly_accessible             = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "publicly_accessible", var.publicly_accessible) : var.publicly_accessible
+  instance_class                  = try(lookup(var.instances_parameters[count.index], "instance_type"), coalesce(var.instance_type_replica, var.instance_type))
+  publicly_accessible             = try(lookup(var.instances_parameters[count.index], "publicly_accessible"), var.publicly_accessible)
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
@@ -125,7 +125,7 @@ resource "aws_rds_cluster_instance" "this" {
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
   monitoring_interval             = var.monitoring_interval
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-  promotion_tier                  = length(var.instances_parameters) > count.index ? lookup(var.instances_parameters[count.index], "instance_promotion_tier", count.index + 1) : count.index + 1
+  promotion_tier                  = try(lookup(var.instances_parameters[count.index], "instance_promotion_tier"), count.index + 1)
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   ca_cert_identifier              = var.ca_cert_identifier
