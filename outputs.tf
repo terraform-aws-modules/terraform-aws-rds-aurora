@@ -54,7 +54,6 @@ output "this_rds_cluster_master_username" {
 output "this_rds_cluster_hosted_zone_id" {
   description = "Route53 hosted zone id of the created cluster"
   value       = element(concat(aws_rds_cluster.this.*.hosted_zone_id, [""]), 0)
-
 }
 
 # aws_rds_cluster_instance
@@ -72,4 +71,20 @@ output "this_rds_cluster_instance_ids" {
 output "this_security_group_id" {
   description = "The security group ID of the cluster"
   value       = local.rds_security_group_id
+}
+
+# Enhanced monitoring role
+output "this_enhanced_monitoring_iam_role_name" {
+  description = "The name of the enhanced monitoring role"
+  value       = element(concat(aws_iam_role.rds_enhanced_monitoring.*.name, [""]), 0)
+}
+
+output "this_enhanced_monitoring_iam_role_arn" {
+  description = "The Amazon Resource Name (ARN) specifying the enhanced monitoring role"
+  value       = element(concat(aws_iam_role.rds_enhanced_monitoring.*.arn, [""]), 0)
+}
+
+output "this_enhanced_monitoring_iam_role_unique_id" {
+  description = "Stable and unique string identifying the enhanced monitoring role"
+  value       = element(concat(aws_iam_role.rds_enhanced_monitoring.*.unique_id, [""]), 0)
 }
