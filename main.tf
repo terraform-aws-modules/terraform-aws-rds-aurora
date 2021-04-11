@@ -1,7 +1,7 @@
 locals {
   port                 = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  master_password      = var.create_cluster && var.create_random_password && var.is_primary_cluster ? random_password.master_password[0].result : var.master_password
+  master_password      = var.create_cluster && var.create_random_password && var.is_primary_cluster ? random_password.master_password[0].result : var.password
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
@@ -18,7 +18,7 @@ locals {
 data "aws_partition" "current" {}
 
 # Random string to use as master password
-resource "random_password" "master" {
+resource "random_password" "master_password" {
   count = var.create_cluster && var.create_random_password ? 1 : 0
 
   length  = 10
@@ -62,7 +62,7 @@ resource "aws_rds_cluster" "this" {
   kms_key_id                          = var.kms_key_id
   database_name                       = var.database_name
   master_username                     = var.username
-  master_password                     = var.master_password
+  master_password                     = local.master_password
   final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
