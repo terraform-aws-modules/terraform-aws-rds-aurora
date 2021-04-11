@@ -82,7 +82,7 @@ variable "create_random_password" {
   default     = true
 }
 
-variable "password" {
+variable "master_password" {
   description = "Master DB password. Note - when specifying a value here, 'create_random_password' should be set to `false`"
   type        = string
   default     = ""
