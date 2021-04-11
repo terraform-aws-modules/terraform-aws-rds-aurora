@@ -18,7 +18,7 @@ locals {
 data "aws_partition" "current" {}
 
 # Random string to use as master password
-resource "random_password" "master_password" {
+resource "random_password" "master" {
   count = var.create_cluster && var.create_random_password ? 1 : 0
 
   length  = 10
