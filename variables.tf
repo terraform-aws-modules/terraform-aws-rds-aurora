@@ -101,7 +101,7 @@ variable "final_snapshot_identifier_prefix" {
 }
 
 variable "skip_final_snapshot" {
-  description = "Should a final snapshot be created on cluster destroy"
+  description = "Determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created."
   type        = bool
   default     = false
 }
