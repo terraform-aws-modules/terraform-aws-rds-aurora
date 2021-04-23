@@ -42,6 +42,7 @@ output "postgresql_rds_cluster_port" {
 output "postgresql_rds_cluster_master_username" {
   description = "The master username"
   value       = module.aurora_postgresql.this_rds_cluster_master_username
+  sensitive   = true
 }
 
 # aws_rds_cluster_instance
