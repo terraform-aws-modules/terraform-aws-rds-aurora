@@ -49,6 +49,7 @@ output "this_rds_cluster_port" {
 output "this_rds_cluster_master_username" {
   description = "The master username"
   value       = element(concat(aws_rds_cluster.this.*.master_username, [""]), 0)
+  sensitive   = true
 }
 
 output "this_rds_cluster_hosted_zone_id" {
