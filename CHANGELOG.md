@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.3.0"></a>
+## [v4.3.0] - 2021-04-24
+
+- fix: mark sensitive outputs to support Terraform 0.15.x ([#215](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/215))
+
+
 <a name="v4.2.0"></a>
 ## [v4.2.0] - 2021-04-21
 
@@ -571,7 +577,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.3.0...HEAD
+[v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.2.0...v4.3.0
 [v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.1.0...v4.2.0
 [v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.13.0...v4.0.0
