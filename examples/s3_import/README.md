@@ -64,8 +64,8 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aurora"></a> [aurora](#module\_aurora) | ../../ |  |
-| <a name="module_import_s3_bucket"></a> [import\_s3\_bucket](#module\_import\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 1 |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 2 |
+| <a name="module_import_s3_bucket"></a> [import\_s3\_bucket](#module\_import\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 2.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
 
 ## Resources
 
@@ -88,15 +88,15 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_this_rds_cluster_database_name"></a> [this\_rds\_cluster\_database\_name](#output\_this\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
-| <a name="output_this_rds_cluster_endpoint"></a> [this\_rds\_cluster\_endpoint](#output\_this\_rds\_cluster\_endpoint) | The cluster endpoint |
-| <a name="output_this_rds_cluster_id"></a> [this\_rds\_cluster\_id](#output\_this\_rds\_cluster\_id) | The ID of the cluster |
-| <a name="output_this_rds_cluster_instance_endpoints"></a> [this\_rds\_cluster\_instance\_endpoints](#output\_this\_rds\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_this_rds_cluster_instance_ids"></a> [this\_rds\_cluster\_instance\_ids](#output\_this\_rds\_cluster\_instance\_ids) | A list of all cluster instance ids |
-| <a name="output_this_rds_cluster_master_password"></a> [this\_rds\_cluster\_master\_password](#output\_this\_rds\_cluster\_master\_password) | The master password |
-| <a name="output_this_rds_cluster_master_username"></a> [this\_rds\_cluster\_master\_username](#output\_this\_rds\_cluster\_master\_username) | The master username |
-| <a name="output_this_rds_cluster_port"></a> [this\_rds\_cluster\_port](#output\_this\_rds\_cluster\_port) | The port |
-| <a name="output_this_rds_cluster_reader_endpoint"></a> [this\_rds\_cluster\_reader\_endpoint](#output\_this\_rds\_cluster\_reader\_endpoint) | The cluster reader endpoint |
-| <a name="output_this_rds_cluster_resource_id"></a> [this\_rds\_cluster\_resource\_id](#output\_this\_rds\_cluster\_resource\_id) | The Resource ID of the cluster |
-| <a name="output_this_security_group_id"></a> [this\_security\_group\_id](#output\_this\_security\_group\_id) | The security group ID of the cluster |
+| <a name="output_rds_cluster_database_name"></a> [rds\_cluster\_database\_name](#output\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
+| <a name="output_rds_cluster_endpoint"></a> [rds\_cluster\_endpoint](#output\_rds\_cluster\_endpoint) | The cluster endpoint |
+| <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the cluster |
+| <a name="output_rds_cluster_instance_endpoints"></a> [rds\_cluster\_instance\_endpoints](#output\_rds\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
+| <a name="output_rds_cluster_instance_ids"></a> [rds\_cluster\_instance\_ids](#output\_rds\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_rds_cluster_master_password"></a> [rds\_cluster\_master\_password](#output\_rds\_cluster\_master\_password) | The master password |
+| <a name="output_rds_cluster_master_username"></a> [rds\_cluster\_master\_username](#output\_rds\_cluster\_master\_username) | The master username |
+| <a name="output_rds_cluster_port"></a> [rds\_cluster\_port](#output\_rds\_cluster\_port) | The port |
+| <a name="output_rds_cluster_reader_endpoint"></a> [rds\_cluster\_reader\_endpoint](#output\_rds\_cluster\_reader\_endpoint) | The cluster reader endpoint |
+| <a name="output_rds_cluster_resource_id"></a> [rds\_cluster\_resource\_id](#output\_rds\_cluster\_resource\_id) | The Resource ID of the cluster |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | The security group ID of the cluster |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
