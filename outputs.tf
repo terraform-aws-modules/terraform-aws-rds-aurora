@@ -68,6 +68,11 @@ output "rds_cluster_instance_ids" {
   value       = aws_rds_cluster_instance.this.*.id
 }
 
+output "rds_cluster_instance_dbi_resource_ids" {
+  description = "A list of all the region-unique, immutable identifiers for the DB instances"
+  value       = aws_rds_cluster_instance.this.*.dbi_resource_id
+}
+
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"

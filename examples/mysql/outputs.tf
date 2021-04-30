@@ -52,6 +52,11 @@ output "rds_cluster_instance_ids" {
   value       = module.aurora.rds_cluster_instance_ids
 }
 
+output "rds_cluster_instance_dbi_resource_ids" {
+  description = "A list of all the region-unique, immutable identifiers for the DB instances"
+  value       = module.aurora.rds_cluster_instance_dbi_resource_ids
+}
+
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"
