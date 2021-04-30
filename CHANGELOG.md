@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v5.1.0"></a>
+## [v5.1.0] - 2021-04-30
+
+- chore: add output for cluster instance `db_resource_id` output list ([#218](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/218))
+
+
 <a name="v5.0.0"></a>
 ## [v5.0.0] - 2021-04-26
 
@@ -583,7 +589,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.1.0...HEAD
+[v5.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.0.0...v5.1.0
 [v5.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.3.0...v5.0.0
 [v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.2.0...v4.3.0
 [v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.1.0...v4.2.0
