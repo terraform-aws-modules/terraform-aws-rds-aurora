@@ -12,6 +12,15 @@ locals {
   iam_role_name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
 
   name = "aurora-${var.name}"
+
+  number_of_replicas = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
+  cluster_instances = { for i in range(local.number_of_replicas) :
+    length(var.instances_parameters) > i ? lookup(var.instances_parameters[i], "instance_name", "${var.name}-${i + 1}") : "${var.name}-${i + 1}" => {
+      publicly_accessible = length(var.instances_parameters) > i ? lookup(var.instances_parameters[i], "publicly_accessible", var.publicly_accessible) : var.publicly_accessible
+      instance_class      = length(var.instances_parameters) > i ? lookup(var.instances_parameters[i], "instance_type", var.instance_type) : i > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type
+      promotion_tier      = length(var.instances_parameters) > i ? lookup(var.instances_parameters[i], "instance_promotion_tier", i + 1) : i + 1
+    }
+  }
 }
 
 # Ref. https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces
@@ -110,14 +119,14 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
+  for_each = local.cluster_instances
 
-  identifier                      = try(lookup(var.instances_parameters[count.index], "instance_name"), "${var.name}-${count.index + 1}")
+  identifier                      = each.key
   cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
   engine                          = var.engine
   engine_version                  = var.engine_version
-  instance_class                  = try(lookup(var.instances_parameters[count.index], "instance_type"), count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type)
-  publicly_accessible             = try(lookup(var.instances_parameters[count.index], "publicly_accessible"), var.publicly_accessible)
+  instance_class                  = each.value.instance_class
+  publicly_accessible             = each.value.publicly_accessible
   db_subnet_group_name            = local.db_subnet_group_name
   db_parameter_group_name         = var.db_parameter_group_name
   preferred_maintenance_window    = var.preferred_maintenance_window
@@ -125,7 +134,7 @@ resource "aws_rds_cluster_instance" "this" {
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
   monitoring_interval             = var.monitoring_interval
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-  promotion_tier                  = try(lookup(var.instances_parameters[count.index], "instance_promotion_tier"), count.index + 1)
+  promotion_tier                  = each.value.promotion_tier
   performance_insights_enabled    = var.performance_insights_enabled
   performance_insights_kms_key_id = var.performance_insights_kms_key_id
   ca_cert_identifier              = var.ca_cert_identifier
