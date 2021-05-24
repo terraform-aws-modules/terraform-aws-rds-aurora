@@ -10,6 +10,11 @@ locals {
   rds_security_group_id = join("", aws_security_group.this.*.id)
 
   name = "aurora-${var.name}"
+
+  common_tags = merge(var.tags, {
+    "ModuleSourceRepo" = "github.com/StratusGrid/terraform-aws-rds-aurora"
+  })
+
 }
 
 # Random string to use as master password unless one is specified
