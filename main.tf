@@ -106,6 +106,12 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [
+      engine_version
+    ]
+  }
+
   tags = merge(var.tags, var.cluster_tags)
 }
 
