@@ -367,7 +367,7 @@ variable "security_group_description" {
 variable "ca_cert_identifier" {
   description = "The identifier of the CA certificate for the DB instance"
   type        = string
-  default     = "rds-ca-2019"
+  default     = null
 }
 
 variable "instances_parameters" {
