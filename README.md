@@ -100,6 +100,8 @@ No modules.
 | [aws_iam_role.rds_enhanced_monitoring](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.rds_enhanced_monitoring](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_rds_cluster.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) | resource |
+| [aws_rds_cluster_endpoint.custom_any](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_endpoint) | resource |
+| [aws_rds_cluster_endpoint.custom_reader](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_endpoint) | resource |
 | [aws_rds_cluster_instance.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance) | resource |
 | [aws_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.cidr_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
@@ -121,9 +123,13 @@ No modules.
 | <a name="input_backtrack_window"></a> [backtrack\_window](#input\_backtrack\_window) | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | How long to keep backups for (in days) | `number` | `7` | no |
 | <a name="input_ca_cert_identifier"></a> [ca\_cert\_identifier](#input\_ca\_cert\_identifier) | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
+| <a name="input_cluster_endpoint_custom_any_name"></a> [cluster\_endpoint\_custom\_any\_name](#input\_cluster\_endpoint\_custom\_any\_name) | Name for a cluster custom ANY endpoint | `string` | `""` | no |
+| <a name="input_cluster_endpoint_custom_reader_name"></a> [cluster\_endpoint\_custom\_reader\_name](#input\_cluster\_endpoint\_custom\_reader\_name) | Name for a cluster custom READER endpoint | `string` | `""` | no |
+| <a name="input_cluster_endpoints_custom_tags"></a> [cluster\_endpoints\_custom\_tags](#input\_cluster\_endpoints\_custom\_tags) | Additional tags for the cluster endpoints | `map(string)` | `{}` | no |
 | <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags) | A map of tags to add to only the RDS cluster. Used for AWS Instance Scheduler tagging | `map(string)` | `{}` | no |
 | <a name="input_copy_tags_to_snapshot"></a> [copy\_tags\_to\_snapshot](#input\_copy\_tags\_to\_snapshot) | Copy all Cluster tags to snapshots | `bool` | `false` | no |
 | <a name="input_create_cluster"></a> [create\_cluster](#input\_create\_cluster) | Whether cluster should be created (it affects almost all resources) | `bool` | `true` | no |
+| <a name="input_create_cluster_custom_endpoints"></a> [create\_cluster\_custom\_endpoints](#input\_create\_cluster\_custom\_endpoints) | Whether to create custom endpoints for RDS cluster | `bool` | `false` | no |
 | <a name="input_create_monitoring_role"></a> [create\_monitoring\_role](#input\_create\_monitoring\_role) | Whether to create the IAM role for RDS enhanced monitoring | `bool` | `true` | no |
 | <a name="input_create_random_password"></a> [create\_random\_password](#input\_create\_random\_password) | Whether to create random password for RDS primary cluster | `bool` | `true` | no |
 | <a name="input_create_security_group"></a> [create\_security\_group](#input\_create\_security\_group) | Whether to create security group for RDS cluster | `bool` | `true` | no |
@@ -196,6 +202,8 @@ No modules.
 | <a name="output_enhanced_monitoring_iam_role_name"></a> [enhanced\_monitoring\_iam\_role\_name](#output\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
 | <a name="output_enhanced_monitoring_iam_role_unique_id"></a> [enhanced\_monitoring\_iam\_role\_unique\_id](#output\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_rds_cluster_arn"></a> [rds\_cluster\_arn](#output\_rds\_cluster\_arn) | The ID of the cluster |
+| <a name="output_rds_cluster_custom_any_endpoint"></a> [rds\_cluster\_custom\_any\_endpoint](#output\_rds\_cluster\_custom\_any\_endpoint) | The cluster custom any endpoint |
+| <a name="output_rds_cluster_custom_reader_endpoint"></a> [rds\_cluster\_custom\_reader\_endpoint](#output\_rds\_cluster\_custom\_reader\_endpoint) | The cluster custom reader endpoint |
 | <a name="output_rds_cluster_database_name"></a> [rds\_cluster\_database\_name](#output\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_rds_cluster_endpoint"></a> [rds\_cluster\_endpoint](#output\_rds\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_rds_cluster_engine_version"></a> [rds\_cluster\_engine\_version](#output\_rds\_cluster\_engine\_version) | The cluster engine version |
