@@ -265,12 +265,12 @@ resource "aws_security_group_rule" "cidr_ingress" {
 # Cluster Endpoints
 ################################################################################
 
-resource "aws_rds_cluster_endpoint" "custom_reader" {
-  count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
+resource "aws_rds_cluster_endpoint" "custom" {
+  for_each = var.create_cluster && var.create_cluster_custom_endpoints ? var.cluster_custom_endpoints : {}
 
   cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
-  cluster_endpoint_identifier = var.cluster_endpoint_custom_reader_name != "" ? lower(var.cluster_endpoint_custom_reader_name) : lower("${var.name}-reader")
-  custom_endpoint_type        = "READER"
+  cluster_endpoint_identifier = lower(each.key)
+  custom_endpoint_type        = each.value
 
   lifecycle {
     ignore_changes = [excluded_members, static_members]
@@ -280,20 +280,3 @@ resource "aws_rds_cluster_endpoint" "custom_reader" {
     Name = local.name
   })
 }
-
-resource "aws_rds_cluster_endpoint" "custom_any" {
-  count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
-
-  cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
-  cluster_endpoint_identifier = var.cluster_endpoint_custom_any_name != "" ? lower(var.cluster_endpoint_custom_any_name) : lower("${var.name}-any")
-  custom_endpoint_type        = "ANY"
-
-  lifecycle {
-    ignore_changes = [excluded_members, static_members]
-  }
-
-  tags = merge(var.tags, var.cluster_endpoints_custom_tags, {
-    Name = local.name
-  })
-}
-

@@ -449,16 +449,17 @@ variable "create_cluster_custom_endpoints" {
   default     = false
 }
 
-variable "cluster_endpoint_custom_reader_name" {
-  description = "Name for a cluster custom READER endpoint"
-  type        = string
-  default     = ""
-}
-
-variable "cluster_endpoint_custom_any_name" {
-  description = "Name for a cluster custom ANY endpoint"
-  type        = string
-  default     = ""
+variable "cluster_custom_endpoints" {
+  description = "Map of custom endpoints where endpoint_identifier = endpoint_type"
+  type        = map(string)
+  default = {
+    reader = "READER"
+    any    = "ANY"
+  }
+  validation {
+    condition     = alltrue([for v in values(var.cluster_custom_endpoints) : contains(["READER", "ANY", "WRITER"], v)])
+    error_message = "Only READER, ANY or WRITER are valid values."
+  }
 }
 
 variable "cluster_endpoints_custom_tags" {
