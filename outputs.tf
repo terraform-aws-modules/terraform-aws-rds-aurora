@@ -96,12 +96,7 @@ output "enhanced_monitoring_iam_role_unique_id" {
 }
 
 # Custom Cluster Endpoints
-output "rds_cluster_custom_reader_endpoint" {
-  description = "The cluster custom reader endpoint"
-  value       = element(concat(aws_rds_cluster_endpoint.custom_reader.*.endpoint, [""]), 0)
-}
-
-output "rds_cluster_custom_any_endpoint" {
-  description = "The cluster custom any endpoint"
-  value       = element(concat(aws_rds_cluster_endpoint.custom_any.*.endpoint, [""]), 0)
+output "rds_cluster_custom_endpoints" {
+  description = "The cluster custom endpoints"
+  value       = aws_rds_cluster_endpoint.custom.*.endpoint
 }

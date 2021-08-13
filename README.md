@@ -200,8 +200,7 @@ No modules.
 | <a name="output_enhanced_monitoring_iam_role_name"></a> [enhanced\_monitoring\_iam\_role\_name](#output\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
 | <a name="output_enhanced_monitoring_iam_role_unique_id"></a> [enhanced\_monitoring\_iam\_role\_unique\_id](#output\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_rds_cluster_arn"></a> [rds\_cluster\_arn](#output\_rds\_cluster\_arn) | The ID of the cluster |
-| <a name="output_rds_cluster_custom_any_endpoint"></a> [rds\_cluster\_custom\_any\_endpoint](#output\_rds\_cluster\_custom\_any\_endpoint) | The cluster custom any endpoint |
-| <a name="output_rds_cluster_custom_reader_endpoint"></a> [rds\_cluster\_custom\_reader\_endpoint](#output\_rds\_cluster\_custom\_reader\_endpoint) | The cluster custom reader endpoint |
+| <a name="output_rds_cluster_custom_endpoints"></a> [rds\_cluster\_custom\_endpoints](#output\_rds\_cluster\_custom\_endpoints) | The cluster custom endpoints |
 | <a name="output_rds_cluster_database_name"></a> [rds\_cluster\_database\_name](#output\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_rds_cluster_endpoint"></a> [rds\_cluster\_endpoint](#output\_rds\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_rds_cluster_engine_version"></a> [rds\_cluster\_engine\_version](#output\_rds\_cluster\_engine\_version) | The cluster engine version |
