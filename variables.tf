@@ -457,7 +457,7 @@ variable "cluster_custom_endpoints" {
     any    = "ANY"
   }
   validation {
-    condition     = alltrue([for v in values(var.cluster_custom_endpoints) : contains(["READER", "ANY", "WRITER"], v)])
+    condition     = !contains([for v in values(var.cluster_custom_endpoints) : contains(["READER", "ANY", "WRITER"], v)], false) #alltrue available in Terraform 0.14 and later.
     error_message = "Only READER, ANY or WRITER are valid values."
   }
 }
