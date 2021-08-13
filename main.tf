@@ -260,3 +260,40 @@ resource "aws_security_group_rule" "cidr_ingress" {
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id
 }
+
+################################################################################
+# Cluster Endpoints
+################################################################################
+
+resource "aws_rds_cluster_endpoint" "custom_reader" {
+  count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
+
+  cluster_identifier          = aws_rds_cluster.this.id
+  cluster_endpoint_identifier = var.cluster_endpoint_custom_reader_name != "" ? lower("${var.name}-reader") : lower(var.cluster_endpoint_custom_reader_name)
+  custom_endpoint_type        = "READER"
+
+  lifecycle {
+    ignore_changes = [excluded_members, static_members]
+  }
+
+  tags = merge(var.tags, var.cluster_endpoints_custom_tags, {
+    Name = local.name
+  })
+}
+
+resource "aws_rds_cluster_endpoint" "custom_any" {
+  count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
+
+  cluster_identifier          = aws_rds_cluster.this.id
+  cluster_endpoint_identifier = var.cluster_endpoint_custom_any_name != "" ? lower("${var.name}-any") : lower(var.cluster_endpoint_custom_any_name)
+  custom_endpoint_type        = "ANY"
+
+  lifecycle {
+    ignore_changes = [excluded_members, static_members]
+  }
+
+  tags = merge(var.tags, var.cluster_endpoints_custom_tags, {
+    Name = local.name
+  })
+}
+

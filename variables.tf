@@ -442,3 +442,27 @@ variable "iam_role_max_session_duration" {
   type        = number
   default     = null
 }
+
+variable "create_cluster_custom_endpoints" {
+  description = "Whether to create custom endpoints for RDS cluster"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_endpoint_custom_reader_name" {
+  description = "Name for a cluster custom READER endpoint"
+  type        = string
+  default     = ""
+}
+
+variable "cluster_endpoint_custom_any_name" {
+  description = "Name for a cluster custom ANY endpoint"
+  type        = string
+  default     = ""
+}
+
+variable "cluster_endpoints_custom_tags" {
+  description = "Additional tags for the cluster endpoints"
+  type        = map(string)
+  default     = {}
+}
