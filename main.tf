@@ -269,7 +269,7 @@ resource "aws_rds_cluster_endpoint" "custom_reader" {
   count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
 
   cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
-  cluster_endpoint_identifier = var.cluster_endpoint_custom_reader_name != "" ? lower("${var.name}-reader") : lower(var.cluster_endpoint_custom_reader_name)
+  cluster_endpoint_identifier = var.cluster_endpoint_custom_reader_name != "" ? lower(var.cluster_endpoint_custom_reader_name) : lower("${var.name}-reader")
   custom_endpoint_type        = "READER"
 
   lifecycle {
@@ -285,7 +285,7 @@ resource "aws_rds_cluster_endpoint" "custom_any" {
   count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
 
   cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
-  cluster_endpoint_identifier = var.cluster_endpoint_custom_any_name != "" ? lower("${var.name}-any") : lower(var.cluster_endpoint_custom_any_name)
+  cluster_endpoint_identifier = var.cluster_endpoint_custom_any_name != "" ? lower(var.cluster_endpoint_custom_any_name) : lower("${var.name}-any")
   custom_endpoint_type        = "ANY"
 
   lifecycle {
