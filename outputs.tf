@@ -103,5 +103,5 @@ output "rds_cluster_custom_reader_endpoint" {
 
 output "rds_cluster_custom_any_endpoint" {
   description = "The cluster custom any endpoint"
-  value = element(concat(aws_rds_cluster_endpoint.custom_any.*.endpoint, [""]), 0)
+  value       = element(concat(aws_rds_cluster_endpoint.custom_any.*.endpoint, [""]), 0)
 }
