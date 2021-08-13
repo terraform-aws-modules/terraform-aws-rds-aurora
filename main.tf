@@ -268,7 +268,7 @@ resource "aws_security_group_rule" "cidr_ingress" {
 resource "aws_rds_cluster_endpoint" "custom_reader" {
   count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
 
-  cluster_identifier          = aws_rds_cluster.this.id
+  cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
   cluster_endpoint_identifier = var.cluster_endpoint_custom_reader_name != "" ? lower("${var.name}-reader") : lower(var.cluster_endpoint_custom_reader_name)
   custom_endpoint_type        = "READER"
 
@@ -284,7 +284,7 @@ resource "aws_rds_cluster_endpoint" "custom_reader" {
 resource "aws_rds_cluster_endpoint" "custom_any" {
   count = var.create_cluster && var.create_cluster_custom_endpoints ? 1 : 0
 
-  cluster_identifier          = aws_rds_cluster.this.id
+  cluster_identifier          = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
   cluster_endpoint_identifier = var.cluster_endpoint_custom_any_name != "" ? lower("${var.name}-any") : lower(var.cluster_endpoint_custom_any_name)
   custom_endpoint_type        = "ANY"
 
