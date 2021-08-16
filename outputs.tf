@@ -97,6 +97,6 @@ output "enhanced_monitoring_iam_role_unique_id" {
 
 # Custom Cluster Endpoints
 output "rds_cluster_custom_endpoints" {
-  description = "The cluster custom endpoints"
-  value       = aws_rds_cluster_endpoint.custom.*.endpoint
+  description = "Array containing the full resource object and attributes for all custom endpoints created"
+  value       = aws_rds_cluster_endpoint.custom
 }
