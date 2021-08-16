@@ -452,7 +452,7 @@ variable "create_cluster_custom_endpoints" {
 variable "cluster_custom_endpoints" {
   description = "Map of custom endpoints where endpoint_identifier = endpoint_type"
   type        = map(string)
-  default = {
+  default = {}
     reader = "READER"
     any    = "ANY"
   }
