@@ -452,14 +452,7 @@ variable "create_cluster_custom_endpoints" {
 variable "cluster_custom_endpoints" {
   description = "Map of custom endpoints where endpoint_identifier = endpoint_type"
   type        = map(string)
-  default = {}
-    reader = "READER"
-    any    = "ANY"
-  }
-  validation {
-    condition     = !contains([for v in values(var.cluster_custom_endpoints) : contains(["READER", "ANY", "WRITER"], v)], false) #alltrue available in Terraform 0.14 and later.
-    error_message = "Only READER, ANY or WRITER are valid values."
-  }
+  default     = {}
 }
 
 variable "cluster_endpoints_custom_tags" {
