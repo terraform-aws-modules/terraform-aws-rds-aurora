@@ -272,10 +272,6 @@ resource "aws_rds_cluster_endpoint" "custom" {
   cluster_endpoint_identifier = lower(each.key)
   custom_endpoint_type        = each.value
 
-  lifecycle {
-    ignore_changes = [excluded_members, static_members]
-  }
-
   tags = merge(var.tags, var.cluster_endpoints_custom_tags, {
     Name = local.name
   })
