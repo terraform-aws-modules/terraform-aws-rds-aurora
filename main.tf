@@ -272,6 +272,9 @@ resource "aws_rds_cluster_endpoint" "custom" {
   cluster_endpoint_identifier = lower(each.key)
   custom_endpoint_type        = each.value
 
+  static_members   = var.cluster_custom_endpoints_only_static_members && var.cluster_custom_endpoints_exclude_members == false ? aws_rds_cluster_instance.this.*.id : []
+  excluded_members = var.cluster_custom_endpoints_exclude_members && var.cluster_custom_endpoints_only_static_members == false ? aws_rds_cluster_instance.this.*.id : []
+
   tags = merge(var.tags, var.cluster_endpoints_custom_tags, {
     Name = local.name
   })

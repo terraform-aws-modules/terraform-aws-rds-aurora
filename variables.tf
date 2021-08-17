@@ -455,6 +455,17 @@ variable "cluster_custom_endpoints" {
   default     = {}
 }
 
+variable "cluster_custom_endpoints_only_static_members" {
+  description = "Include into custom endpoints only instances created with module. Conflict with `var.cluster_custom_endpoints_exclude_members`"
+  type        = bool
+  default     = false
+}
+variable "cluster_custom_endpoints_exclude_members" {
+  description = "Exclude from custom endpoints all instances created with module. Conflict with `var.cluster_custom_endpoints_only_static_members`"
+  type        = bool
+  default     = false
+}
+
 variable "cluster_endpoints_custom_tags" {
   description = "Additional tags for the cluster endpoints"
   type        = map(string)
