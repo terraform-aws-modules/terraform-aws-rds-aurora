@@ -12,7 +12,7 @@ Terraform module which creates RDS Aurora resources on AWS.
 ```hcl
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   name           = "test-aurora-db-postgres96"
   engine         = "aurora-postgresql"
@@ -50,7 +50,7 @@ Sometimes you need to have a way to create RDS Aurora resources conditionally bu
 # This RDS cluster will not be created
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   create_cluster = false
   # ... omitted
