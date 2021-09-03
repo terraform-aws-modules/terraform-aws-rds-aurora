@@ -61,8 +61,8 @@ resource "aws_rds_cluster" "this" {
   enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
   database_name                       = var.database_name
-  master_username                     = var.username
-  master_password                     = local.master_password
+  master_username                     = var.is_primary_cluster == false ? null : var.username
+  master_password                     = var.is_primary_cluster == false ? null : local.master_password
   final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
