@@ -7,6 +7,80 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v5.2.0"></a>
+## [v5.2.0] - 2021-04-30
+
+- fix: Don't use instance_type_replica for main replica ([#211](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/211))
+
+
+<a name="v5.1.0"></a>
+## [v5.1.0] - 2021-04-30
+
+- chore: add output for cluster instance `db_resource_id` output list ([#218](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/218))
+
+
+<a name="v5.0.0"></a>
+## [v5.0.0] - 2021-04-26
+
+- feat: Shorten outputs (removing this_) ([#216](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/216))
+
+
+<a name="v4.3.0"></a>
+## [v4.3.0] - 2021-04-24
+
+- fix: mark sensitive outputs to support Terraform 0.15.x ([#215](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/215))
+
+
+<a name="v4.2.0"></a>
+## [v4.2.0] - 2021-04-21
+
+- fix: set backup and maintenance windows to `null` when using serverless mode ([#213](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/213))
+
+
+<a name="v4.1.0"></a>
+## [v4.1.0] - 2021-04-13
+
+- docs: Clarify description of skip_final_snapshot variable ([#209](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/209))
+- chore: update documentation and pin `terraform_docs` version to avoid future changes ([#207](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/207))
+
+
+<a name="v4.0.0"></a>
+## [v4.0.0] - 2021-03-25
+
+- feat: Simplify instrance_parameters (Terraform 0.13) ([#206](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/206))
+
+
+<a name="v3.13.0"></a>
+## [v3.13.0] - 2021-03-21
+
+- feat: Additional tags for security group ([#205](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/205))
+
+
+<a name="v3.12.0"></a>
+## [v3.12.0] - 2021-03-19
+
+- fix: when `engine_mode` is `serverless`, set `engine_version` to `null` ([#204](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/204))
+
+
+<a name="v3.11.0"></a>
+## [v3.11.0] - 2021-03-18
+
+- fix: Bump AWS provider version ([#202](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/202))
+
+
+<a name="v3.10.0"></a>
+## [v3.10.0] - 2021-03-14
+
+- chore: add all attributes and some outputs for enhanced monitoring IAM role ([#201](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/201))
+
+
+<a name="v3.9.0"></a>
+## [v3.9.0] - 2021-03-13
+
+- chore: update examples to to be self-sufficient and using latest practices/versions ([#200](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/200))
+- chore: update README documentation and reference to license ([#199](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/199))
+
+
 <a name="v3.8.0"></a>
 ## [v3.8.0] - 2021-03-08
 
@@ -142,6 +216,18 @@ All notable changes to this project will be documented in this file.
 ## [v2.17.0] - 2020-04-11
 
 - feat: Support enable_http_endpoint - Data API ([#117](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/117))
+- Merge pull request [#116](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/116) from terraform-aws-modules/terraform-provider-githubfile-1584635292483240000
+- [ci skip] Create ".chglog/CHANGELOG.tpl.md".
+- Merge pull request [#114](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/114) from terraform-aws-modules/terraform-provider-githubfile-1584537210006480000
+- [ci skip] Create "Makefile".
+- Merge pull request [#110](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/110) from terraform-aws-modules/terraform-provider-githubfile-1584537179488954000
+- Merge pull request [#111](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/111) from terraform-aws-modules/terraform-provider-githubfile-1584537179489000000
+- Merge pull request [#112](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/112) from terraform-aws-modules/terraform-provider-githubfile-1584537179488978000
+- Merge pull request [#109](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/109) from terraform-aws-modules/terraform-provider-githubfile-1584537179488979000
+- [ci skip] Create "LICENSE".
+- [ci skip] Create ".gitignore".
+- [ci skip] Create ".pre-commit-config.yaml".
+- [ci skip] Create ".editorconfig".
 - Updated postgres example to latest engine_version
 
 
@@ -421,6 +507,7 @@ when calling import with this module in the configuration.
 <a name="v1.9.0"></a>
 ## [v1.9.0] - 2019-02-16
 
+- Merge pull request [#25](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/25) from Blokje5/add-support-for-database-iam-authentication
 - Remove validation
 - Add support for IAM Database authentication
 
@@ -430,18 +517,21 @@ when calling import with this module in the configuration.
 
 - Updated example with correct allowed_security_groups_count
 - Run pre-commit hooks
+- Merge pull request [#23](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/23) from dekimsey/fix-default-ingress-count-error
 - Hardcode number of allowed_security_groups
 
 
 <a name="v1.7.0"></a>
 ## [v1.7.0] - 2019-01-30
 
+- Merge pull request [#21](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/21) from max-rocket-internet/remove_maintainer
 - Removing myself from README
 
 
 <a name="v1.6.0"></a>
 ## [v1.6.0] - 2019-01-30
 
+- Merge pull request [#22](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/22) from terraform-aws-modules/pr/13
 - Merge remote-tracking branch 'origin/master' into pr-13
 - Added output for database_name
 - add support for database_name argument
@@ -450,6 +540,7 @@ when calling import with this module in the configuration.
 <a name="v1.5.0"></a>
 ## [v1.5.0] - 2019-01-30
 
+- Merge pull request [#15](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/15) from christiangjengedal/support_deletion_protection
 - Merge branch 'master' into support_deletion_protection
 - Added argument deletion_protection
 
@@ -457,6 +548,7 @@ when calling import with this module in the configuration.
 <a name="v1.4.0"></a>
 ## [v1.4.0] - 2019-01-30
 
+- Merge pull request [#20](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/20) from terraform-aws-modules/removed_azs
 - Removed availability_zones var (closes [#10](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/10))
 
 
@@ -464,6 +556,7 @@ when calling import with this module in the configuration.
 ## [v1.3.0] - 2019-01-30
 
 - Run pre-commit hooks
+- Merge pull request [#16](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/16) from terraform-aws-modules/fix_az
 - Merge branch 'master' into fix_az
 - Fixed variable for az
 
@@ -472,6 +565,7 @@ when calling import with this module in the configuration.
 ## [v1.1.0] - 2019-01-30
 
 - Run pre-commit hooks
+- Merge pull request [#17](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/17) from christiangjengedal/mod_securitygroup
 - 3 adjustments: - Avoid description attr on aws_security_group to avoid forcing new instance on changes - Use name-prefix to ensure unique names - Avoid unnecessary name-prefixes
 
 
@@ -479,9 +573,12 @@ when calling import with this module in the configuration.
 ## [v1.0.0] - 2018-12-11
 
 - Updated pre-commit hooks version
+- Merge pull request [#4](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/4) from FutureSharks/example_fix
+- Merge pull request [#3](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/3) from terraform-aws-modules/post_initial_commit
 - Fix for: 'count' cannot be computed
 - Added few files
 - Made small changes to be closer to other terraform-aws-modules
+- Merge pull request [#1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/1) from FutureSharks/initial_commit
 - adding pre commit hooks config
 - updating readme, docs, main.tf etc
 - adding port output
@@ -498,7 +595,19 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.2.0...HEAD
+[v5.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.1.0...v5.2.0
+[v5.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.0.0...v5.1.0
+[v5.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.3.0...v5.0.0
+[v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.2.0...v4.3.0
+[v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.1.0...v4.2.0
+[v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v4.0.0...v4.1.0
+[v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.13.0...v4.0.0
+[v3.13.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.12.0...v3.13.0
+[v3.12.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.11.0...v3.12.0
+[v3.11.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.10.0...v3.11.0
+[v3.10.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.9.0...v3.10.0
+[v3.9.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.8.0...v3.9.0
 [v3.8.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.7.0...v3.8.0
 [v3.7.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.6.0...v3.7.0
 [v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v3.5.0...v3.6.0
