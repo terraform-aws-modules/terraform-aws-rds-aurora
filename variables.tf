@@ -91,7 +91,7 @@ variable "create_random_password" {
 variable "password" {
   description = "Master DB password. Note - when specifying a value here, 'create_random_password' should be set to `false`"
   type        = string
-  default     = ""
+  default     = null 
 }
 
 variable "is_primary_cluster" {
