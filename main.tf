@@ -121,7 +121,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
+  count = var.create_cluster ? var.replica_count : 0
 
   identifier                      = try(lookup(var.instances_parameters[count.index], "instance_name"), "${var.name}-${count.index + 1}")
   cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
