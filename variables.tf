@@ -16,6 +16,12 @@ variable "name" {
   default     = ""
 }
 
+variable "autoscaling_policy_name" {
+  description = "Autoscaling policy name"
+  type        = string
+  default     = "target-metric"
+}
+
 variable "subnets" {
   description = "List of subnet IDs used by database subnet group created"
   type        = list(string)
