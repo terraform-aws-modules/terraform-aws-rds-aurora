@@ -106,6 +106,17 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
+  dynamic "restore_to_point_in_time" {
+    for_each = length(keys(var.restore_to_point_in_time)) == 0 ? [] : [var.restore_to_point_in_time]
+
+    content {
+      source_cluster_identifier  = restore_to_point_in_time.value.source_cluster_identifier
+      restore_type               = lookup(restore_to_point_in_time.value, "restore_type", null)
+      use_latest_restorable_time = lookup(restore_to_point_in_time.value, "use_latest_restorable_time", null)
+      restore_to_time            = lookup(restore_to_point_in_time.value, "restore_to_time", null)
+    }
+  }
+
   tags = merge(var.tags, var.cluster_tags)
 }
 
