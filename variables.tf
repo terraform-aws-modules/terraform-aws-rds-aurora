@@ -88,6 +88,12 @@ variable "password" {
   default     = ""
 }
 
+variable "random_password_length" {
+  description = "(Optional) Length of random password to create. (default: 10)"
+  type        = number
+  default     = 10
+}
+
 variable "is_primary_cluster" {
   description = "Whether to create a primary cluster (set to false to be a part of a Global database)"
   type        = bool
