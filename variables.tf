@@ -340,8 +340,14 @@ variable "vpc_security_group_ids" {
   default     = []
 }
 
+variable "create_db_subnet_group" {
+  description = "Whether to create the DB subnet group or use existing"
+  type        = bool
+  default     = true
+}
+
 variable "db_subnet_group_name" {
-  description = "The existing subnet group name to use"
+  description = "The subnet group name to use (existing or to create)"
   type        = string
   default     = ""
 }

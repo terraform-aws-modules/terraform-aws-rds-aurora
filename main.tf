@@ -1,16 +1,16 @@
 locals {
-  port                 = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
-  db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  master_password      = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.password
-  backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
+  port = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
+
+  db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
+  internal_db_subnet_group_name = coalesce(var.db_subnet_group_name, var.name)
+  master_password               = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.password
+  backtrack_window              = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
   rds_security_group_id       = join("", aws_security_group.this.*.id)
 
   iam_role_name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
   iam_role_name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
-
-  name = "aurora-${var.name}"
 }
 
 # Ref. https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces
@@ -35,14 +35,14 @@ resource "random_id" "snapshot_identifier" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  count = var.create_cluster && var.db_subnet_group_name == "" ? 1 : 0
+  count = var.create_cluster && var.create_db_subnet_group ? 1 : 0
 
-  name        = var.name
+  name        = local.internal_db_subnet_group_name
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
 
   tags = merge(var.tags, {
-    Name = local.name
+    Name = local.internal_db_subnet_group_name
   })
 }
 
@@ -187,7 +187,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
   max_session_duration  = var.iam_role_max_session_duration
 
   tags = merge(var.tags, {
-    Name = local.name
+    Name = local.iam_role_name
   })
 }
 
@@ -247,7 +247,7 @@ resource "aws_security_group" "this" {
   description = var.security_group_description == "" ? "Control traffic to/from RDS Aurora ${var.name}" : var.security_group_description
 
   tags = merge(var.tags, var.security_group_tags, {
-    Name = local.name
+    Name = var.name
   })
 }
 
