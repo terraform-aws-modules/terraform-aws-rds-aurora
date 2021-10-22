@@ -47,9 +47,6 @@ module "aurora_postgresql" {
   create_security_group = true
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
-  replica_scale_enabled = false
-  replica_count         = 0
-
   monitoring_interval = 60
 
   apply_immediately   = true
@@ -98,9 +95,6 @@ module "aurora_mysql" {
   subnets               = module.vpc.database_subnets
   create_security_group = true
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
-
-  replica_scale_enabled = false
-  replica_count         = 0
 
   monitoring_interval = 60
 

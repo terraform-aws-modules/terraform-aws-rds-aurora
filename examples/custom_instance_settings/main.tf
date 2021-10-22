@@ -43,15 +43,13 @@ module "aurora" {
   name           = local.name
   engine         = "aurora-postgresql"
   engine_version = "11.9"
-  instance_type  = "db.r5.large"
+  instance_class = "db.r5.large"
 
   vpc_id                     = module.vpc.vpc_id
   db_subnet_group_name       = module.vpc.database_subnet_group_name
   create_security_group      = true
   security_group_description = ""
   allowed_cidr_blocks        = module.vpc.private_subnets_cidr_blocks
-
-  replica_count = 3
 
   apply_immediately   = true
   skip_final_snapshot = true
@@ -60,22 +58,22 @@ module "aurora" {
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
-  instances_parameters = [
+  cluster_instances = {
     # List index should be equal to `replica_count`
     # Omitted keys replaced by module defaults
-    {
-      instance_type       = "db.r5.2xlarge"
+    1 = {
+      instance_class      = "db.r5.2xlarge"
       publicly_accessible = true
-    },
-    {
-      instance_type = "db.r5.2xlarge"
-    },
-    {
+    }
+    2 = {
+      instance_class = "db.r5.2xlarge"
+    }
+    3 = {
       instance_name           = "reporting"
-      instance_type           = "db.r5.large"
+      instance_class          = "db.r5.large"
       instance_promotion_tier = 15
     }
-  ]
+  }
 
   tags = local.tags
 }

@@ -128,35 +128,31 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
+  for_each = var.create_cluster ? var.cluster_instances : {}
 
-  identifier                      = try(lookup(var.instances_parameters[count.index], "instance_name"), "${var.name}-${count.index + 1}")
-  cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
-  engine                          = var.engine
-  engine_version                  = var.engine_version
-  instance_class                  = try(lookup(var.instances_parameters[count.index], "instance_type"), count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type)
-  publicly_accessible             = try(lookup(var.instances_parameters[count.index], "publicly_accessible"), var.publicly_accessible)
-  db_subnet_group_name            = local.db_subnet_group_name
-  db_parameter_group_name         = var.db_parameter_group_name
-  preferred_maintenance_window    = var.preferred_maintenance_window
-  apply_immediately               = var.apply_immediately
-  monitoring_role_arn             = local.rds_enhanced_monitoring_arn
-  monitoring_interval             = var.monitoring_interval
-  auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-  promotion_tier                  = try(lookup(var.instances_parameters[count.index], "instance_promotion_tier"), count.index + 1)
-  performance_insights_enabled    = var.performance_insights_enabled
-  performance_insights_kms_key_id = var.performance_insights_kms_key_id
-  ca_cert_identifier              = var.ca_cert_identifier
+  identifier                            = lookup(each.value, "identifier", "${var.name}-${each.key}")
+  cluster_identifier                    = try(aws_rds_cluster.this[0].id, "")
+  engine                                = var.engine
+  engine_version                        = var.engine_version
+  instance_class                        = lookup(each.value, "instance_class", var.instance_class)
+  publicly_accessible                   = lookup(each.value, "publicly_accessible", var.publicly_accessible)
+  db_subnet_group_name                  = local.db_subnet_group_name
+  db_parameter_group_name               = lookup(each.value, "db_parameter_group_name", var.db_parameter_group_name)
+  apply_immediately                     = lookup(each.value, "apply_immediately", var.apply_immediately)
+  monitoring_role_arn                   = local.rds_enhanced_monitoring_arn
+  monitoring_interval                   = lookup(each.value, "monitoring_interval", var.monitoring_interval)
+  promotion_tier                        = lookup(each.value, "promotion_tier", null)
+  availability_zone                     = lookup(each.value, "availability_zone", null)
+  preferred_backup_window               = lookup(each.value, "preferred_backup_window", var.preferred_backup_window)
+  preferred_maintenance_window          = lookup(each.value, "preferred_maintenance_window", var.preferred_maintenance_window)
+  auto_minor_version_upgrade            = lookup(each.value, "auto_minor_version_upgrade", var.auto_minor_version_upgrade)
+  performance_insights_enabled          = lookup(each.value, "performance_insights_enabled", var.performance_insights_enabled)
+  performance_insights_kms_key_id       = lookup(each.value, "performance_insights_kms_key_id", var.performance_insights_kms_key_id)
+  performance_insights_retention_period = lookup(each.value, "performance_insights_retention_period", var.performance_insights_retention_period)
+  copy_tags_to_snapshot                 = lookup(each.value, "copy_tags_to_snapshot", var.copy_tags_to_snapshot)
+  ca_cert_identifier                    = var.ca_cert_identifier
 
-  # Updating engine version forces replacement of instances, and they shouldn't be replaced
-  # because cluster will update them if engine version is changed
-  lifecycle {
-    ignore_changes = [
-      engine_version
-    ]
-  }
-
-  tags = var.tags
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 }
 
 ################################################################################
@@ -205,21 +201,21 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 ################################################################################
 
 resource "aws_appautoscaling_target" "read_replica_count" {
-  count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
+  count = var.create_cluster && var.autoscaling_enabled ? 1 : 0
 
-  max_capacity       = var.replica_scale_max
-  min_capacity       = var.replica_scale_min
-  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
+  max_capacity       = var.autoscaling_max_capacity
+  min_capacity       = var.autoscaling_min_capacity
+  resource_id        = "cluster:${try(aws_rds_cluster.this[0].cluster_identifier, "")}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 }
 
 resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
-  count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
+  count = var.create_cluster && var.autoscaling_enabled ? 1 : 0
 
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
-  resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
+  resource_id        = "cluster:${try(aws_rds_cluster.this[0].cluster_identifier, "")}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 
@@ -228,9 +224,9 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
       predefined_metric_type = var.predefined_metric_type
     }
 
-    scale_in_cooldown  = var.replica_scale_in_cooldown
-    scale_out_cooldown = var.replica_scale_out_cooldown
-    target_value       = var.predefined_metric_type == "RDSReaderAverageCPUUtilization" ? var.replica_scale_cpu : var.replica_scale_connections
+    scale_in_cooldown  = var.autoscaling_scale_in_cooldown
+    scale_out_cooldown = var.autoscaling_scale_out_cooldown
+    target_value       = var.predefined_metric_type == "RDSReaderAverageCPUUtilization" ? var.autoscaling_target_cpu : var.autoscaling_target_connections
   }
 
   depends_on = [aws_appautoscaling_target.read_replica_count]

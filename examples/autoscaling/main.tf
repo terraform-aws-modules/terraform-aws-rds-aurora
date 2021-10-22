@@ -37,21 +37,20 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                  = local.name
-  engine                = "aurora-postgresql"
-  engine_version        = "11.9"
-  instance_type         = "db.r5.large"
-  instance_type_replica = "db.t3.large"
+  name                   = local.name
+  engine                 = "aurora-postgresql"
+  engine_version         = "11.9"
+  instance_class         = "db.r5.large"
+  instance_class_replica = "db.t3.large"
 
   vpc_id                = module.vpc.vpc_id
   db_subnet_group_name  = module.vpc.database_subnet_group_name
   create_security_group = true
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
-  replica_count         = 1
-  replica_scale_enabled = true
-  replica_scale_min     = 1
-  replica_scale_max     = 5
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 5
 
   monitoring_interval           = 60
   iam_role_name                 = "${local.name}-enhanced-monitoring"

@@ -120,14 +120,13 @@ module "aurora" {
   name           = local.name
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
-  instance_type  = "db.r5.large"
+  instance_class = "db.r5.large"
 
   vpc_id                = module.vpc.vpc_id
   db_subnet_group_name  = module.vpc.database_subnet_group_name
   create_security_group = true
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
-  replica_count                       = 1
   iam_database_authentication_enabled = true
   password                            = random_password.master.result
   create_random_password              = false

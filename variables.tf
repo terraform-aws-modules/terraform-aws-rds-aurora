@@ -22,12 +22,6 @@ variable "subnets" {
   default     = []
 }
 
-variable "replica_count" {
-  description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
-  type        = number
-  default     = 1
-}
-
 variable "allowed_security_groups" {
   description = "A list of Security Group ID's to allow access to"
   type        = list(string)
@@ -46,14 +40,14 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "instance_type_replica" {
+variable "instance_class_replica" {
   description = "Instance type to use at replica instance"
   type        = string
   default     = null
 }
 
-variable "instance_type" {
-  description = "Instance type to use at master instance. If instance_type_replica is not set it will use the same type for replica instances"
+variable "instance_class" {
+  description = "Instance type to use at master instance. If instance_class_replica is not set it will use the same type for replica instances"
   type        = string
   default     = ""
 }
@@ -232,43 +226,43 @@ variable "enable_http_endpoint" {
   default     = false
 }
 
-variable "replica_scale_enabled" {
+variable "autoscaling_enabled" {
   description = "Whether to enable autoscaling for RDS Aurora (MySQL) read replicas"
   type        = bool
   default     = false
 }
 
-variable "replica_scale_max" {
+variable "autoscaling_max_capacity" {
   description = "Maximum number of read replicas permitted when autoscaling is enabled"
   type        = number
   default     = 0
 }
 
-variable "replica_scale_min" {
+variable "autoscaling_min_capacity" {
   description = "Minimum number of read replicas permitted when autoscaling is enabled"
   type        = number
   default     = 2
 }
 
-variable "replica_scale_cpu" {
+variable "autoscaling_target_cpu" {
   description = "CPU threshold which will initiate autoscaling"
   type        = number
   default     = 70
 }
 
-variable "replica_scale_connections" {
+variable "autoscaling_target_connections" {
   description = "Average number of connections threshold which will initiate autoscaling. Default value is 70% of db.r4.large's default max_connections"
   type        = number
   default     = 700
 }
 
-variable "replica_scale_in_cooldown" {
+variable "autoscaling_scale_in_cooldown" {
   description = "Cooldown in seconds before allowing further scaling operations after a scale in"
   type        = number
   default     = 300
 }
 
-variable "replica_scale_out_cooldown" {
+variable "autoscaling_scale_out_cooldown" {
   description = "Cooldown in seconds before allowing further scaling operations after a scale out"
   type        = number
   default     = 300
@@ -302,6 +296,12 @@ variable "performance_insights_kms_key_id" {
   description = "The ARN for the KMS key to encrypt Performance Insights data"
   type        = string
   default     = ""
+}
+
+variable "performance_insights_retention_period" {
+  description = "Amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)"
+  type        = number
+  default     = null
 }
 
 variable "iam_database_authentication_enabled" {
@@ -400,10 +400,10 @@ variable "ca_cert_identifier" {
   default     = null
 }
 
-variable "instances_parameters" {
-  description = "Customized instance settings. Supported keys: `instance_name`, `instance_type`, `instance_promotion_tier`, `publicly_accessible`"
-  type        = list(map(string))
-  default     = []
+variable "cluster_instances" {
+  description = "Map of cluster instances and any specific/overriding attributes to be created"
+  type        = map(any)
+  default     = {}
 }
 
 variable "s3_import" {
