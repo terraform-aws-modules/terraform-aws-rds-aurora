@@ -47,8 +47,6 @@ module "aurora" {
   instance_class = "db.r5.large"
   instances      = { for i in range(3) : i => {} }
   # instances = {
-  #   # List index should be equal to `replica_count`
-  #   # Omitted keys replaced by module defaults
   #   1 = {
   #     instance_class      = "db.r5.2xlarge"
   #     publicly_accessible = true

@@ -1,6 +1,6 @@
-# PostgreSQL Example
+# Aurora Global Cluster Example
 
-Configuration in this directory creates a PostgreSQL Aurora cluster.
+Configuration in this directory creates a PostgreSQL Aurora global cluster.
 
 ## Usage
 

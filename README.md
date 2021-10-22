@@ -1,27 +1,36 @@
 # AWS RDS Aurora Terraform module
 
-Terraform module which creates RDS Aurora resources on AWS.
+Terraform module which creates AWS RDS Aurora resources.
 
 ## Available features
 
-- Autoscaling of read-replicas (based on CPU utilization)
+- Autoscaling of read-replicas
+- Global clusters
 - Enhanced Monitoring
+- Serverless cluster
+- Import from S3
+- Fine grained control of individual cluster instances
 
 ## Usage
 
 ```hcl
-module "db" {
+module "cluster" {
   source  = "terraform-aws-modules/rds-aurora/aws"
 
   name           = "test-aurora-db-postgres96"
   engine         = "aurora-postgresql"
   engine_version = "11.12"
   instance_class = "db.r6g.large"
+  instances = {
+    one = {}
+    2 = {
+      instance_class = "db.r6g.2xlarge"
+    }
+  }
 
   vpc_id  = "vpc-12345678"
   subnets = ["subnet-12345678", "subnet-87654321"]
 
-  replica_count           = 1
   allowed_security_groups = ["sg-12345678"]
   allowed_cidr_blocks     = ["10.20.0.0/20"]
 
@@ -43,14 +52,28 @@ module "db" {
 
 ## Conditional creation
 
-Sometimes you need to have a way to create RDS Aurora resources conditionally but Terraform does not allow to use `count` inside `module` block, so the solution is to specify argument `create_cluster`.
+The following values are provided to toggle on/off creation of the associated resources as desired:
 
 ```hcl
 # This RDS cluster will not be created
-module "db" {
+module "cluster" {
   source  = "terraform-aws-modules/rds-aurora/aws"
 
+  # Disable creation of cluster and all resources
   create_cluster = false
+
+  # Disable creation of subnet group - provide a subnet group
+  create_db_subnet_group = false
+
+  # Disable creation of security group - provide a security group
+  create_security_group = false
+
+  # Disable creation of monitoring IAM role - provide a role ARN
+  create_monitoring_role = false
+
+  # Disable creation of random password - AWS API provides the password
+  create_random_password = false
+
   # ... omitted
 }
 ```
