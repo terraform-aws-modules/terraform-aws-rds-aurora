@@ -1,7 +1,7 @@
 locals {
   port                 = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  master_password      = var.create_cluster && var.create_random_password && var.is_primary_cluster ? random_password.master_password[0].result : var.password
+  master_password      = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.password
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
@@ -59,9 +59,9 @@ resource "aws_rds_cluster" "this" {
   allow_major_version_upgrade         = var.allow_major_version_upgrade
   enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
-  database_name                       = var.database_name
-  master_username                     = var.username
-  master_password                     = local.master_password
+  database_name                       = var.is_primary_cluster ? var.database_name : null
+  master_username                     = var.is_primary_cluster ? var.username : null
+  master_password                     = var.is_primary_cluster ? local.master_password : null
   final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
@@ -114,6 +114,12 @@ resource "aws_rds_cluster" "this" {
       use_latest_restorable_time = lookup(restore_to_point_in_time.value, "use_latest_restorable_time", null)
       restore_to_time            = lookup(restore_to_point_in_time.value, "restore_to_time", null)
     }
+  }
+
+  # See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#replication_source_identifier
+  # Since this is used either in read-replica clusters or global clusters, this should be acceptable to specify
+  lifecycle {
+    ignore_changes = [replication_source_identifier]
   }
 
   tags = merge(var.tags, var.cluster_tags)
