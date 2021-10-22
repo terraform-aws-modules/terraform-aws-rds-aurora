@@ -178,6 +178,12 @@ variable "db_cluster_parameter_group_name" {
   default     = null
 }
 
+variable "db_cluster_db_instance_parameter_group_name" {
+  description = "Instance parameter group to associate with all instances of the DB cluster. It is only valid in combination with the `allow_major_version_upgrade` parameter"
+  type        = string
+  default     = null
+}
+
 variable "scaling_configuration" {
   description = "Map of nested attributes with scaling properties. Only valid when engine_mode is set to `serverless`"
   type        = map(string)
@@ -314,6 +320,12 @@ variable "global_cluster_identifier" {
   description = "The global cluster identifier specified on aws_rds_global_cluster"
   type        = string
   default     = ""
+}
+
+variable "enable_global_write_forwarding" {
+  description = "Whether cluster should forward writes to an associated global cluster. Applied to secondary clusters to enable them to forward writes to an `aws_rds_global_cluster`'s primary cluster"
+  type        = bool
+  default     = null
 }
 
 variable "engine_mode" {

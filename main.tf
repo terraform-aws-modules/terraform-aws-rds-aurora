@@ -49,10 +49,12 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   count = var.create_cluster ? 1 : 0
 
-  global_cluster_identifier           = var.global_cluster_identifier
-  cluster_identifier                  = var.name
-  replication_source_identifier       = var.replication_source_identifier
-  source_region                       = var.source_region
+  global_cluster_identifier      = var.global_cluster_identifier
+  enable_global_write_forwarding = var.enable_global_write_forwarding
+  cluster_identifier             = var.name
+  replication_source_identifier  = var.replication_source_identifier
+  source_region                  = var.source_region
+
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_mode == "serverless" ? null : var.engine_version
@@ -75,12 +77,12 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
   db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
+  db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
   iam_roles                           = var.iam_roles
-
-  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+  enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
 
   dynamic "scaling_configuration" {
     for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
