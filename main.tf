@@ -7,8 +7,7 @@ locals {
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
   rds_security_group_id       = join("", aws_security_group.this.*.id)
 
-  # TODO - remove coalesce() at next breaking change - adding existing name as fallback to maintain backwards compatibility
-  iam_role_name        = var.iam_role_use_name_prefix ? null : coalesce(var.iam_role_name, "rds-enhanced-monitoring-${var.name}")
+  iam_role_name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
   iam_role_name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
 
   name = "aurora-${var.name}"
