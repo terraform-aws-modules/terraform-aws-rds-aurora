@@ -41,20 +41,10 @@ output "primary_cluster_master_username" {
   sensitive   = true
 }
 
-# aws_rds_cluster_instance
-output "primary_cluster_instance_endpoints" {
-  description = "A list of all cluster instance endpoints"
-  value       = module.primary_aurora.rds_cluster_instance_endpoints
-}
-
-output "primary_cluster_instance_ids" {
-  description = "A list of all cluster instance ids"
-  value       = module.primary_aurora.rds_cluster_instance_ids
-}
-
-output "primary_cluster_instance_dbi_resource_ids" {
-  description = "A list of all the region-unique, immutable identifiers for the DB instances"
-  value       = module.primary_aurora.rds_cluster_instance_dbi_resource_ids
+# aws_rds_cluster_instances
+output "primary_cluster_instances" {
+  description = "A map of cluster instances and their attributes"
+  value       = module.primary_aurora.rds_cluster_instances
 }
 
 # aws_security_group
@@ -106,20 +96,10 @@ output "secondary_cluster_master_username" {
   sensitive   = true
 }
 
-# aws_rds_cluster_instance
-output "secondary_cluster_instance_endpoints" {
-  description = "A list of all cluster instance endpoints"
-  value       = module.secondary_aurora.rds_cluster_instance_endpoints
-}
-
-output "secondary_cluster_instance_ids" {
-  description = "A list of all cluster instance ids"
-  value       = module.secondary_aurora.rds_cluster_instance_ids
-}
-
-output "secondary_cluster_instance_dbi_resource_ids" {
-  description = "A list of all the region-unique, immutable identifiers for the DB instances"
-  value       = module.secondary_aurora.rds_cluster_instance_dbi_resource_ids
+# aws_rds_cluster_instances
+output "secondary_cluster_instances" {
+  description = "A map of cluster instances and their attributes"
+  value       = module.secondary_aurora.rds_cluster_instances
 }
 
 # aws_security_group

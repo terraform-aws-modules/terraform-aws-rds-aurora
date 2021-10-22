@@ -41,11 +41,27 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                   = local.name
-  engine                 = "aurora-postgresql"
-  engine_version         = "11.9"
-  instance_class         = "db.r5.large"
-  instance_class_replica = "db.t3.medium"
+  name           = local.name
+  engine         = "aurora-postgresql"
+  engine_version = "11.12"
+  instance_class = "db.r5.large"
+  instances      = { for i in range(3) : i => {} }
+  # instances = {
+  #   # List index should be equal to `replica_count`
+  #   # Omitted keys replaced by module defaults
+  #   1 = {
+  #     instance_class      = "db.r5.2xlarge"
+  #     publicly_accessible = true
+  #   }
+  #   2 = {
+  #     instance_class = "db.r5.2xlarge"
+  #   }
+  #   3 = {
+  #     instance_name           = "reporting"
+  #     instance_class          = "db.r5.large"
+  #     instance_promotion_tier = 15
+  #   }
+  # }
 
   vpc_id                = module.vpc.vpc_id
   db_subnet_group_name  = module.vpc.database_subnet_group_name

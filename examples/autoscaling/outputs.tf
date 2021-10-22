@@ -41,15 +41,10 @@ output "rds_cluster_master_username" {
   sensitive   = true
 }
 
-# aws_rds_cluster_instance
-output "rds_cluster_instance_endpoints" {
-  description = "A list of all cluster instance endpoints"
-  value       = module.aurora.rds_cluster_instance_endpoints
-}
-
-output "rds_cluster_instance_ids" {
-  description = "A list of all cluster instance ids"
-  value       = module.aurora.rds_cluster_instance_ids
+# aws_rds_cluster_instances
+output "rds_cluster_instances" {
+  description = "A map of cluster instances and their attributes"
+  value       = module.aurora.rds_cluster_instances
 }
 
 # aws_security_group

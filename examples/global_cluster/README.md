@@ -61,9 +61,7 @@ No inputs.
 | <a name="output_primary_cluster_database_name"></a> [primary\_cluster\_database\_name](#output\_primary\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_primary_cluster_endpoint"></a> [primary\_cluster\_endpoint](#output\_primary\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_primary_cluster_id"></a> [primary\_cluster\_id](#output\_primary\_cluster\_id) | The ID of the cluster |
-| <a name="output_primary_cluster_instance_dbi_resource_ids"></a> [primary\_cluster\_instance\_dbi\_resource\_ids](#output\_primary\_cluster\_instance\_dbi\_resource\_ids) | A list of all the region-unique, immutable identifiers for the DB instances |
-| <a name="output_primary_cluster_instance_endpoints"></a> [primary\_cluster\_instance\_endpoints](#output\_primary\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_primary_cluster_instance_ids"></a> [primary\_cluster\_instance\_ids](#output\_primary\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_primary_cluster_instances"></a> [primary\_cluster\_instances](#output\_primary\_cluster\_instances) | A map of cluster instances and their attributes |
 | <a name="output_primary_cluster_master_password"></a> [primary\_cluster\_master\_password](#output\_primary\_cluster\_master\_password) | The master password |
 | <a name="output_primary_cluster_master_username"></a> [primary\_cluster\_master\_username](#output\_primary\_cluster\_master\_username) | The master username |
 | <a name="output_primary_cluster_port"></a> [primary\_cluster\_port](#output\_primary\_cluster\_port) | The port |
@@ -73,9 +71,7 @@ No inputs.
 | <a name="output_secondary_cluster_database_name"></a> [secondary\_cluster\_database\_name](#output\_secondary\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_secondary_cluster_endpoint"></a> [secondary\_cluster\_endpoint](#output\_secondary\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_secondary_cluster_id"></a> [secondary\_cluster\_id](#output\_secondary\_cluster\_id) | The ID of the cluster |
-| <a name="output_secondary_cluster_instance_dbi_resource_ids"></a> [secondary\_cluster\_instance\_dbi\_resource\_ids](#output\_secondary\_cluster\_instance\_dbi\_resource\_ids) | A list of all the region-unique, immutable identifiers for the DB instances |
-| <a name="output_secondary_cluster_instance_endpoints"></a> [secondary\_cluster\_instance\_endpoints](#output\_secondary\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_secondary_cluster_instance_ids"></a> [secondary\_cluster\_instance\_ids](#output\_secondary\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_secondary_cluster_instances"></a> [secondary\_cluster\_instances](#output\_secondary\_cluster\_instances) | A map of cluster instances and their attributes |
 | <a name="output_secondary_cluster_master_password"></a> [secondary\_cluster\_master\_password](#output\_secondary\_cluster\_master\_password) | The master password |
 | <a name="output_secondary_cluster_master_username"></a> [secondary\_cluster\_master\_username](#output\_secondary\_cluster\_master\_username) | The master username |
 | <a name="output_secondary_cluster_port"></a> [secondary\_cluster\_port](#output\_secondary\_cluster\_port) | The port |

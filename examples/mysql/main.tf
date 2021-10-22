@@ -41,11 +41,24 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                   = local.name
-  engine                 = "aurora-mysql"
-  engine_version         = "5.7.12"
-  instance_class         = "db.r5.large"
-  instance_class_replica = "db.t3.medium"
+  name           = local.name
+  engine         = "aurora-mysql"
+  engine_version = "5.7.12"
+  instance_class = "db.r5.large"
+  instances = {
+    1 = {
+      instance_class      = "db.r6g.large"
+      publicly_accessible = true
+    }
+    2 = {
+      instance_class = "db.t3.large"
+    }
+    3 = {
+      instance_name           = "reporting"
+      instance_class          = "db.r5.large"
+      instance_promotion_tier = 15
+    }
+  }
 
   vpc_id                = module.vpc.vpc_id
   db_subnet_group_name  = module.vpc.database_subnet_group_name

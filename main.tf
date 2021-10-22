@@ -2,7 +2,7 @@ locals {
   port = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
 
   db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  internal_db_subnet_group_name = coalesce(var.db_subnet_group_name, var.name)
+  internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
   master_password               = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.password
   backtrack_window              = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
@@ -128,10 +128,14 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  for_each = var.create_cluster ? var.cluster_instances : {}
+  for_each = var.create_cluster ? var.instances : {}
 
-  identifier                            = lookup(each.value, "identifier", "${var.name}-${each.key}")
-  cluster_identifier                    = try(aws_rds_cluster.this[0].id, "")
+  # Notes:
+  # Do not set preferred_backup_window - its set at the clsuter level and will error if provided here
+
+  identifier                            = var.instances_use_identifier_prefix ? null : lookup(each.value, "identifier", "${var.name}-${each.key}")
+  identifier_prefix                     = var.instances_use_identifier_prefix ? var.instances_identifier_prefix : null
+  cluster_identifier                    = try(aws_rds_cluster.this[0].id, "${var.name}-${each.key}")
   engine                                = var.engine
   engine_version                        = var.engine_version
   instance_class                        = lookup(each.value, "instance_class", var.instance_class)
@@ -143,7 +147,6 @@ resource "aws_rds_cluster_instance" "this" {
   monitoring_interval                   = lookup(each.value, "monitoring_interval", var.monitoring_interval)
   promotion_tier                        = lookup(each.value, "promotion_tier", null)
   availability_zone                     = lookup(each.value, "availability_zone", null)
-  preferred_backup_window               = lookup(each.value, "preferred_backup_window", var.preferred_backup_window)
   preferred_maintenance_window          = lookup(each.value, "preferred_maintenance_window", var.preferred_maintenance_window)
   auto_minor_version_upgrade            = lookup(each.value, "auto_minor_version_upgrade", var.auto_minor_version_upgrade)
   performance_insights_enabled          = lookup(each.value, "performance_insights_enabled", var.performance_insights_enabled)
@@ -152,7 +155,8 @@ resource "aws_rds_cluster_instance" "this" {
   copy_tags_to_snapshot                 = lookup(each.value, "copy_tags_to_snapshot", var.copy_tags_to_snapshot)
   ca_cert_identifier                    = var.ca_cert_identifier
 
-  tags = merge(var.tags, lookup(each.value, "tags", {}))
+  # tags = merge(var.tags, lookup(each.value, "tags", {}))
+  tags = var.tags
 }
 
 ################################################################################

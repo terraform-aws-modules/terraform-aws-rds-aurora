@@ -37,16 +37,22 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                   = local.name
-  engine                 = "aurora-postgresql"
-  engine_version         = "11.9"
-  instance_class         = "db.r5.large"
-  instance_class_replica = "db.t3.large"
+  name           = local.name
+  engine         = "aurora-postgresql"
+  engine_version = "11.12"
+  instance_class = "db.r6g.large"
+  instances = {
+    1 = {}
+    2 = {
+      instance_class = "db.t3.large"
+    }
+  }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
   autoscaling_enabled      = true
   autoscaling_min_capacity = 1

@@ -41,24 +41,30 @@ output "rds_cluster_master_username" {
   sensitive   = true
 }
 
-# aws_rds_cluster_instance
-output "rds_cluster_instance_endpoints" {
-  description = "A list of all cluster instance endpoints"
-  value       = module.aurora.rds_cluster_instance_endpoints
-}
-
-output "rds_cluster_instance_ids" {
-  description = "A list of all cluster instance ids"
-  value       = module.aurora.rds_cluster_instance_ids
-}
-
-output "rds_cluster_instance_dbi_resource_ids" {
-  description = "A list of all the region-unique, immutable identifiers for the DB instances"
-  value       = module.aurora.rds_cluster_instance_dbi_resource_ids
+# aws_rds_cluster_instances
+output "rds_cluster_instances" {
+  description = "A map of cluster instances and their attributes"
+  value       = module.aurora.rds_cluster_instances
 }
 
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.security_group_id
+}
+
+# Enhanced monitoring role
+output "enhanced_monitoring_iam_role_name" {
+  description = "The name of the enhanced monitoring role"
+  value       = module.aurora.enhanced_monitoring_iam_role_name
+}
+
+output "enhanced_monitoring_iam_role_arn" {
+  description = "The Amazon Resource Name (ARN) specifying the enhanced monitoring role"
+  value       = module.aurora.enhanced_monitoring_iam_role_arn
+}
+
+output "enhanced_monitoring_iam_role_unique_id" {
+  description = "Stable and unique string identifying the enhanced monitoring role"
+  value       = module.aurora.enhanced_monitoring_iam_role_unique_id
 }

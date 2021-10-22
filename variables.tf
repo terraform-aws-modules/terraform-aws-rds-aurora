@@ -400,10 +400,22 @@ variable "ca_cert_identifier" {
   default     = null
 }
 
-variable "cluster_instances" {
+variable "instances" {
   description = "Map of cluster instances and any specific/overriding attributes to be created"
-  type        = map(any)
+  type        = any
   default     = {}
+}
+
+variable "instances_use_identifier_prefix" {
+  description = "Determines whether cluster instances begin with `instances_identifier_prefix` or not"
+  type        = bool
+  default     = false
+}
+
+variable "instances_identifier_prefix" {
+  description = "Creates a unique identifier beginning with the specified prefix"
+  type        = string
+  default     = null
 }
 
 variable "s3_import" {

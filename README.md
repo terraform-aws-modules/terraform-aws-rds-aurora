@@ -12,12 +12,11 @@ Terraform module which creates RDS Aurora resources on AWS.
 ```hcl
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 5.0"
 
   name           = "test-aurora-db-postgres96"
   engine         = "aurora-postgresql"
-  engine_version = "11.9"
-  instance_class  = "db.r5.large"
+  engine_version = "11.12"
+  instance_class = "db.r6g.large"
 
   vpc_id  = "vpc-12345678"
   subnets = ["subnet-12345678", "subnet-87654321"]
@@ -50,7 +49,6 @@ Sometimes you need to have a way to create RDS Aurora resources conditionally bu
 # This RDS cluster will not be created
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 5.0"
 
   create_cluster = false
   # ... omitted
@@ -60,7 +58,7 @@ module "db" {
 ## Examples
 
 - [Autoscaling](examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
-- [Custom Instance Settings](examples/custom_instance_settings): A PostgreSQL cluster with multiple replics configured using custom settings
+- [Global Cluster](examples/global_cluster): A PostgreSQL global cluster with clusters provisioned in two different region
 - [MySQL](examples/mysql): A simple MySQL cluster
 - [PostgreSQL](examples/postgresql): A simple PostgreSQL cluster
 - [S3 Import](examples/s3_import): A MySQL cluster created from a Percona Xtrabackup stored in S3
@@ -128,7 +126,6 @@ No modules.
 | <a name="input_backtrack_window"></a> [backtrack\_window](#input\_backtrack\_window) | The target backtrack window, in seconds. Only available for aurora engine currently. To disable backtracking, set this value to 0. Must be between 0 and 259200 (72 hours) | `number` | `0` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | How long to keep backups for (in days) | `number` | `7` | no |
 | <a name="input_ca_cert_identifier"></a> [ca\_cert\_identifier](#input\_ca\_cert\_identifier) | The identifier of the CA certificate for the DB instance | `string` | `null` | no |
-| <a name="input_cluster_instances"></a> [cluster\_instances](#input\_cluster\_instances) | Map of cluster instances and any specific/overriding attributes to be created | `map(any)` | `{}` | no |
 | <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags) | A map of tags to add to only the RDS cluster. Used for AWS Instance Scheduler tagging | `map(string)` | `{}` | no |
 | <a name="input_copy_tags_to_snapshot"></a> [copy\_tags\_to\_snapshot](#input\_copy\_tags\_to\_snapshot) | Copy all Cluster tags to snapshots | `bool` | `false` | no |
 | <a name="input_create_cluster"></a> [create\_cluster](#input\_create\_cluster) | Whether cluster should be created (it affects almost all resources) | `bool` | `true` | no |
@@ -162,6 +159,9 @@ No modules.
 | <a name="input_iam_roles"></a> [iam\_roles](#input\_iam\_roles) | A List of ARNs for the IAM roles to associate to the RDS Cluster | `list(string)` | `[]` | no |
 | <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | Instance type to use at master instance. If instance\_class\_replica is not set it will use the same type for replica instances | `string` | `""` | no |
 | <a name="input_instance_class_replica"></a> [instance\_class\_replica](#input\_instance\_class\_replica) | Instance type to use at replica instance | `string` | `null` | no |
+| <a name="input_instances"></a> [instances](#input\_instances) | Map of cluster instances and any specific/overriding attributes to be created | `any` | `{}` | no |
+| <a name="input_instances_identifier_prefix"></a> [instances\_identifier\_prefix](#input\_instances\_identifier\_prefix) | Creates a unique identifier beginning with the specified prefix | `string` | `null` | no |
+| <a name="input_instances_use_identifier_prefix"></a> [instances\_use\_identifier\_prefix](#input\_instances\_use\_identifier\_prefix) | Determines whether cluster instances begin with `instances_identifier_prefix` or not | `bool` | `false` | no |
 | <a name="input_is_primary_cluster"></a> [is\_primary\_cluster](#input\_is\_primary\_cluster) | Whether to create a primary cluster (set to false to be a part of a Global database) | `bool` | `true` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The ARN for the KMS encryption key if one is set to the cluster | `string` | `""` | no |
 | <a name="input_monitoring_interval"></a> [monitoring\_interval](#input\_monitoring\_interval) | The interval (seconds) between points when Enhanced Monitoring metrics are collected | `number` | `0` | no |
@@ -206,9 +206,7 @@ No modules.
 | <a name="output_rds_cluster_engine_version"></a> [rds\_cluster\_engine\_version](#output\_rds\_cluster\_engine\_version) | The cluster engine version |
 | <a name="output_rds_cluster_hosted_zone_id"></a> [rds\_cluster\_hosted\_zone\_id](#output\_rds\_cluster\_hosted\_zone\_id) | Route53 hosted zone id of the created cluster |
 | <a name="output_rds_cluster_id"></a> [rds\_cluster\_id](#output\_rds\_cluster\_id) | The ID of the cluster |
-| <a name="output_rds_cluster_instance_dbi_resource_ids"></a> [rds\_cluster\_instance\_dbi\_resource\_ids](#output\_rds\_cluster\_instance\_dbi\_resource\_ids) | A list of all the region-unique, immutable identifiers for the DB instances |
-| <a name="output_rds_cluster_instance_endpoints"></a> [rds\_cluster\_instance\_endpoints](#output\_rds\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_rds_cluster_instance_ids"></a> [rds\_cluster\_instance\_ids](#output\_rds\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_rds_cluster_instances"></a> [rds\_cluster\_instances](#output\_rds\_cluster\_instances) | A map of cluster instances and their attributes |
 | <a name="output_rds_cluster_master_password"></a> [rds\_cluster\_master\_password](#output\_rds\_cluster\_master\_password) | The master password |
 | <a name="output_rds_cluster_master_username"></a> [rds\_cluster\_master\_username](#output\_rds\_cluster\_master\_username) | The master username |
 | <a name="output_rds_cluster_port"></a> [rds\_cluster\_port](#output\_rds\_cluster\_port) | The port |

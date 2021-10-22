@@ -53,11 +53,16 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_enhanced_monitoring_iam_role_arn"></a> [enhanced\_monitoring\_iam\_role\_arn](#output\_enhanced\_monitoring\_iam\_role\_arn) | The Amazon Resource Name (ARN) specifying the enhanced monitoring role |
+| <a name="output_enhanced_monitoring_iam_role_name"></a> [enhanced\_monitoring\_iam\_role\_name](#output\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
+| <a name="output_enhanced_monitoring_iam_role_unique_id"></a> [enhanced\_monitoring\_iam\_role\_unique\_id](#output\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
+| <a name="output_mysql_enhanced_monitoring_iam_role_arn"></a> [mysql\_enhanced\_monitoring\_iam\_role\_arn](#output\_mysql\_enhanced\_monitoring\_iam\_role\_arn) | The Amazon Resource Name (ARN) specifying the enhanced monitoring role |
+| <a name="output_mysql_enhanced_monitoring_iam_role_name"></a> [mysql\_enhanced\_monitoring\_iam\_role\_name](#output\_mysql\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
+| <a name="output_mysql_enhanced_monitoring_iam_role_unique_id"></a> [mysql\_enhanced\_monitoring\_iam\_role\_unique\_id](#output\_mysql\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_mysql_rds_cluster_database_name"></a> [mysql\_rds\_cluster\_database\_name](#output\_mysql\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_mysql_rds_cluster_endpoint"></a> [mysql\_rds\_cluster\_endpoint](#output\_mysql\_rds\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_mysql_rds_cluster_id"></a> [mysql\_rds\_cluster\_id](#output\_mysql\_rds\_cluster\_id) | The ID of the cluster |
-| <a name="output_mysql_rds_cluster_instance_endpoints"></a> [mysql\_rds\_cluster\_instance\_endpoints](#output\_mysql\_rds\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_mysql_rds_cluster_instance_ids"></a> [mysql\_rds\_cluster\_instance\_ids](#output\_mysql\_rds\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_mysql_rds_cluster_instances"></a> [mysql\_rds\_cluster\_instances](#output\_mysql\_rds\_cluster\_instances) | A map of cluster instances and their attributes |
 | <a name="output_mysql_rds_cluster_master_password"></a> [mysql\_rds\_cluster\_master\_password](#output\_mysql\_rds\_cluster\_master\_password) | The master password |
 | <a name="output_mysql_rds_cluster_master_username"></a> [mysql\_rds\_cluster\_master\_username](#output\_mysql\_rds\_cluster\_master\_username) | The master username |
 | <a name="output_mysql_rds_cluster_port"></a> [mysql\_rds\_cluster\_port](#output\_mysql\_rds\_cluster\_port) | The port |
@@ -67,12 +72,11 @@ No inputs.
 | <a name="output_postgresql_rds_cluster_database_name"></a> [postgresql\_rds\_cluster\_database\_name](#output\_postgresql\_rds\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_postgresql_rds_cluster_endpoint"></a> [postgresql\_rds\_cluster\_endpoint](#output\_postgresql\_rds\_cluster\_endpoint) | The cluster endpoint |
 | <a name="output_postgresql_rds_cluster_id"></a> [postgresql\_rds\_cluster\_id](#output\_postgresql\_rds\_cluster\_id) | The ID of the cluster |
-| <a name="output_postgresql_rds_cluster_instance_endpoints"></a> [postgresql\_rds\_cluster\_instance\_endpoints](#output\_postgresql\_rds\_cluster\_instance\_endpoints) | A list of all cluster instance endpoints |
-| <a name="output_postgresql_rds_cluster_instance_ids"></a> [postgresql\_rds\_cluster\_instance\_ids](#output\_postgresql\_rds\_cluster\_instance\_ids) | A list of all cluster instance ids |
+| <a name="output_postgresql_rds_cluster_instances"></a> [postgresql\_rds\_cluster\_instances](#output\_postgresql\_rds\_cluster\_instances) | A map of cluster instances and their attributes |
 | <a name="output_postgresql_rds_cluster_master_password"></a> [postgresql\_rds\_cluster\_master\_password](#output\_postgresql\_rds\_cluster\_master\_password) | The master password |
 | <a name="output_postgresql_rds_cluster_master_username"></a> [postgresql\_rds\_cluster\_master\_username](#output\_postgresql\_rds\_cluster\_master\_username) | The master username |
 | <a name="output_postgresql_rds_cluster_port"></a> [postgresql\_rds\_cluster\_port](#output\_postgresql\_rds\_cluster\_port) | The port |
 | <a name="output_postgresql_rds_cluster_reader_endpoint"></a> [postgresql\_rds\_cluster\_reader\_endpoint](#output\_postgresql\_rds\_cluster\_reader\_endpoint) | The cluster reader endpoint |
 | <a name="output_postgresql_rds_cluster_resource_id"></a> [postgresql\_rds\_cluster\_resource\_id](#output\_postgresql\_rds\_cluster\_resource\_id) | The Resource ID of the cluster |
-| <a name="output_postgresql_security_group_id"></a> [postgresql\_security\_group\_id](#output\_postgresql\_security\_group\_id) | The security group ID of the cluster |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | The security group ID of the cluster |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

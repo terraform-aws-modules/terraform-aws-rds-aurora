@@ -11,7 +11,7 @@ repos:
         args:
           - '--args=--only=terraform_deprecated_interpolation'
           - '--args=--only=terraform_deprecated_index'
-          - '--args=--only=terraform_unused_declarations'
+          # - '--args=--only=terraform_unused_declarations'
           - '--args=--only=terraform_comment_syntax'
           - '--args=--only=terraform_documented_outputs'
           - '--args=--only=terraform_documented_variables'
