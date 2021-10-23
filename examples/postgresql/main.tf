@@ -87,7 +87,7 @@ module "aurora" {
   allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
   iam_database_authentication_enabled = true
-  password                            = random_password.master.result
+  master_password                     = random_password.master.result
   create_random_password              = false
 
   apply_immediately   = true

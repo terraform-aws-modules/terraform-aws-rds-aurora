@@ -64,7 +64,7 @@ variable "database_name" {
   default     = ""
 }
 
-variable "username" {
+variable "master_username" {
   description = "Master DB username"
   type        = string
   default     = "root"
@@ -76,7 +76,7 @@ variable "create_random_password" {
   default     = true
 }
 
-variable "password" {
+variable "master_password" {
   description = "Master DB password. Note - when specifying a value here, 'create_random_password' should be set to `false`"
   type        = string
   default     = ""
@@ -382,12 +382,6 @@ variable "copy_tags_to_snapshot" {
   default     = false
 }
 
-variable "iam_roles" {
-  description = "A List of ARNs for the IAM roles to associate to the RDS Cluster"
-  type        = list(string)
-  default     = []
-}
-
 variable "security_group_description" {
   description = "The description of the security group. If value is set to empty string it will contain cluster name in the description"
   type        = string
@@ -443,7 +437,7 @@ variable "instance_timeouts" {
 }
 
 # IAM role association
-variable "associate_roles" {
+variable "iam_roles" {
   description = "Map of IAM roles and supported feature names to associate with the cluster"
   type        = map(string)
   default     = {}

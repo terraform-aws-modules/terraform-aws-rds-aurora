@@ -3,7 +3,7 @@ locals {
 
   db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
-  master_password               = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.password
+  master_password               = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.master_password
   backtrack_window              = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
@@ -11,6 +11,8 @@ locals {
 
   iam_role_name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
   iam_role_name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
+
+  is_serverless = var.engine_mode == "serverless"
 }
 
 # Ref. https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces
@@ -49,6 +51,9 @@ resource "aws_db_subnet_group" "this" {
 resource "aws_rds_cluster" "this" {
   count = var.create_cluster ? 1 : 0
 
+  # Notes:
+  # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
+
   global_cluster_identifier      = var.global_cluster_identifier
   enable_global_write_forwarding = var.enable_global_write_forwarding
   cluster_identifier             = var.name
@@ -57,19 +62,19 @@ resource "aws_rds_cluster" "this" {
 
   engine                              = var.engine
   engine_mode                         = var.engine_mode
-  engine_version                      = var.engine_mode == "serverless" ? null : var.engine_version
+  engine_version                      = local.is_serverless ? null : var.engine_version
   allow_major_version_upgrade         = var.allow_major_version_upgrade
   enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
   database_name                       = var.is_primary_cluster ? var.database_name : null
-  master_username                     = var.is_primary_cluster ? var.username : null
+  master_username                     = var.is_primary_cluster ? var.master_username : null
   master_password                     = var.is_primary_cluster ? local.master_password : null
   final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${element(concat(random_id.snapshot_identifier.*.hex, [""]), 0)}"
   skip_final_snapshot                 = var.skip_final_snapshot
   deletion_protection                 = var.deletion_protection
   backup_retention_period             = var.backup_retention_period
-  preferred_backup_window             = var.engine_mode == "serverless" ? null : var.preferred_backup_window
-  preferred_maintenance_window        = var.engine_mode == "serverless" ? null : var.preferred_maintenance_window
+  preferred_backup_window             = local.is_serverless ? null : var.preferred_backup_window
+  preferred_maintenance_window        = local.is_serverless ? null : var.preferred_maintenance_window
   port                                = local.port
   db_subnet_group_name                = local.db_subnet_group_name
   vpc_security_group_ids              = compact(concat(aws_security_group.this.*.id, var.vpc_security_group_ids))
@@ -81,7 +86,6 @@ resource "aws_rds_cluster" "this" {
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
-  iam_roles                           = var.iam_roles
   enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
 
   timeouts {
@@ -124,17 +128,21 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
-  # See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#replication_source_identifier
-  # Since this is used either in read-replica clusters or global clusters, this should be acceptable to specify
   lifecycle {
-    ignore_changes = [replication_source_identifier]
+    ignore_changes = [
+      # See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#replication_source_identifier
+      # Since this is used either in read-replica clusters or global clusters, this should be acceptable to specify
+      replication_source_identifier,
+      # See docs here https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_global_cluster#new-global-cluster-from-existing-db-cluster
+      global_cluster_identifier,
+    ]
   }
 
   tags = merge(var.tags, var.cluster_tags)
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  for_each = var.create_cluster ? var.instances : {}
+  for_each = var.create_cluster && !local.is_serverless ? var.instances : {}
 
   # Notes:
   # Do not set preferred_backup_window - its set at the clsuter level and will error if provided here
@@ -190,7 +198,7 @@ resource "aws_rds_cluster_endpoint" "this" {
 }
 
 resource "aws_rds_cluster_role_association" "this" {
-  for_each = var.create_cluster ? var.associate_roles : {}
+  for_each = var.create_cluster ? var.iam_roles : {}
 
   db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
   feature_name          = each.value.feature_name
