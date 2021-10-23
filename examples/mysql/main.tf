@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "mysql"
+  name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
   tags = {
     Owner       = "user"

@@ -8,7 +8,7 @@ provider "aws" {
 }
 
 locals {
-  name = "postgresql"
+  name = "example-${replace(basename(path.cwd), "_", "-")}"
   primary = {
     region      = "eu-west-1"
     cidr_prefix = "10.99"
@@ -121,7 +121,7 @@ resource "aws_rds_global_cluster" "this" {
   storage_encrypted         = true
 }
 
-module "primary_aurora" {
+module "aurora_primary" {
   source = "../../"
 
   name                      = local.name
@@ -142,7 +142,7 @@ module "primary_aurora" {
   tags = local.tags
 }
 
-module "secondary_aurora" {
+module "aurora_secondary" {
   source = "../../"
 
   providers = { aws = aws.secondary }
@@ -165,7 +165,7 @@ module "secondary_aurora" {
   skip_final_snapshot = true
 
   depends_on = [
-    module.primary_aurora
+    module.aurora_primary
   ]
 
   tags = local.tags
