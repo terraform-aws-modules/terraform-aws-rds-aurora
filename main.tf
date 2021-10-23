@@ -9,8 +9,6 @@ locals {
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
   rds_security_group_id       = join("", aws_security_group.this.*.id)
 
-  iam_role_name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
-  iam_role_name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
 
   is_serverless = var.engine_mode == "serverless"
 }
@@ -148,7 +146,7 @@ resource "aws_rds_cluster_instance" "this" {
   # Do not set preferred_backup_window - its set at the clsuter level and will error if provided here
 
   identifier                            = var.instances_use_identifier_prefix ? null : lookup(each.value, "identifier", "${var.name}-${each.key}")
-  identifier_prefix                     = var.instances_use_identifier_prefix ? var.instances_identifier_prefix : null
+  identifier_prefix                     = var.instances_use_identifier_prefix ? lookup(each.value, "identifier_prefix", "${var.name}-${each.key}-") : null
   cluster_identifier                    = try(aws_rds_cluster.this[0].id, "")
   engine                                = var.engine
   engine_version                        = var.engine_version
@@ -181,7 +179,7 @@ resource "aws_rds_cluster_instance" "this" {
 }
 
 resource "aws_rds_cluster_endpoint" "this" {
-  for_each = var.create_cluster ? var.endpoints : tomap({})
+  for_each = var.create_cluster && !local.is_serverless ? var.endpoints : tomap({})
 
   cluster_identifier          = try(aws_rds_cluster.this[0].id, "")
   cluster_endpoint_identifier = each.value.identifier
@@ -223,8 +221,8 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 resource "aws_iam_role" "rds_enhanced_monitoring" {
   count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
-  name        = local.iam_role_name
-  name_prefix = local.iam_role_name_prefix
+  name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
+  name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
   description = var.iam_role_description
   path        = var.iam_role_path
 
@@ -235,7 +233,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
   max_session_duration  = var.iam_role_max_session_duration
 
   tags = merge(var.tags, {
-    Name = local.iam_role_name
+    Name = var.iam_role_name
   })
 }
 
@@ -250,8 +248,8 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 # Autoscaling
 ################################################################################
 
-resource "aws_appautoscaling_target" "read_replica_count" {
-  count = var.create_cluster && var.autoscaling_enabled ? 1 : 0
+resource "aws_appautoscaling_target" "this" {
+  count = var.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   max_capacity       = var.autoscaling_max_capacity
   min_capacity       = var.autoscaling_min_capacity
@@ -260,8 +258,8 @@ resource "aws_appautoscaling_target" "read_replica_count" {
   service_namespace  = "rds"
 }
 
-resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
-  count = var.create_cluster && var.autoscaling_enabled ? 1 : 0
+resource "aws_appautoscaling_policy" "this" {
+  count = var.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
@@ -279,7 +277,7 @@ resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
     target_value       = var.predefined_metric_type == "RDSReaderAverageCPUUtilization" ? var.autoscaling_target_cpu : var.autoscaling_target_connections
   }
 
-  depends_on = [aws_appautoscaling_target.read_replica_count]
+  depends_on = [aws_appautoscaling_target.this]
 }
 
 ################################################################################
@@ -291,8 +289,7 @@ resource "aws_security_group" "this" {
 
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
-
-  description = var.security_group_description == "" ? "Control traffic to/from RDS Aurora ${var.name}" : var.security_group_description
+  description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
 
   tags = merge(var.tags, var.security_group_tags, {
     Name = var.name
