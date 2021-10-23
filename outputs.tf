@@ -63,6 +63,12 @@ output "rds_cluster_instances" {
   value       = aws_rds_cluster_instance.this
 }
 
+# aws_rds_cluster_endpoint
+output "rds_additional_cluster_endpoints" {
+  description = "A map of additional cluster endpoints and their attributes"
+  value       = rds_cluster_endpoints.this
+}
+
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"

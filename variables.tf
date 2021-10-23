@@ -424,6 +424,12 @@ variable "s3_import" {
   default     = null
 }
 
+variable "endpoints" {
+  description = "Map of additional cluster endpoints and their attributes to be created"
+  type        = any
+  default     = {}
+}
+
 # Enhanced monitoring role
 variable "create_monitoring_role" {
   description = "Whether to create the IAM role for RDS enhanced monitoring"

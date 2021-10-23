@@ -45,26 +45,43 @@ module "aurora" {
   engine         = "aurora-postgresql"
   engine_version = "11.12"
   instance_class = "db.r5.large"
-  instances      = { for i in range(3) : i => {} }
-  # instances = {
-  #   1 = {
-  #     instance_class      = "db.r5.2xlarge"
-  #     publicly_accessible = true
-  #   }
-  #   2 = {
-  #     instance_class = "db.r5.2xlarge"
-  #   }
-  #   3 = {
-  #     instance_name           = "reporting"
-  #     instance_class          = "db.r5.large"
-  #     instance_promotion_tier = 15
-  #   }
-  # }
+  # instances      = { for i in range(3) : i => {} }
+  instances = {
+    1 = {
+      instance_class      = "db.r5.2xlarge"
+      publicly_accessible = true
+    }
+    2 = {
+      identifier     = "static-member-1"
+      instance_class = "db.r5.2xlarge"
+    }
+    3 = {
+      identifier     = "excluded-member-1"
+      instance_class = "db.r5.large"
+      promotion_tier = 15
+    }
+  }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  endpoints = {
+    static = {
+      identifier     = "static-custom-endpt"
+      type           = "ANY"
+      static_members = ["static-member-1"]
+      tags           = { Endpoint = "static-members" }
+    }
+    excluded = {
+      identifier       = "excluded-custom-endpt"
+      type             = "READER"
+      excluded_members = ["excluded-member-1"]
+      tags             = { Endpoint = "excluded-members" }
+    }
+  }
+
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
   iam_database_authentication_enabled = true
   password                            = random_password.master.result

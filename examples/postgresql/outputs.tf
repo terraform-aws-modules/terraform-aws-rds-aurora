@@ -47,6 +47,12 @@ output "rds_cluster_instances" {
   value       = module.aurora.rds_cluster_instances
 }
 
+# rds_cluster_endpoints
+output "rds_additional_cluster_endpoints" {
+  description = "A map of additional cluster endpoints and their attributes"
+  value       = module.aurora.rds_additional_cluster_endpoints
+}
+
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"

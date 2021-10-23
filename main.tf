@@ -135,7 +135,7 @@ resource "aws_rds_cluster_instance" "this" {
 
   identifier                            = var.instances_use_identifier_prefix ? null : lookup(each.value, "identifier", "${var.name}-${each.key}")
   identifier_prefix                     = var.instances_use_identifier_prefix ? var.instances_identifier_prefix : null
-  cluster_identifier                    = try(aws_rds_cluster.this[0].id, "${var.name}-${each.key}")
+  cluster_identifier                    = try(aws_rds_cluster.this[0].id, "")
   engine                                = var.engine
   engine_version                        = var.engine_version
   instance_class                        = lookup(each.value, "instance_class", var.instance_class)
@@ -155,8 +155,24 @@ resource "aws_rds_cluster_instance" "this" {
   copy_tags_to_snapshot                 = lookup(each.value, "copy_tags_to_snapshot", var.copy_tags_to_snapshot)
   ca_cert_identifier                    = var.ca_cert_identifier
 
+  # TODO - not sure why this is failing and throwing type mis-match errors
   # tags = merge(var.tags, lookup(each.value, "tags", {}))
   tags = var.tags
+}
+
+resource "aws_rds_cluster_endpoint" "this" {
+  for_each = var.create_cluster ? var.endpoints : tomap({})
+
+  cluster_identifier          = try(aws_rds_cluster.this[0].id, "")
+  cluster_endpoint_identifier = each.value.identifier
+  custom_endpoint_type        = each.value.type
+
+  static_members   = lookup(each.value, "static_members", null)
+  excluded_members = lookup(each.value, "excluded_members", null)
+
+  depends_on = [aws_rds_cluster_instance.this]
+
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 }
 
 ################################################################################
