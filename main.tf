@@ -41,9 +41,7 @@ resource "aws_db_subnet_group" "this" {
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
 
-  tags = merge(var.tags, {
-    Name = local.internal_db_subnet_group_name
-  })
+  tags = var.tags
 }
 
 resource "aws_rds_cluster" "this" {
@@ -232,9 +230,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
   force_detach_policies = var.iam_role_force_detach_policies
   max_session_duration  = var.iam_role_max_session_duration
 
-  tags = merge(var.tags, {
-    Name = var.iam_role_name
-  })
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {

@@ -26,6 +26,9 @@ module "vpc" {
   name = local.name
   cidr = "10.99.0.0/18"
 
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
   azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
@@ -44,26 +47,27 @@ module "aurora" {
   name           = local.name
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
-  instance_class = "db.r5.large"
   instances = {
     1 = {
-      instance_class      = "db.r6g.large"
+      instance_class      = "db.r5.large"
       publicly_accessible = true
     }
     2 = {
-      instance_class = "db.t3.large"
+      identifier     = "mysql-static-1"
+      instance_class = "db.r5.2xlarge"
     }
     3 = {
-      instance_name           = "reporting"
-      instance_class          = "db.r5.large"
-      instance_promotion_tier = 15
+      identifier     = "mysql-excluded-1"
+      instance_class = "db.r5.xlarge"
+      promotion_tier = 15
     }
   }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
   iam_database_authentication_enabled = true
   master_password                     = random_password.master.result

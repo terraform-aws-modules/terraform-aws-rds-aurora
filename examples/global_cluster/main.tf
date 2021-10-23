@@ -130,12 +130,14 @@ module "aurora_primary" {
   engine_version            = aws_rds_global_cluster.this.engine_version
   global_cluster_identifier = aws_rds_global_cluster.this.id
   instance_class            = "db.r6g.large"
+  instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.primary.arn
 
-  vpc_id                = module.primary_vpc.vpc_id
-  db_subnet_group_name  = module.primary_vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.primary_vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.primary_vpc.vpc_id
+  db_subnet_group_name   = module.primary_vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.primary_vpc.private_subnets_cidr_blocks
 
   skip_final_snapshot = true
 
@@ -155,12 +157,14 @@ module "aurora_secondary" {
   global_cluster_identifier = aws_rds_global_cluster.this.id
   source_region             = local.primary.region
   instance_class            = "db.r6g.large"
+  instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.secondary.arn
 
-  vpc_id                = module.secondary_vpc.vpc_id
-  db_subnet_group_name  = module.secondary_vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.secondary_vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.secondary_vpc.vpc_id
+  db_subnet_group_name   = module.secondary_vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.secondary_vpc.private_subnets_cidr_blocks
 
   skip_final_snapshot = true
 

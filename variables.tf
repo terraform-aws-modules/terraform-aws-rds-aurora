@@ -87,7 +87,7 @@ variable "engine_version" {
 variable "allow_major_version_upgrade" {
   description = "Enable to allow major engine version upgrades when changing engine versions. Defaults to `false`"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "enable_http_endpoint" {
@@ -205,7 +205,7 @@ variable "db_cluster_parameter_group_name" {
 }
 
 variable "db_cluster_db_instance_parameter_group_name" {
-  description = "Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_`db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
+  description = "Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
   type        = string
   default     = null
 }
@@ -298,7 +298,7 @@ variable "db_parameter_group_name" {
 variable "monitoring_interval" {
   description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for instances. Set to `0` to disble. Default is `0`"
   type        = number
-  default     = null
+  default     = 0
 }
 
 variable "auto_minor_version_upgrade" {

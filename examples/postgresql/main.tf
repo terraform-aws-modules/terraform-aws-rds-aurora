@@ -47,8 +47,6 @@ module "aurora" {
   name           = local.name
   engine         = "aurora-postgresql"
   engine_version = "11.12"
-  instance_class = "db.r5.large"
-  # instances      = { for i in range(3) : i => {} }
   instances = {
     1 = {
       instance_class      = "db.r5.2xlarge"
