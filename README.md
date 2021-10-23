@@ -2,14 +2,15 @@
 
 Terraform module which creates AWS RDS Aurora resources.
 
-## Available features
+## Available Features
 
 - Autoscaling of read-replicas
-- Global clusters
-- Enhanced Monitoring
+- Global cluster
+- Enhanced monitoring
 - Serverless cluster
 - Import from S3
 - Fine grained control of individual cluster instances
+- Custom endpoints
 
 ## Usage
 
@@ -50,7 +51,130 @@ module "cluster" {
 }
 ```
 
-## Conditional creation
+### Cluster Instance Configuration
+
+There are a couple different configuration methods that can be used to create instances within the cluster:
+
+ℹ️ Only the pertinent attributes are shown for brevity
+
+1. Create homogenous cluster of any number of instances
+
+  - Resources created:
+    - Writer: 1
+    - Reader(s): 2
+
+```hcl
+  ...
+  instance_class = "db.r6g.large"
+  instances = { for i in range(3) : i => {} }
+  ...
+```
+
+2. Create homogenous cluster of instances w/ autoscaling enabled. This is redundant and we'll show why in the next example.
+
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 4 readers (2 created directly, 2 created by appautoscaling)
+      - At most 7 reader instances (2 created directly, 5 created by appautoscaling)
+
+ℹ️ Autoscaling uses the instance class specified by `instance_class`.
+
+```hcl
+  ...
+  instance_class = "db.r6g.large"
+  instances = { for i in range(3) : i => {} }
+
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 2
+  autoscaling_max_capacity = 5
+  ...
+```
+
+3. Create homogeneous cluster scaled via autoscaling. At least one instance (writer) is required
+
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 1 reader
+      - At most 5 readers
+
+```hcl
+  ...
+  instance_class = "db.r6g.large"
+  instances = { 1 = {} }
+
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 5
+  ...
+```
+
+4. Create heterogenous cluster to support mixed-use workloads
+
+    It is common in this configuration to independently control the instance `promotion_tier` paired with `endpoints` to create custom endpoints directed at select instances or instance groups.
+
+  - Resources created:
+    - Writer: 1
+    - Readers: 2
+
+```hcl
+  ...
+  instance_class = "db.r5.large"
+  instances = {
+    1 = {
+      instance_class      = "db.r5.2xlarge"
+      publicly_accessible = true
+    }
+    2 = {
+      identifier     = "static-member-1"
+      instance_class = "db.r5.2xlarge"
+    }
+    3 = {
+      identifier     = "excluded-member-1"
+      instance_class = "db.r5.large"
+      promotion_tier = 15
+    }
+  }
+  ...
+```
+
+5. Create heterogenous cluster to support mixed-use workloads w/ autoscaling enabled
+
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 3 readers (2 created directly, 1 created through appautoscaling)
+      - At most 7 readers (2 created directly, 5 created through appautoscaling)
+
+ℹ️ Autoscaling uses the instance class specified by `instance_class`.
+
+```hcl
+  ...
+  instance_class = "db.r5.large"
+  instances = {
+    1 = {
+      instance_class      = "db.r5.2xlarge"
+      publicly_accessible = true
+    }
+    2 = {
+      identifier     = "static-member-1"
+      instance_class = "db.r5.2xlarge"
+    }
+    3 = {
+      identifier     = "excluded-member-1"
+      instance_class = "db.r5.large"
+      promotion_tier = 15
+    }
+  }
+
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 5
+  ...
+```
+
+## Conditional Creation
 
 The following values are provided to toggle on/off creation of the associated resources as desired:
 
