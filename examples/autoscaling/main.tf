@@ -34,6 +34,31 @@ module "vpc" {
 # RDS Aurora Module
 ################################################################################
 
+module "empty" {
+  source = "../../"
+
+  name           = "${local.name}-empty"
+  engine         = "aurora-postgresql"
+  engine_version = "11.12"
+  instance_class = "db.r6g.large"
+  instances      = {}
+
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
+
+  apply_immediately   = true
+  skip_final_snapshot = true
+
+  db_parameter_group_name         = aws_db_parameter_group.example.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+
+  tags = local.tags
+}
+
 module "aurora" {
   source = "../../"
 

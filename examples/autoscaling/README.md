@@ -34,6 +34,7 @@ Note that this example may create resources which cost money. Run `terraform des
 |------|--------|---------|
 | <a name="module_aurora"></a> [aurora](#module\_aurora) | ../../ | n/a |
 | <a name="module_disabled_aurora"></a> [disabled\_aurora](#module\_disabled\_aurora) | ../../ | n/a |
+| <a name="module_empty"></a> [empty](#module\_empty) | ../../ | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
 
 ## Resources

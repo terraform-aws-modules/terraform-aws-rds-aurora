@@ -15,10 +15,6 @@ locals {
 # Supporting Resources
 ################################################################################
 
-resource "random_password" "master" {
-  length = 10
-}
-
 resource "random_pet" "this" {
   length = 2
 }
@@ -129,8 +125,6 @@ module "aurora" {
   allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
 
   iam_database_authentication_enabled = true
-  password                            = random_password.master.result
-  create_random_password              = false
 
   # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
