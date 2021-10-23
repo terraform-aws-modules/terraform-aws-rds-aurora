@@ -430,6 +430,25 @@ variable "endpoints" {
   default     = {}
 }
 
+variable "cluster_timeouts" {
+  description = "Create, update, and delete timeout configurations for the cluster"
+  type        = map(string)
+  default     = {}
+}
+
+variable "instance_timeouts" {
+  description = "Create, update, and delete timeout configurations for the cluster instance(s)"
+  type        = map(string)
+  default     = {}
+}
+
+# IAM role association
+variable "associate_roles" {
+  description = "Map of IAM roles and supported feature names to associate with the cluster"
+  type        = map(string)
+  default     = {}
+}
+
 # Enhanced monitoring role
 variable "create_monitoring_role" {
   description = "Whether to create the IAM role for RDS enhanced monitoring"

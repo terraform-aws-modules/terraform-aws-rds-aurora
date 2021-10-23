@@ -66,13 +66,19 @@ output "rds_cluster_instances" {
 # aws_rds_cluster_endpoint
 output "rds_additional_cluster_endpoints" {
   description = "A map of additional cluster endpoints and their attributes"
-  value       = rds_cluster_endpoints.this
+  value       = aws_rds_cluster_endpoint.this
 }
 
 # aws_security_group
 output "security_group_id" {
   description = "The security group ID of the cluster"
   value       = local.rds_security_group_id
+}
+
+# aws_rds_cluster_role_association
+output "rds_cluster_role_associations" {
+  description = "A map of cluster IAM role associations and their attributes"
+  value       = aws_rds_cluster_role_association.this
 }
 
 # Enhanced monitoring role

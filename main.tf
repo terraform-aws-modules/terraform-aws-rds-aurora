@@ -84,6 +84,12 @@ resource "aws_rds_cluster" "this" {
   iam_roles                           = var.iam_roles
   enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
 
+  timeouts {
+    create = lookup(var.cluster_timeouts, "create", null)
+    update = lookup(var.cluster_timeouts, "update", null)
+    delete = lookup(var.cluster_timeouts, "delete", null)
+  }
+
   dynamic "scaling_configuration" {
     for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
 
@@ -155,6 +161,12 @@ resource "aws_rds_cluster_instance" "this" {
   copy_tags_to_snapshot                 = lookup(each.value, "copy_tags_to_snapshot", var.copy_tags_to_snapshot)
   ca_cert_identifier                    = var.ca_cert_identifier
 
+  timeouts {
+    create = lookup(var.instance_timeouts, "create", null)
+    update = lookup(var.instance_timeouts, "update", null)
+    delete = lookup(var.instance_timeouts, "delete", null)
+  }
+
   # TODO - not sure why this is failing and throwing type mis-match errors
   # tags = merge(var.tags, lookup(each.value, "tags", {}))
   tags = var.tags
@@ -170,9 +182,19 @@ resource "aws_rds_cluster_endpoint" "this" {
   static_members   = lookup(each.value, "static_members", null)
   excluded_members = lookup(each.value, "excluded_members", null)
 
-  depends_on = [aws_rds_cluster_instance.this]
+  depends_on = [
+    aws_rds_cluster_instance.this
+  ]
 
   tags = merge(var.tags, lookup(each.value, "tags", {}))
+}
+
+resource "aws_rds_cluster_role_association" "this" {
+  for_each = var.create_cluster ? var.associate_roles : {}
+
+  db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
+  feature_name          = each.value.feature_name
+  role_arn              = each.value.role_arn
 }
 
 ################################################################################
