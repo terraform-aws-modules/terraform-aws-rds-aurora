@@ -82,7 +82,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
    - `additional_cluster_endpoints`
    - `cluster_role_associations`
 
-## Upgrade State Migrations
+## Upgrade Migrations
 
 ### Before 5.x Example
 
@@ -91,11 +91,11 @@ module "cluster_before" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 5.0"
 
-  name           = "before-5.x"
-  engine         = "aurora-postgresql"
-  engine_version = "11.9"
-  instance_type  = "db.r5.large"
-  - replica_count           = 3
+  name            = "before-5.x"
+  engine          = "aurora-postgresql"
+  engine_version  = "11.9"
+  instance_type   = "db.r5.large"
+  - replica_count = 3
 
   - instances_parameters = [
     # List index should be equal to `replica_count`
@@ -193,18 +193,70 @@ module "cluster_after" {
 }
 ```
 
+### State Changes
+
 To migrate from the `v5.x` version to `v6.x` version example shown above, the following state move commands can be performed to maintain the current resources without modification:
 
 ```bash
-terraform state mv 'module.cluster_before.aws_rds_cluster_instance.this[0]' 'module.cluster_after.aws_rds_cluster_instance.this["0"]'
-# Note: this move will need to be made for each instance in the cluster, where `<n>` is the instance creation order and is mapped to its new `<key>` specified
+terraform state mv 'module.cluster_before.aws_rds_cluster_instance.this[0]' 'module.cluster_after.aws_rds_cluster_instance.this["1"]'
+# Note: this move will need to be made for each instance in the cluster, where `<index>` is the instance creation index/position and is mapped to its new `<key>` specified
 # in the `var.instances` map. See next line for rough pattern to follow for all instances in your cluster
-# terraform state mv 'module.cluster_before.aws_rds_cluster_instance.this[<n>]' 'module.cluster_after.aws_rds_cluster_instance.this["<key>"]'
+# terraform state mv 'module.cluster_before.aws_rds_cluster_instance.this[<index>]' 'module.cluster_after.aws_rds_cluster_instance.this["<key>"]'
 
 terraform state mv 'module.cluster_before.aws_appautoscaling_policy.autoscaling_read_replica_count[0]' 'module.cluster_after.aws_appautoscaling_policy.this[0]'
 terraform state mv 'module.cluster_before.aws_appautoscaling_target.read_replica_count[0]' 'module.cluster_after.aws_appautoscaling_target.this[0]'
 ```
 
-:info: Notes
+For example, if you previously had a configuration such as (truncated for brevity):
 
-- TODO
+```hcl
+module "aurora" {
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 5.x"
+
+  instance_type         = "db.r5.large"
+  instance_type_replica = "db.t3.medium"
+  replica_count         = 2
+  replica_scale_enabled = true
+  replica_scale_min     = 2
+  replica_scale_max     = 5
+```
+
+After updating the configuration to the latest 6.x changes:
+
+```hcl
+module "aurora" {
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 6.x"
+
+  instance_class = "db.r5.large"
+  instances = {
+    1 = {
+      promotion_tier = 1
+    }
+    2 = {
+      instance_class = "db.t3.medium"
+      promotion_tier = 2
+    }
+
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 2
+  autoscaling_max_capacity = 5
+```
+
+The associated Terraform state move commands would be:
+
+```bash
+terraform state mv 'module.aurora.aws_rds_cluster_instance.this[0]' 'module.aurora.aws_rds_cluster_instance.this["1"]'
+terraform state mv 'module.aurora.aws_rds_cluster_instance.this[1]' 'module.aurora.aws_rds_cluster_instance.this["2"]'
+
+terraform state mv 'module.aurora.aws_appautoscaling_policy.autoscaling_read_replica_count[0]' 'module.aurora.aws_appautoscaling_policy.this[0]'
+terraform state mv 'module.aurora.aws_appautoscaling_target.read_replica_count[0]' 'module.aurora.aws_appautoscaling_target.this[0]'
+```
+
+### Configuration Changes
+
+To avoid re-creation of the security group created by the module, you can add the following attribute and value:
+```hcl
+  security_group_description = "Managed by Terraform"
+```
