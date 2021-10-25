@@ -121,7 +121,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  count = var.create_cluster ? (var.replica_scale_enabled ? var.replica_scale_min : var.replica_count) : 0
+  count = var.create_cluster ? var.replica_count : 0
 
   identifier                      = try(lookup(var.instances_parameters[count.index], "instance_name"), "${var.name}-${count.index + 1}")
   cluster_identifier              = element(concat(aws_rds_cluster.this.*.id, [""]), 0)
@@ -210,7 +210,7 @@ resource "aws_appautoscaling_target" "read_replica_count" {
 resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
   count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
 
-  name               = "target-metric"
+  name               = var.autoscaling_policy_name 
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
