@@ -64,10 +64,12 @@ There are a couple different configuration methods that can be used to create in
     - Reader(s): 2
 
 ```hcl
-  ...
   instance_class = "db.r6g.large"
-  instances = { for i in range(3) : i => {} }
-  ...
+  instances = {
+    one   = {}
+    two   = {}
+    three = {}
+  }
 ```
 
 2. Create homogenous cluster of instances w/ autoscaling enabled. This is redundant and we'll show why in the next example.
@@ -81,14 +83,16 @@ There are a couple different configuration methods that can be used to create in
 ℹ️ Autoscaling uses the instance class specified by `instance_class`.
 
 ```hcl
-  ...
   instance_class = "db.r6g.large"
-  instances = { for i in range(3) : i => {} }
+  instances = {
+    one   = {}
+    two   = {}
+    three = {}
+  }
 
   autoscaling_enabled      = true
   autoscaling_min_capacity = 2
   autoscaling_max_capacity = 5
-  ...
 ```
 
 3. Create homogeneous cluster scaled via autoscaling. At least one instance (writer) is required
@@ -100,14 +104,14 @@ There are a couple different configuration methods that can be used to create in
       - At most 5 readers
 
 ```hcl
-  ...
   instance_class = "db.r6g.large"
-  instances = { 1 = {} }
+  instances = {
+    one = {}
+  }
 
   autoscaling_enabled      = true
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 5
-  ...
 ```
 
 4. Create heterogenous cluster to support mixed-use workloads
@@ -119,24 +123,22 @@ There are a couple different configuration methods that can be used to create in
     - Readers: 2
 
 ```hcl
-  ...
   instance_class = "db.r5.large"
   instances = {
-    1 = {
+    one = {
       instance_class      = "db.r5.2xlarge"
       publicly_accessible = true
     }
-    2 = {
+    two = {
       identifier     = "static-member-1"
       instance_class = "db.r5.2xlarge"
     }
-    3 = {
+    three = {
       identifier     = "excluded-member-1"
       instance_class = "db.r5.large"
       promotion_tier = 15
     }
   }
-  ...
 ```
 
 5. Create heterogenous cluster to support mixed-use workloads w/ autoscaling enabled
@@ -150,18 +152,17 @@ There are a couple different configuration methods that can be used to create in
 ℹ️ Autoscaling uses the instance class specified by `instance_class`.
 
 ```hcl
-  ...
   instance_class = "db.r5.large"
   instances = {
-    1 = {
+    one = {
       instance_class      = "db.r5.2xlarge"
       publicly_accessible = true
     }
-    2 = {
+    two = {
       identifier     = "static-member-1"
       instance_class = "db.r5.2xlarge"
     }
-    3 = {
+    three = {
       identifier     = "excluded-member-1"
       instance_class = "db.r5.large"
       promotion_tier = 15
@@ -171,7 +172,6 @@ There are a couple different configuration methods that can be used to create in
   autoscaling_enabled      = true
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 5
-  ...
 ```
 
 ## Conditional Creation
