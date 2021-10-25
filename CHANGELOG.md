@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v5.4.0"></a>
+## [v5.4.0] - 2021-10-25
+
+- BREAKING CHANGE: update module to allow for control over individual cluster instances and latest features ([#243](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/243))
+- chore: update CI workflow to use composite actions, update pre-commit versions ([#242](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/242))
+
+
 <a name="v5.3.0"></a>
 ## [v5.3.0] - 2021-10-13
 
@@ -580,7 +587,8 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.3.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.4.0...HEAD
+[v5.4.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.3.0...v5.4.0
 [v5.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.2.0...v5.3.0
 [v5.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.1.0...v5.2.0
 [v5.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.0.0...v5.1.0
