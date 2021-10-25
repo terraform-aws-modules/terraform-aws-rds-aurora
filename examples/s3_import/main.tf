@@ -125,7 +125,12 @@ module "aurora" {
   create_security_group  = true
   allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
-  iam_database_authentication_enabled = true
+  iam_roles = {
+    s3_import = {
+      role_arn     = aws_iam_role.s3_import.arn
+      feature_name = "s3Import"
+    }
+  }
 
   # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
@@ -134,7 +139,6 @@ module "aurora" {
     ingestion_role        = aws_iam_role.s3_import.arn
   }
 
-  apply_immediately   = true
   skip_final_snapshot = true
 
   db_parameter_group_name         = aws_db_parameter_group.example.id
