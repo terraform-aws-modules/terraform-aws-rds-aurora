@@ -46,7 +46,6 @@ jobs:
         uses: clowdhaus/terraform-composite-actions/pre-commit@v1.3.0
         with:
           terraform-version: ${{ steps.minMax.outputs.minVersion }}
-          terraform-docs-version: ${{ env.TERRAFORM_DOCS_VERSION }}
           args: 'terraform_validate --color=always --show-diff-on-failure --files ${{ matrix.directory }}/*'
 
       - name: Pre-commit Terraform ${{ steps.minMax.outputs.minVersion }}
@@ -55,7 +54,6 @@ jobs:
         uses: clowdhaus/terraform-composite-actions/pre-commit@v1.3.0
         with:
           terraform-version: ${{ steps.minMax.outputs.minVersion }}
-          terraform-docs-version: ${{ env.TERRAFORM_DOCS_VERSION }}
           args: 'terraform_validate --color=always --show-diff-on-failure --files $(ls *.tf)'
 
   preCommitMaxVersion:
