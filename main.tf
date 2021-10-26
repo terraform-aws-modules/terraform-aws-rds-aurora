@@ -271,3 +271,33 @@ resource "aws_security_group_rule" "cidr_ingress" {
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id
 }
+
+resource "aws_rds_cluster_parameter_group" "cluster_pg" {
+  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.parameter_group_settings["pg_name_cluster"] == null ? 0 : 1
+  
+  name   = var.parameter_group_settings["pg_name_cluster"]
+  family = var.parameter_group_settings["family"]
+  
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
+    content {
+      name  = parameter.key
+      value = parameter.value
+    }
+  }
+}
+
+resource "aws_db_parameter_group" "instance_pg" {
+  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.parameter_group_settings["pg_name_instance"] == null ? 0 : 1
+  
+  name   = var.parameter_group_settings["pg_name_instance"]
+  family = var.parameter_group_settings["family"]
+  
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
+    content {
+      name  = parameter.key
+      value = parameter.value
+    }
+  }
+}
