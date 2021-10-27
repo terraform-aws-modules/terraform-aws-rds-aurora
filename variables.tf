@@ -470,7 +470,7 @@ variable "create_instance_parameter_group" {
 variable "parameter_group_settings" {
   description = "Map holding all parameter group related settings."
   type        = object({
-    family              = string
+    pg_family           = string
     pg_name_cluster     = string
     pg_name_instance    = string 
     parameters_cluster  = optional(map(string))
