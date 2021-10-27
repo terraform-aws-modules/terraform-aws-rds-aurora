@@ -471,8 +471,8 @@ variable "parameter_group_settings" {
   description = "Map holding all parameter group related settings."
   type        = object({
     pg_family           = optional(string)
-    parameters_cluster  = optional(list(map(string)))
-    parameters_instance = optional(list(map(string)))
+    parameters_cluster  = optional(map(string))
+    parameters_instance = optional(map(string))
   })
   default     = null
 }
