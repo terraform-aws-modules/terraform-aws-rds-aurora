@@ -472,10 +472,9 @@ variable "parameter_group_settings" {
   type        = object({
     pg_family               = optional(string)
     pg_description_cluster  = optional(string)
-    parameters_cluster      = optional(map(string))
+    parameters_cluster      = optional(map(map(string)))
     pg_description_instance = optional(string)
-    parameters_instance     = optional(map(string))
-
+    parameters_instance     = optional(map(map(string)))
   })
   default     = null
 }
