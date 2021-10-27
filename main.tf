@@ -273,7 +273,7 @@ resource "aws_security_group_rule" "cidr_ingress" {
 }
 
 resource "aws_rds_cluster_parameter_group" "cluster_pg" {
-  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.parameter_group_settings["pg_name_cluster"] == null ? 0 : 1
+  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.db_cluster_parameter_group_name == null ? 0 : 1
   
   name   = var.parameter_group_settings["pg_name_cluster"]
   family = var.parameter_group_settings["pg_family"]
@@ -288,7 +288,7 @@ resource "aws_rds_cluster_parameter_group" "cluster_pg" {
 }
 
 resource "aws_db_parameter_group" "instance_pg" {
-  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.parameter_group_settings["pg_name_instance"] == null ? 0 : 1
+  count = var.create_cluster && var.parameter_group_settings == null ? 0 : var.db_parameter_group_name == null ? 0 : 1
   
   name   = var.parameter_group_settings["pg_name_instance"]
   family = var.parameter_group_settings["pg_family"]
