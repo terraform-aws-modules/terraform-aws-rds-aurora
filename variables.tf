@@ -455,18 +455,6 @@ variable "iam_role_max_session_duration" {
   default     = null
 }
 
-variable "create_cluster_parameter_group" {
-  description = "Whether to create a cluster parameter group or not. If specified as false, default parameter group is used."
-  type        = bool
-  default     = true
-}
-
-variable "create_instance_parameter_group" {
-  description = "Whether to create an instance parameter group or not. If specified as false, default parameter group is used."
-  type        = bool
-  default     = true
-}
-
 variable "parameter_group_settings" {
   description = "Map holding all parameter group related settings."
   type        = object({
