@@ -83,6 +83,12 @@ module "aurora" {
   create_db_subnet_group = false
   create_security_group  = true
   allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
+  security_group_egress_rules = {
+    to_cidrs = {
+      cidr_blocks = ["10.33.0.0/28"]
+      description = "Egress to corporate printer closet"
+    }
+  }
 
   iam_database_authentication_enabled = true
   master_password                     = random_password.master.result
