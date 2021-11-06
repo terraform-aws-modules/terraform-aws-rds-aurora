@@ -204,12 +204,12 @@ module "cluster" {
 
 ## Examples
 
-- [Autoscaling](examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
-- [Global Cluster](examples/global_cluster): A PostgreSQL global cluster with clusters provisioned in two different region
-- [MySQL](examples/mysql): A simple MySQL cluster
-- [PostgreSQL](examples/postgresql): A simple PostgreSQL cluster
-- [S3 Import](examples/s3_import): A MySQL cluster created from a Percona Xtrabackup stored in S3
-- [Serverless](examples/serverless): Serverless PostgreSQL and MySQL clusters
+- [Autoscaling](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
+- [Global Cluster](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/global_cluster): A PostgreSQL global cluster with clusters provisioned in two different region
+- [MySQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/mysql): A simple MySQL cluster
+- [PostgreSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/postgresql): A simple PostgreSQL cluster
+- [S3 Import](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/s3_import): A MySQL cluster created from a Percona Xtrabackup stored in S3
+- [Serverless](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/serverless): Serverless PostgreSQL and MySQL clusters
 
 ## Documentation
 
