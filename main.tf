@@ -1,5 +1,5 @@
 locals {
-  port = var.port != null ? var.port : (var.engine == "aurora-postgresql" ? 5432 : 3306)
+  port = coalesce(var.port, (var.engine == "aurora-postgresql" ? 5432 : 3306))
 
   db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
