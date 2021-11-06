@@ -1,5 +1,5 @@
 locals {
-  port = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
+  port = coalesce(var.port, (var.engine == "aurora-postgresql" ? 5432 : 3306))
 
   db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
@@ -8,9 +8,7 @@ locals {
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
   rds_security_group_id       = join("", aws_security_group.this.*.id)
-
-
-  is_serverless = var.engine_mode == "serverless"
+  is_serverless               = var.engine_mode == "serverless"
 }
 
 # Ref. https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces
@@ -292,28 +290,48 @@ resource "aws_security_group" "this" {
   })
 }
 
+# TODO - change to map of ingress rules under one resource at next breaking change
 resource "aws_security_group_rule" "default_ingress" {
   count = var.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
 
   description = "From allowed SGs"
 
   type                     = "ingress"
-  from_port                = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
-  to_port                  = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
+  from_port                = local.port
+  to_port                  = local.port
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = local.rds_security_group_id
 }
 
+# TODO - change to map of ingress rules under one resource at next breaking change
 resource "aws_security_group_rule" "cidr_ingress" {
   count = var.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
 
   description = "From allowed CIDRs"
 
   type              = "ingress"
-  from_port         = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
-  to_port           = element(concat(aws_rds_cluster.this.*.port, [""]), 0)
+  from_port         = local.port
+  to_port           = local.port
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id
+}
+
+resource "aws_security_group_rule" "egress" {
+  for_each = var.create_cluster && var.create_security_group ? var.security_group_egress_rules : {}
+
+  # required
+  type              = "egress"
+  from_port         = lookup(each.value, "from_port", local.port)
+  to_port           = lookup(each.value, "to_port", local.port)
+  protocol          = "tcp"
+  security_group_id = local.rds_security_group_id
+
+  # optional
+  cidr_blocks              = lookup(each.value, "cidr_blocks", null)
+  description              = lookup(each.value, "description", null)
+  ipv6_cidr_blocks         = lookup(each.value, "ipv6_cidr_blocks", null)
+  prefix_list_ids          = lookup(each.value, "prefix_list_ids", null)
+  source_security_group_id = lookup(each.value, "source_security_group_id", null)
 }

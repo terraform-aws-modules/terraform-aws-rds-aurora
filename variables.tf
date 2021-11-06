@@ -497,3 +497,9 @@ variable "allowed_cidr_blocks" {
   type        = list(string)
   default     = []
 }
+
+variable "security_group_egress_rules" {
+  description = "A map of security group egress rule defintions to add to the security group created"
+  type        = map(any)
+  default     = {}
+}
