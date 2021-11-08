@@ -10,7 +10,7 @@
     [
       "@semantic-release/github",
       {
-        "successComment": "This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${releaseInfos.length > 0 ? `[${nextRelease.version}](${releaseInfos[0].url})` : `${nextRelease.version}`} :tada:",
+        "successComment": "This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version [${nextRelease.version}](<github_release_url>) :tada:",
         "labels": false,
         "releasedLabels": false
       }
@@ -19,7 +19,7 @@
       "@semantic-release/changelog",
       {
         "changelogFile": "CHANGELOG.md",
-        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file"
+        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file."
       }
     ],
     [
