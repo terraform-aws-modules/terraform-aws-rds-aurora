@@ -285,9 +285,7 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
   description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
 
-  tags = merge(var.tags, var.security_group_tags, {
-    Name = var.name
-  })
+  tags = merge(var.tags, var.security_group_tags, { Name = var.name })
 }
 
 # TODO - change to map of ingress rules under one resource at next breaking change
