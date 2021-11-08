@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file
 
+## [6.1.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.1...v6.1.2) (2021-11-08)
+
+
+### Bug Fixes
+
+* Small useless change in main.tf to test semantic-release ([#254](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/254)) ([95bb77f](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/95bb77f2797cdb1760fdd52203b5710273a6603b))
+* Small useless change in main.tf to test semantic-release (last one, I promise) ([#255](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/255)) ([8b3525e](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/8b3525e7930c0ca43124432e416f6ec35ab7618e))
+
 ## [6.1.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.0...v6.1.1) (2021-11-08)
 
 
