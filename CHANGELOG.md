@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file
+
+## [6.1.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.0...v6.1.1) (2021-11-08)
+
+
+### Bug Fixes
+
+* update CI/CD process to enable auto-release workflow ([#250](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/250)) ([b44aae5](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/b44aae50ff2785a6a2a04691ba87d4589b4fa102))
+
 <a name="v6.1.0"></a>
 ## [v6.1.0] - 2021-11-06
 
