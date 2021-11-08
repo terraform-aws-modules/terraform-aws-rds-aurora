@@ -10,7 +10,7 @@
     [
       "@semantic-release/github",
       {
-        "successComment": "This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version [${nextRelease.version}](<github_release_url>) :tada:",
+        "successComment": "This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version [${nextRelease.version}](${releaseInfos[0].url}) :tada:",
         "labels": false,
         "releasedLabels": false
       }
