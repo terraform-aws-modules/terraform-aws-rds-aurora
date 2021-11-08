@@ -271,7 +271,9 @@ resource "aws_appautoscaling_policy" "this" {
     target_value       = var.predefined_metric_type == "RDSReaderAverageCPUUtilization" ? var.autoscaling_target_cpu : var.autoscaling_target_connections
   }
 
-  depends_on = [aws_appautoscaling_target.this]
+  depends_on = [
+    aws_appautoscaling_target.this
+  ]
 }
 
 
