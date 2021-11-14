@@ -454,3 +454,15 @@ variable "iam_role_max_session_duration" {
   type        = number
   default     = null
 }
+
+variable "parameter_group_settings" {
+  description = "Map holding all parameter group related settings."
+  type        = object({
+    pg_family               = optional(string)
+    pg_description_cluster  = optional(string)
+    parameters_cluster      = optional(map(map(string)))
+    pg_description_instance = optional(string)
+    parameters_instance     = optional(map(map(string)))
+  })
+  default     = null
+}

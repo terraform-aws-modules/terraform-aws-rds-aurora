@@ -75,7 +75,7 @@ resource "aws_rds_cluster" "this" {
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
-  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
+  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name == null ? null : aws_rds_cluster_parameter_group.cluster_pg[0].id
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
@@ -130,7 +130,7 @@ resource "aws_rds_cluster_instance" "this" {
   instance_class                  = try(lookup(var.instances_parameters[count.index], "instance_type"), count.index > 0 ? coalesce(var.instance_type_replica, var.instance_type) : var.instance_type)
   publicly_accessible             = try(lookup(var.instances_parameters[count.index], "publicly_accessible"), var.publicly_accessible)
   db_subnet_group_name            = local.db_subnet_group_name
-  db_parameter_group_name         = var.db_parameter_group_name
+  db_parameter_group_name         = var.db_parameter_group_name == null ? null : aws_db_parameter_group.instance_pg[0].id
   preferred_maintenance_window    = var.preferred_maintenance_window
   apply_immediately               = var.apply_immediately
   monitoring_role_arn             = local.rds_enhanced_monitoring_arn
@@ -270,4 +270,38 @@ resource "aws_security_group_rule" "cidr_ingress" {
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = local.rds_security_group_id
+}
+
+resource "aws_rds_cluster_parameter_group" "cluster_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_cluster_parameter_group_name == null ? 0 : 1
+  
+  name        = var.db_cluster_parameter_group_name
+  description = var.parameter_group_settings["pg_description_cluster"]
+  family      = var.parameter_group_settings["pg_family"]
+  
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
+}
+
+resource "aws_db_parameter_group" "instance_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_parameter_group_name == null ? 0 : 1
+  
+  name        = var.db_parameter_group_name
+  description = var.parameter_group_settings["pg_description_instance"]
+  family      = var.parameter_group_settings["pg_family"]
+  
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
 }
