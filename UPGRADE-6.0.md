@@ -154,15 +154,15 @@ module "cluster_after" {
 
   + instances = {
     1 = {
-      instance_type       = "db.r5.2xlarge"
+      instance_class      = "db.r5.2xlarge"
       publicly_accessible = true
     }
     2 = {
-      instance_type = "db.r5.2xlarge"
+      instance_class = "db.r5.2xlarge"
     }
     3 = {
       identifier              = "reporting"
-      instance_type           = "db.r5.large"
+      instance_class          = "db.r5.large"
       instance_promotion_tier = 15
     }
   ]
