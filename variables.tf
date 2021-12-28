@@ -383,7 +383,7 @@ variable "ca_cert_identifier" {
 }
 
 variable "instances_parameters" {
-  description = "Customized instance settings. Supported keys: `instance_name`, `instance_type`, `instance_promotion_tier`, `publicly_accessible`"
+  description = "Customized instance settings. Supported keys: `instance_name`, `instance_type`, `instance_promotion_tier`, `publicly_accessible`, `performance_insights_kms_key_id`"
   type        = list(map(string))
   default     = []
 }
