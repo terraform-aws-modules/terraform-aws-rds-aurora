@@ -498,6 +498,12 @@ variable "allowed_cidr_blocks" {
   default     = []
 }
 
+variable "security_group_ingress_rules" {
+  description = "A map of security group egress rule or cidr egress defintions to add to the security group created"
+  type        = map(any)
+  default     = {}
+}
+
 variable "security_group_egress_rules" {
   description = "A map of security group egress rule defintions to add to the security group created"
   type        = map(any)

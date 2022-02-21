@@ -291,32 +291,17 @@ resource "aws_security_group" "this" {
   tags = merge(var.tags, var.security_group_tags, { Name = var.name })
 }
 
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "default_ingress" {
-  count = var.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
-
-  description = "From allowed SGs"
+resource "aws_security_group_rule" "ingress" {
+  for_each = var.create_cluster && var.create_security_group ? var.security_group_ingress_rules : null
 
   type                     = "ingress"
-  from_port                = local.port
-  to_port                  = local.port
-  protocol                 = "tcp"
-  source_security_group_id = element(var.allowed_security_groups, count.index)
+  description              = lookup(each.value, "description", null)
+  from_port                = lookup(each.value, "from_port", local.port)
+  to_port                  = lookup(each.value, "to_port", local.port)
+  protocol                 = lookup(each.value, "protocol", "tcp")
+  cidr_blocks              = lookup(each.value, "cidr_blocks", null)
+  source_security_group_id = lookup(each.value, "source_security_group_id", null)
   security_group_id        = local.rds_security_group_id
-}
-
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "cidr_ingress" {
-  count = var.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
-
-  description = "From allowed CIDRs"
-
-  type              = "ingress"
-  from_port         = local.port
-  to_port           = local.port
-  protocol          = "tcp"
-  cidr_blocks       = var.allowed_cidr_blocks
-  security_group_id = local.rds_security_group_id
 }
 
 resource "aws_security_group_rule" "egress" {
