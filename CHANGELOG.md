@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.4...v6.2.0) (2022-03-12)
+
+
+### Features
+
+* Made it clear that we stand with Ukraine ([57c20b9](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/57c20b9f96c6fdf7664a5fc6b6c9a677f819b99d))
+
 ### [6.1.4](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.3...v6.1.4) (2022-01-10)
 
 
