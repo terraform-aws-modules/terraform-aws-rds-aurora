@@ -1,9 +1,11 @@
 locals {
+  create_cluster = var.create_cluster && var.putin_khuylo
+
   port = coalesce(var.port, (var.engine == "aurora-postgresql" ? 5432 : 3306))
 
   db_subnet_group_name          = var.create_db_subnet_group ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
-  master_password               = var.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.master_password
+  master_password               = local.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.master_password
   backtrack_window              = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
@@ -16,14 +18,14 @@ data "aws_partition" "current" {}
 
 # Random string to use as master password
 resource "random_password" "master_password" {
-  count = var.create_cluster && var.create_random_password ? 1 : 0
+  count = local.create_cluster && var.create_random_password ? 1 : 0
 
   length  = var.random_password_length
   special = false
 }
 
 resource "random_id" "snapshot_identifier" {
-  count = var.create_cluster ? 1 : 0
+  count = local.create_cluster ? 1 : 0
 
   keepers = {
     id = var.name
@@ -33,7 +35,7 @@ resource "random_id" "snapshot_identifier" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  count = var.create_cluster && var.create_db_subnet_group ? 1 : 0
+  count = local.create_cluster && var.create_db_subnet_group ? 1 : 0
 
   name        = local.internal_db_subnet_group_name
   description = "For Aurora cluster ${var.name}"
@@ -43,7 +45,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_rds_cluster" "this" {
-  count = var.create_cluster ? 1 : 0
+  count = local.create_cluster ? 1 : 0
 
   # Notes:
   # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
@@ -136,7 +138,7 @@ resource "aws_rds_cluster" "this" {
 }
 
 resource "aws_rds_cluster_instance" "this" {
-  for_each = var.create_cluster && !local.is_serverless ? var.instances : {}
+  for_each = local.create_cluster && !local.is_serverless ? var.instances : {}
 
   # Notes:
   # Do not set preferred_backup_window - its set at the cluster level and will error if provided here
@@ -175,7 +177,7 @@ resource "aws_rds_cluster_instance" "this" {
 }
 
 resource "aws_rds_cluster_endpoint" "this" {
-  for_each = var.create_cluster && !local.is_serverless ? var.endpoints : tomap({})
+  for_each = local.create_cluster && !local.is_serverless ? var.endpoints : tomap({})
 
   cluster_identifier          = try(aws_rds_cluster.this[0].id, "")
   cluster_endpoint_identifier = each.value.identifier
@@ -192,7 +194,7 @@ resource "aws_rds_cluster_endpoint" "this" {
 }
 
 resource "aws_rds_cluster_role_association" "this" {
-  for_each = var.create_cluster ? var.iam_roles : {}
+  for_each = local.create_cluster ? var.iam_roles : {}
 
   db_cluster_identifier = try(aws_rds_cluster.this[0].id, "")
   feature_name          = each.value.feature_name
@@ -215,7 +217,7 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = local.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
   name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
@@ -232,7 +234,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = var.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = local.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
 
   role       = aws_iam_role.rds_enhanced_monitoring[0].name
   policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
@@ -243,7 +245,7 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 ################################################################################
 
 resource "aws_appautoscaling_target" "this" {
-  count = var.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+  count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   max_capacity       = var.autoscaling_max_capacity
   min_capacity       = var.autoscaling_min_capacity
@@ -253,7 +255,7 @@ resource "aws_appautoscaling_target" "this" {
 }
 
 resource "aws_appautoscaling_policy" "this" {
-  count = var.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+  count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   name               = "target-metric"
   policy_type        = "TargetTrackingScaling"
@@ -282,7 +284,7 @@ resource "aws_appautoscaling_policy" "this" {
 ################################################################################
 
 resource "aws_security_group" "this" {
-  count = var.create_cluster && var.create_security_group ? 1 : 0
+  count = local.create_cluster && var.create_security_group ? 1 : 0
 
   name_prefix = "${var.name}-"
   vpc_id      = var.vpc_id
@@ -293,7 +295,7 @@ resource "aws_security_group" "this" {
 
 # TODO - change to map of ingress rules under one resource at next breaking change
 resource "aws_security_group_rule" "default_ingress" {
-  count = var.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
+  count = local.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
 
   description = "From allowed SGs"
 
@@ -307,7 +309,7 @@ resource "aws_security_group_rule" "default_ingress" {
 
 # TODO - change to map of ingress rules under one resource at next breaking change
 resource "aws_security_group_rule" "cidr_ingress" {
-  count = var.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+  count = local.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
 
   description = "From allowed CIDRs"
 
@@ -320,7 +322,7 @@ resource "aws_security_group_rule" "cidr_ingress" {
 }
 
 resource "aws_security_group_rule" "egress" {
-  for_each = var.create_cluster && var.create_security_group ? var.security_group_egress_rules : {}
+  for_each = local.create_cluster && var.create_security_group ? var.security_group_egress_rules : {}
 
   # required
   type              = "egress"
