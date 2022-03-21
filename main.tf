@@ -1,7 +1,7 @@
 locals {
   port                 = var.port == "" ? (var.engine == "aurora-postgresql" ? 5432 : 3306) : var.port
   db_subnet_group_name = var.db_subnet_group_name == "" ? join("", aws_db_subnet_group.this.*.name) : var.db_subnet_group_name
-  master_password      = var.create_cluster && var.create_random_password && var.is_primary_cluster ? random_password.master_password[0].result : var.password
+  master_password      = var.password == "" ? random_password.master_password.result : var.password
   backtrack_window     = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   rds_enhanced_monitoring_arn = var.create_monitoring_role ? join("", aws_iam_role.rds_enhanced_monitoring.*.arn) : var.monitoring_role_arn
@@ -19,7 +19,6 @@ data "aws_partition" "current" {}
 
 # Random string to use as master password
 resource "random_password" "master_password" {
-  count = var.create_cluster && var.create_random_password ? 1 : 0
 
   length  = 10
   special = false
@@ -132,11 +131,9 @@ resource "aws_rds_cluster_instance" "this" {
 
   # Updating engine version forces replacement of instances, and they shouldn't be replaced
   # because cluster will update them if engine version is changed
-  lifecycle { # We do not want to change password, nor store the current in code nor state so ignoring changes from here
-    ignore_changes = [
-      master_password,
-    ]
-  }
+
+  # We do not want to change password, nor store the current in code nor state so ignoring changes from here
+  lifecycle { ignore_changes = [master_password1] }
 
   tags = var.tags
 }
