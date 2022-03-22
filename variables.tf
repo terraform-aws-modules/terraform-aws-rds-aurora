@@ -12,7 +12,7 @@ variable "tags" {
 
 # aws_db_subnet_group
 variable "create_db_subnet_group" {
-  description = "Determines whether to create the databae subnet group or use existing"
+  description = "Determines whether to create the database subnet group or use existing"
   type        = bool
   default     = true
 }
