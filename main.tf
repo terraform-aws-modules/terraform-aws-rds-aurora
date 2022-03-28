@@ -83,6 +83,11 @@ resource "aws_rds_cluster" "this" {
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
+  lifecycle {
+    ignore_changes = [
+      global_cluster_identifier
+    ]
+  }
   dynamic "scaling_configuration" {
     for_each = length(keys(var.scaling_configuration)) == 0 ? [] : [var.scaling_configuration]
 
@@ -210,7 +215,7 @@ resource "aws_appautoscaling_target" "read_replica_count" {
 resource "aws_appautoscaling_policy" "autoscaling_read_replica_count" {
   count = var.create_cluster && var.replica_scale_enabled ? 1 : 0
 
-  name               = var.autoscaling_policy_name 
+  name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${element(concat(aws_rds_cluster.this.*.cluster_identifier, [""]), 0)}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
@@ -274,11 +279,11 @@ resource "aws_security_group_rule" "cidr_ingress" {
 
 resource "aws_rds_cluster_parameter_group" "cluster_pg" {
   count = var.create_cluster == false || var.parameter_group_settings == null || var.db_cluster_parameter_group_name == null ? 0 : 1
-  
+
   name        = var.db_cluster_parameter_group_name
   description = var.parameter_group_settings["pg_description_cluster"]
   family      = var.parameter_group_settings["pg_family"]
-  
+
   dynamic "parameter" {
     for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
     content {
@@ -291,11 +296,11 @@ resource "aws_rds_cluster_parameter_group" "cluster_pg" {
 
 resource "aws_db_parameter_group" "instance_pg" {
   count = var.create_cluster == false || var.parameter_group_settings == null || var.db_parameter_group_name == null ? 0 : 1
-  
+
   name        = var.db_parameter_group_name
   description = var.parameter_group_settings["pg_description_instance"]
   family      = var.parameter_group_settings["pg_family"]
-  
+
   dynamic "parameter" {
     for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
     content {
