@@ -58,7 +58,7 @@ resource "aws_rds_cluster" "this" {
 
   engine                              = var.engine
   engine_mode                         = var.engine_mode
-  engine_version                      = local.is_serverless ? null : var.engine_version
+  engine_version                      = var.engine_version
   allow_major_version_upgrade         = var.allow_major_version_upgrade
   enable_http_endpoint                = var.enable_http_endpoint
   kms_key_id                          = var.kms_key_id
