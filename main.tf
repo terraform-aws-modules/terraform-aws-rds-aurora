@@ -102,6 +102,14 @@ resource "aws_rds_cluster" "this" {
     }
   }
 
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = length(keys(var.serverlessv2_scaling_configuration)) == 0 || local.is_serverless ? [] : [var.serverlessv2_scaling_configuration]
+
+    content {
+      max_capacity = lookup(serverlessv2_scaling_configuration.value, "max_capacity", null)
+      min_capacity = lookup(serverlessv2_scaling_configuration.value, "min_capacity", null)
+    }
+  }
   dynamic "s3_import" {
     for_each = var.s3_import != null && !local.is_serverless ? [var.s3_import] : []
     content {
