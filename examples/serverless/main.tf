@@ -132,7 +132,7 @@ resource "aws_rds_cluster_parameter_group" "example_mysql" {
 # RDS Aurora Module - Serverless V2
 ################################################################################
 
-data "aws_rds_engine_version" "test" {
+data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
   version = "13.6"
 }
@@ -140,9 +140,9 @@ data "aws_rds_engine_version" "test" {
 module "aurora_postgresql_serverlessv2" {
   source            = "../../"
   name              = "${local.name}-postgresqlv2"
-  engine            = data.aws_rds_engine_version.test.engine
+  engine            = data.aws_rds_engine_version.postgresql.engine
   engine_mode       = "provisioned"
-  engine_version    = data.aws_rds_engine_version.test.version
+  engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
 
   vpc_id                = module.vpc.vpc_id
@@ -157,7 +157,7 @@ module "aurora_postgresql_serverlessv2" {
 
   db_parameter_group_name         = aws_db_parameter_group.example_postgresql.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_postgresql.id
-  # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
+
 
   serverlessv2_scaling_configuration = {
     min_capacity = 2

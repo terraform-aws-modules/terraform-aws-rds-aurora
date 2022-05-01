@@ -106,8 +106,8 @@ resource "aws_rds_cluster" "this" {
     for_each = length(keys(var.serverlessv2_scaling_configuration)) == 0 || local.is_serverless ? [] : [var.serverlessv2_scaling_configuration]
 
     content {
-      max_capacity = lookup(serverlessv2_scaling_configuration.value, "max_capacity", null)
-      min_capacity = lookup(serverlessv2_scaling_configuration.value, "min_capacity", null)
+      max_capacity = serverlessv2_scaling_configuration.value.max_capacity
+      min_capacity = serverlessv2_scaling_configuration.value.min_capacity
     }
   }
   dynamic "s3_import" {
