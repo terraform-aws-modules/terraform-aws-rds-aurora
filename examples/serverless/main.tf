@@ -27,6 +27,8 @@ module "vpc" {
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
+  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
+
   tags = local.tags
 }
 
@@ -129,7 +131,7 @@ resource "aws_rds_cluster_parameter_group" "example_mysql" {
 }
 
 ################################################################################
-# RDS Aurora Module - Serverless V2
+# RDS Aurora Module - PostgreSQL Serverless V2
 ################################################################################
 
 data "aws_rds_engine_version" "postgresql" {
@@ -155,9 +157,8 @@ module "aurora_postgresql_serverlessv2" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example_postgresql.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_postgresql.id
-
+  db_parameter_group_name         = aws_db_parameter_group.example_postgresql13.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_postgresql13.id
 
   serverlessv2_scaling_configuration = {
     min_capacity = 2
@@ -169,4 +170,18 @@ module "aurora_postgresql_serverlessv2" {
     one = {}
     two = {}
   }
+}
+
+resource "aws_db_parameter_group" "example_postgresql13" {
+  name        = "${local.name}-aurora-db-postgres13-parameter-group"
+  family      = "aurora-postgresql13"
+  description = "${local.name}-aurora-db-postgres13-parameter-group"
+  tags        = local.tags
+}
+
+resource "aws_rds_cluster_parameter_group" "example_postgresql13" {
+  name        = "${local.name}-aurora-postgres13-cluster-parameter-group"
+  family      = "aurora-postgresql13"
+  description = "${local.name}-aurora-postgres13-cluster-parameter-group"
+  tags        = local.tags
 }
