@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.0.0...v7.1.0) (2022-05-02)
+
+
+### Features
+
+* Add `security_group_use_name_prefix` variable to enable/disable name prefix usage ([#289](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/289)) ([75ffb30](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/75ffb30cd6032622ac28f4c5c16e47aba069e11f))
+
 ## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.2.0...v7.0.0) (2022-05-02)
 
 
