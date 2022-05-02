@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.2.0...v7.0.0) (2022-05-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Added support for ServerlessV2 and updated AWS provider to v4.12+ (#288)
+
+### Features
+
+* Added support for ServerlessV2 and updated AWS provider to v4.12+ ([#288](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/288)) ([6ca7c70](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/6ca7c705f382c2d5aec0df5a0aa6f6c198871dec))
+
 ## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.4...v6.2.0) (2022-03-12)
 
 
