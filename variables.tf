@@ -510,6 +510,12 @@ variable "security_group_egress_rules" {
   default     = {}
 }
 
+variable "security_group_use_name_prefix" {
+  description = "Determines whether the security group name (`name`) is used as a prefix"
+  type        = bool
+  default     = true
+}
+
 variable "putin_khuylo" {
   description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool
