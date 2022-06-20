@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.1.0...v7.2.0) (2022-06-20)
+
+
+### Features
+
+* Add MySql serverless v2 example ([#295](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/295)) ([0390b59](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/0390b59a279eb9a02126df29c43f5cc828d3870f))
+
 ## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.0.0...v7.1.0) (2022-05-02)
 
 
