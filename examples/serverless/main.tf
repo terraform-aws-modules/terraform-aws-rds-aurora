@@ -142,9 +142,9 @@ module "aurora_mysql_serverlessv2" {
   source = "../../"
 
   name              = "${local.name}-mysqlv2"
-  engine            = data.aws_rds_engine_version.postgresql.engine
+  engine            = data.aws_rds_engine_version.mysql.engine
   engine_mode       = "provisioned"
-  engine_version    = data.aws_rds_engine_version.postgresql.version
+  engine_version    = data.aws_rds_engine_version.mysql.version
   storage_encrypted = true
 
   vpc_id                = module.vpc.vpc_id
