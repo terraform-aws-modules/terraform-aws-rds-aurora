@@ -131,6 +131,62 @@ resource "aws_rds_cluster_parameter_group" "example_mysql" {
 }
 
 ################################################################################
+# RDS Aurora Module - MySQL Serverless V2
+################################################################################
+data "aws_rds_engine_version" "mysql" {
+  engine  = "aurora-mysql"
+  version = "8.0"
+}
+
+module "aurora_mysql_serverlessv2" {
+  source = "../../"
+
+  name              = "${local.name}-mysqlv2"
+  engine            = data.aws_rds_engine_version.postgresql.engine
+  engine_mode       = "provisioned"
+  engine_version    = data.aws_rds_engine_version.postgresql.version
+  storage_encrypted = true
+
+  vpc_id                = module.vpc.vpc_id
+  subnets               = module.vpc.database_subnets
+  create_security_group = true
+  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+
+  monitoring_interval = 60
+
+  apply_immediately   = true
+  skip_final_snapshot = true
+
+  db_parameter_group_name         = aws_db_parameter_group.example_mysql.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example_mysql.id
+
+  serverlessv2_scaling_configuration = {
+    min_capacity = 2
+    max_capacity = 10
+  }
+
+  instance_class = "db.serverless"
+  instances = {
+    one = {}
+    two = {}
+  }
+}
+
+resource "aws_db_parameter_group" "example_mysql" {
+  name        = "${local.name}-aurora-db-mysql-parameter-group"
+  family      = "aurora-mysql8.0"
+  description = "${local.name}-aurora-db-mysql-parameter-group"
+  tags        = local.tags
+}
+
+resource "aws_rds_cluster_parameter_group" "example_mysql" {
+  name        = "${local.name}-aurora-mysql-cluster-parameter-group"
+  family      = "aurora-mysql8.0"
+  description = "${local.name}-aurora-mysql-cluster-parameter-group"
+  tags        = local.tags
+}
+
+################################################################################
 # RDS Aurora Module - PostgreSQL Serverless V2
 ################################################################################
 
