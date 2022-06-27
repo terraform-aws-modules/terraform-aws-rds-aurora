@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [7.2.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.2.0...v7.2.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* SecurityGroup - create_before_destroy ([#301](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/301)) ([ceb91fb](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/ceb91fb0153aa2cd92d3bfa67c458998901530a0))
+
 ## [7.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.1.0...v7.2.0) (2022-06-20)
 
 
