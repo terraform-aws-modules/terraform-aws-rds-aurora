@@ -1,10 +1,98 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
-<a name="unreleased"></a>
-## [Unreleased]
+### [7.2.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.2.1...v7.2.2) (2022-07-11)
 
+
+### Bug Fixes
+
+* InvalidParameterCombination: Cannot find version 5.7.12 for aurora-mysql ([#303](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/303)) ([bcbb386](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/bcbb386e0854bc1968c271bb3f49a5a106fbcec9))
+
+### [7.2.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.2.0...v7.2.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* SecurityGroup - create_before_destroy ([#301](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/301)) ([ceb91fb](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/ceb91fb0153aa2cd92d3bfa67c458998901530a0))
+
+## [7.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.1.0...v7.2.0) (2022-06-20)
+
+
+### Features
+
+* Add MySql serverless v2 example ([#295](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/295)) ([0390b59](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/0390b59a279eb9a02126df29c43f5cc828d3870f))
+
+## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.0.0...v7.1.0) (2022-05-02)
+
+
+### Features
+
+* Add `security_group_use_name_prefix` variable to enable/disable name prefix usage ([#289](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/289)) ([75ffb30](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/75ffb30cd6032622ac28f4c5c16e47aba069e11f))
+
+## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.2.0...v7.0.0) (2022-05-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Added support for ServerlessV2 and updated AWS provider to v4.12+ (#288)
+
+### Features
+
+* Added support for ServerlessV2 and updated AWS provider to v4.12+ ([#288](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/288)) ([6ca7c70](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/6ca7c705f382c2d5aec0df5a0aa6f6c198871dec))
+
+## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.4...v6.2.0) (2022-03-12)
+
+
+### Features
+
+* Made it clear that we stand with Ukraine ([57c20b9](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/57c20b9f96c6fdf7664a5fc6b6c9a677f819b99d))
+
+### [6.1.4](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.3...v6.1.4) (2022-01-10)
+
+
+### Bug Fixes
+
+* update CI/CD process to align auto-release workflow ([#259](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/259)) ([d00931e](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/d00931e97350a1e2f04b60328ba10dbbe823e44c))
+
+## [6.1.3](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.2...v6.1.3) (2021-11-08)
+
+
+### Bug Fixes
+
+* Revert small useless change in main.tf ([#256](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/256)) ([40c146a](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/40c146abec001e10bbd7a379943579c338da3d67))
+
+# Changelog
+
+All notable changes to this project will be documented in this file
+
+## [6.1.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.1...v6.1.2) (2021-11-08)
+
+
+### Bug Fixes
+
+* Small useless change in main.tf to test semantic-release ([#254](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/254)) ([95bb77f](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/95bb77f2797cdb1760fdd52203b5710273a6603b))
+* Small useless change in main.tf to test semantic-release (last one, I promise) ([#255](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/255)) ([8b3525e](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/8b3525e7930c0ca43124432e416f6ec35ab7618e))
+
+## [6.1.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.0...v6.1.1) (2021-11-08)
+
+
+### Bug Fixes
+
+* update CI/CD process to enable auto-release workflow ([#250](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/250)) ([b44aae5](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/b44aae50ff2785a6a2a04691ba87d4589b4fa102))
+
+<a name="v6.1.0"></a>
+## [v6.1.0] - 2021-11-06
+
+- feat: Add security group egress rule support, fix documentation links ([#249](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/249))
+
+
+<a name="v6.0.0"></a>
+## [v6.0.0] - 2021-10-25
+
+- chore: Updated release Makefile
+- BREAKING CHANGE: update module to allow for control over individual cluster instances and latest features ([#243](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/243))
+- chore: update CI workflow to use composite actions, update pre-commit versions ([#242](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/242))
 
 
 <a name="v5.3.0"></a>
@@ -580,7 +668,9 @@ when calling import with this module in the configuration.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.3.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.1.0...HEAD
+[v6.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v6.0.0...v6.1.0
+[v6.0.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.3.0...v6.0.0
 [v5.3.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.2.0...v5.3.0
 [v5.2.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.1.0...v5.2.0
 [v5.1.0]: https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v5.0.0...v5.1.0

@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "advanced"
+  name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
   tags = {
     Owner       = "user"
@@ -37,24 +37,24 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                  = local.name
-  engine                = "aurora-postgresql"
-  engine_version        = "11.9"
-  instance_type         = "db.r5.large"
-  instance_type_replica = "db.t3.large"
+  name           = local.name
+  engine         = "aurora-postgresql"
+  engine_version = "11.12"
+  instance_class = "db.r6g.large"
+  instances      = { 1 = {} }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
-  replica_count         = 1
-  replica_scale_enabled = true
-  replica_scale_min     = 1
-  replica_scale_max     = 5
+  autoscaling_enabled      = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 5
 
   monitoring_interval           = 60
-  iam_role_name                 = "${local.name}-enhanced-monitoring"
+  iam_role_name                 = "${local.name}-monitor"
   iam_role_use_name_prefix      = true
   iam_role_description          = "${local.name} RDS enhanced monitoring IAM role"
   iam_role_path                 = "/autoscaling/"
