@@ -265,7 +265,7 @@ resource "aws_appautoscaling_target" "this" {
 resource "aws_appautoscaling_policy" "this" {
   count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
-  name               = "target-metric"
+  name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${try(aws_rds_cluster.this[0].cluster_identifier, "")}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
@@ -350,4 +350,43 @@ resource "aws_security_group_rule" "egress" {
   ipv6_cidr_blocks         = lookup(each.value, "ipv6_cidr_blocks", null)
   prefix_list_ids          = lookup(each.value, "prefix_list_ids", null)
   source_security_group_id = lookup(each.value, "source_security_group_id", null)
+}
+
+
+################################################################################
+# Parameter Group
+################################################################################
+
+resource "aws_rds_cluster_parameter_group" "cluster_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_cluster_parameter_group_name == null ? 0 : 1
+
+  name        = var.db_cluster_parameter_group_name
+  description = var.parameter_group_settings["pg_description_cluster"]
+  family      = var.parameter_group_settings["pg_family"]
+
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
+}
+
+resource "aws_db_parameter_group" "instance_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_parameter_group_name == null ? 0 : 1
+
+  name        = var.db_parameter_group_name
+  description = var.parameter_group_settings["pg_description_instance"]
+  family      = var.parameter_group_settings["pg_family"]
+
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
 }

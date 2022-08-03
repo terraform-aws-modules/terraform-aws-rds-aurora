@@ -4,6 +4,12 @@ variable "name" {
   default     = ""
 }
 
+variable "autoscaling_policy_name" {
+  description = "Autoscaling policy name"
+  type        = string
+  default     = "target-metric"
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -520,4 +526,16 @@ variable "putin_khuylo" {
   description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool
   default     = true
+}
+
+variable "parameter_group_settings" {
+  description = "Map holding all parameter group related settings."
+  type        = object({
+    pg_family               = optional(string)
+    pg_description_cluster  = optional(string)
+    parameters_cluster      = optional(map(map(string)))
+    pg_description_instance = optional(string)
+    parameters_instance     = optional(map(map(string)))
+  })
+  default     = null
 }
