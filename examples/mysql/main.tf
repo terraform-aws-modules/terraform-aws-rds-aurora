@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "mysql"
+  name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
   tags = {
     Owner       = "user"
@@ -26,6 +26,9 @@ module "vpc" {
   name = local.name
   cidr = "10.99.0.0/18"
 
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
   azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
@@ -41,20 +44,33 @@ module "vpc" {
 module "aurora" {
   source = "../../"
 
-  name                  = local.name
-  engine                = "aurora-mysql"
-  engine_version        = "5.7.12"
-  instance_type         = "db.r5.large"
-  instance_type_replica = "db.t3.medium"
+  name           = local.name
+  engine         = "aurora-mysql"
+  engine_version = "5.7"
+  instances = {
+    1 = {
+      instance_class      = "db.r5.large"
+      publicly_accessible = true
+    }
+    2 = {
+      identifier     = "mysql-static-1"
+      instance_class = "db.r5.2xlarge"
+    }
+    3 = {
+      identifier     = "mysql-excluded-1"
+      instance_class = "db.r5.xlarge"
+      promotion_tier = 15
+    }
+  }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
-  replica_count                       = 2
   iam_database_authentication_enabled = true
-  password                            = random_password.master.result
+  master_password                     = random_password.master.result
   create_random_password              = false
 
   apply_immediately   = true
@@ -63,6 +79,8 @@ module "aurora" {
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+
+  security_group_use_name_prefix = false
 
   tags = local.tags
 }

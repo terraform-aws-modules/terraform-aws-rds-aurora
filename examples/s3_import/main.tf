@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "s3-import"
+  name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
   tags = {
     Owner       = "user"
@@ -14,10 +14,6 @@ locals {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-resource "random_password" "master" {
-  length = 10
-}
 
 resource "random_pet" "this" {
   length = 2
@@ -43,7 +39,7 @@ module "vpc" {
 
 module "import_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   bucket        = "${local.name}-${random_pet.this.id}"
   acl           = "private"
@@ -120,17 +116,21 @@ module "aurora" {
   name           = local.name
   engine         = "aurora-mysql"
   engine_version = "5.7.12"
-  instance_type  = "db.r5.large"
+  instance_class = "db.r5.large"
+  instances      = { 1 = {} }
 
-  vpc_id                = module.vpc.vpc_id
-  db_subnet_group_name  = module.vpc.database_subnet_group_name
-  create_security_group = true
-  allowed_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
 
-  replica_count                       = 1
-  iam_database_authentication_enabled = true
-  password                            = random_password.master.result
-  create_random_password              = false
+  iam_roles = {
+    s3_import = {
+      role_arn     = aws_iam_role.s3_import.arn
+      feature_name = "s3Import"
+    }
+  }
 
   # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
@@ -139,7 +139,6 @@ module "aurora" {
     ingestion_role        = aws_iam_role.s3_import.arn
   }
 
-  apply_immediately   = true
   skip_final_snapshot = true
 
   db_parameter_group_name         = aws_db_parameter_group.example.id
