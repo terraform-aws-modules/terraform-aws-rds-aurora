@@ -77,7 +77,7 @@ resource "aws_rds_cluster" "this" {
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
-  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
+  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name == null ? null : aws_rds_cluster_parameter_group.cluster_pg[0].id
   db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
@@ -159,7 +159,7 @@ resource "aws_rds_cluster_instance" "this" {
   instance_class                        = lookup(each.value, "instance_class", var.instance_class)
   publicly_accessible                   = lookup(each.value, "publicly_accessible", var.publicly_accessible)
   db_subnet_group_name                  = local.db_subnet_group_name
-  db_parameter_group_name               = lookup(each.value, "db_parameter_group_name", var.db_parameter_group_name)
+  db_parameter_group_name               = lookup(each.value, "db_parameter_group_name", var.db_parameter_group_name) == null ? null : aws_db_parameter_group.instance_pg[0].id
   apply_immediately                     = lookup(each.value, "apply_immediately", var.apply_immediately)
   monitoring_role_arn                   = local.rds_enhanced_monitoring_arn
   monitoring_interval                   = lookup(each.value, "monitoring_interval", var.monitoring_interval)
@@ -265,7 +265,7 @@ resource "aws_appautoscaling_target" "this" {
 resource "aws_appautoscaling_policy" "this" {
   count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
-  name               = "target-metric"
+  name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${try(aws_rds_cluster.this[0].cluster_identifier, "")}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
@@ -350,4 +350,43 @@ resource "aws_security_group_rule" "egress" {
   ipv6_cidr_blocks         = lookup(each.value, "ipv6_cidr_blocks", null)
   prefix_list_ids          = lookup(each.value, "prefix_list_ids", null)
   source_security_group_id = lookup(each.value, "source_security_group_id", null)
+}
+
+
+################################################################################
+# Parameter Group
+################################################################################
+
+resource "aws_rds_cluster_parameter_group" "cluster_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_cluster_parameter_group_name == null ? 0 : 1
+
+  name        = var.db_cluster_parameter_group_name
+  description = var.parameter_group_settings["pg_description_cluster"]
+  family      = var.parameter_group_settings["pg_family"]
+
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
+}
+
+resource "aws_db_parameter_group" "instance_pg" {
+  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_parameter_group_name == null ? 0 : 1
+
+  name        = var.db_parameter_group_name
+  description = var.parameter_group_settings["pg_description_instance"]
+  family      = var.parameter_group_settings["pg_family"]
+
+  dynamic "parameter" {
+    for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
+    content {
+      name         = parameter.key
+      value        = keys(parameter.value)[0]
+      apply_method = values(parameter.value)[0]
+    }
+  }
 }
