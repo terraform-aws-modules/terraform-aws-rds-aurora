@@ -538,4 +538,5 @@ variable "parameter_group_settings" {
     parameters_instance     = optional(map(map(string)))
   })
   default = null
+  
 }
