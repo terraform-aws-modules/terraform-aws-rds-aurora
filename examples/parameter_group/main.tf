@@ -4,7 +4,7 @@ provider "aws" {
 
 locals {
   name   = "example-${replace(basename(path.cwd), "_", "-")}"
-  region = "eu-west-1"
+  region = "us-east-1"
   tags = {
     Owner       = "user"
     Environment = "dev"
@@ -46,8 +46,8 @@ module "aurora" {
   name   = local.name
   instances = {
     1 = {
-      instance_class      = "mysql-static-1"
-      publicly_accessible = true
+      identifier     = "mysql-static-1"
+      instance_class = "db.r5.xlarge"
     }
     2 = {
       identifier     = "mysql-static-2"
@@ -57,7 +57,7 @@ module "aurora" {
   instances_use_identifier_prefix = false
   engine                          = "aurora-mysql"
   engine_version                  = "5.7"
-  instance_class                  = "db.r5.large"
+  instance_class                  = "db.r5.xlarge"
   create_random_password          = false
   master_password                 = random_password.master.result
   db_parameter_group_name         = "db-pg-aurora2"

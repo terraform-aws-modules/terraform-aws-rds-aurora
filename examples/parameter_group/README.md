@@ -1,6 +1,6 @@
 # MySQL Example
 
-Configuration in this directory creates a MySQL Aurora cluster.
+Configuration in this directory creates a MySQL Aurora cluster with parameter group.
 
 ## Usage
 
