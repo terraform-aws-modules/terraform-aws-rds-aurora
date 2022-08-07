@@ -365,7 +365,7 @@ resource "aws_rds_cluster_parameter_group" "cluster_pg" {
   family      = var.parameter_group_settings["pg_family"]
 
   dynamic "parameter" {
-    for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
+     for_each = coalesce(var.parameter_group_settings["parameters_cluster"],{})
     content {
       name         = parameter.key
       value        = keys(parameter.value)[0]
@@ -382,7 +382,7 @@ resource "aws_db_parameter_group" "instance_pg" {
   family      = var.parameter_group_settings["pg_family"]
 
   dynamic "parameter" {
-    for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
+     for_each = coalesce(var.parameter_group_settings["parameters_instance"],{})
     content {
       name         = parameter.key
       value        = keys(parameter.value)[0]

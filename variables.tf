@@ -530,12 +530,12 @@ variable "putin_khuylo" {
 
 variable "parameter_group_settings" {
   description = "Map holding all parameter group related settings."
-  type        = object({
+  type = object({
     pg_family               = optional(string)
     pg_description_cluster  = optional(string)
     parameters_cluster      = optional(map(map(string)))
     pg_description_instance = optional(string)
     parameters_instance     = optional(map(map(string)))
   })
-  default     = null
+  default = null
 }
