@@ -27,7 +27,6 @@ Note that this example may create resources which cost money. Run `terraform des
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.63 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 2.2 |
 
 ## Modules
@@ -35,11 +34,13 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aurora"></a> [aurora](#module\_aurora) | ../../ | n/a |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 
 ## Inputs
 
