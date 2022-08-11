@@ -62,8 +62,11 @@ module "aurora" {
   master_password                 = random_password.master.result
   db_parameter_group_name         = "db-pg-aurora2"
   db_cluster_parameter_group_name = "db-aurora2-cluster-pg"
-  parameter_group_settings = {
-    pg_family = "aurora-mysql5.7"
+  create_db_cluster_parameter_group = true
+  create_db_parameter_group =true
+  db_cluster_parameter_group = {
+    family = "aurora-mysql5.7"
+    description_cluster  = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
     parameters_cluster = {
       "aurora_disable_hash_join"                              = { "1" = "immediate" }
       "aurora_load_from_s3_role"                              = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
@@ -89,6 +92,10 @@ module "aurora" {
       "performance_schema_consumer_events_statements_current" = { "1" = "pending-reboot" }
       "performance_schema_consumer_events_statements_history" = { "1" = "pending-reboot" }
     }
+  }
+  db_parameter_group = {
+    family = "aurora-mysql5.7"
+    description_instance = "dev-rds-1-aurora2 Aurora2 5.7 DB Parameter Group"
     parameters_instance = {
       "connect_timeout"                 = { "60" = "immediate" }
       "general_log"                     = { "0" = "immediate" }
@@ -99,8 +106,6 @@ module "aurora" {
       "slow_query_log"                  = { "1" = "immediate" }
       "log_bin_trust_function_creators" = { "1" = "immediate" }
     }
-    pg_description_cluster  = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
-    pg_description_instance = "dev-rds-1-aurora2 Aurora2 5.7 DB Parameter Group"
   }
   autoscaling_enabled             = "true"
   autoscaling_policy_name         = "${local.name}-autoscaling"
