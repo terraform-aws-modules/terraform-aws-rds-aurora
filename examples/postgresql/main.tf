@@ -97,23 +97,54 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  db_parameter_group_name           = "db-pg-aurora2"
+  db_cluster_parameter_group_name   = "db-aurora2-cluster-pg"
+  create_db_cluster_parameter_group = true
+  create_db_parameter_group         = true
+  db_cluster_parameter_group = {
+    family              = "aurora-postgresql"
+    description_cluster = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
+    parameters_cluster = {
+      "aurora_disable_hash_join"                              = { "1" = "immediate" }
+      "aurora_load_from_s3_role"                              = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
+      "aurora_select_into_s3_role"                            = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
+      "aws_default_lambda_role"                               = { "arn:aws:iam::095326208734:role/dev-rds-lambda" = "immediate" }
+      "aws_default_s3_role"                                   = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
+      "binlog_checksum"                                       = { "NONE" = "immediate" }
+      "connect_timeout"                                       = { "120" = "immediate" }
+      "innodb_lock_wait_timeout"                              = { "300" = "immediate" }
+      "log_output"                                            = { "FILE" = "immediate" }
+      "max_allowed_packet"                                    = { "67108864" = "immediate" }
+      "server_audit_events"                                   = { "QUERY" = "immediate" }
+      "server_audit_excl_users"                               = { "rdsadmin" = "immediate" }
+      "server_audit_logging"                                  = { "1" = "immediate" }
+      "server_audit_logs_upload"                              = { "1" = "immediate" }
+      "aurora_parallel_query"                                 = { "OFF" = "pending-reboot" }
+      "binlog_format"                                         = { "ROW" = "pending-reboot" }
+      "log_bin_trust_function_creators"                       = { "1" = "immediate" }
+      "require_secure_transport"                              = { "ON" = "immediate" }
+      "tls_version"                                           = { "TLSv1.2" = "pending-reboot" }
+      "server_audit_events"                                   = { "CONNECT,QUERY" = "immediate" }
+      "performance_schema"                                    = { "1" = "pending-reboot" }
+      "performance_schema_consumer_events_statements_current" = { "1" = "pending-reboot" }
+      "performance_schema_consumer_events_statements_history" = { "1" = "pending-reboot" }
+    }
+  }
+  db_parameter_group = {
+    family               = "aurora-postgresql"
+    description_instance = "dev-rds-1-aurora2 Aurora2 5.7 DB Parameter Group"
+    parameters_instance = {
+      "connect_timeout"                 = { "60" = "immediate" }
+      "general_log"                     = { "0" = "immediate" }
+      "innodb_lock_wait_timeout"        = { "300" = "immediate" }
+      "log_output"                      = { "FILE" = "immediate" }
+      "long_query_time"                 = { "5" = "immediate" }
+      "max_connections"                 = { "2000" = "immediate" }
+      "slow_query_log"                  = { "1" = "immediate" }
+      "log_bin_trust_function_creators" = { "1" = "immediate" }
+    }
+  }
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   tags = local.tags
-}
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-postgres11-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-db-postgres11-parameter-group"
-  tags        = local.tags
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  tags        = local.tags
 }

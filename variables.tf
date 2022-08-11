@@ -19,9 +19,9 @@ variable "create_db_cluster_parameter_group" {
 variable "db_cluster_parameter_group" {
   description = "Objeact holding all parameter group related settings for cluster."
   type = object({
-    family               = string
-    description_cluster  = string
-    parameters_cluster   = map(map(string))
+    family              = string
+    description_cluster = string
+    parameters_cluster  = map(map(string))
   })
   default = null
 }
