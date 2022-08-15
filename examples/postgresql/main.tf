@@ -97,23 +97,26 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  db_parameter_group_name           = "db-pg-aurora2"
+  db_cluster_parameter_group_name   = "db-aurora2-cluster-pg"
+  create_db_cluster_parameter_group = true
+  create_db_parameter_group         = true
+  db_cluster_parameter_group = {
+    family              = "aurora-postgresql11"
+    description_cluster = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
+    parameters_cluster = {
+      "log_min_duration_statement" = { "4000" = "immediate" }
+      "rds.force_ssl"              = { "1" = "immediate" }
+    }
+  }
+  db_parameter_group = {
+    family               = "aurora-postgresql11"
+    description_instance = "dev-rds-1-aurora2 Aurora2 5.7 DB Parameter Group"
+    parameters_instance = {
+      "log_min_duration_statement" = { "4000" = "immediate" }
+    }
+  }
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   tags = local.tags
-}
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-postgres11-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-db-postgres11-parameter-group"
-  tags        = local.tags
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  tags        = local.tags
 }

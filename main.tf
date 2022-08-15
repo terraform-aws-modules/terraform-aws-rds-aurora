@@ -77,7 +77,7 @@ resource "aws_rds_cluster" "this" {
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
-  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name == null ? null : aws_rds_cluster_parameter_group.cluster_pg[0].id
+  db_cluster_parameter_group_name     = var.create_db_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.db_cluster_parameter_group_name
   db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
@@ -159,7 +159,7 @@ resource "aws_rds_cluster_instance" "this" {
   instance_class                        = lookup(each.value, "instance_class", var.instance_class)
   publicly_accessible                   = lookup(each.value, "publicly_accessible", var.publicly_accessible)
   db_subnet_group_name                  = local.db_subnet_group_name
-  db_parameter_group_name               = lookup(each.value, "db_parameter_group_name", var.db_parameter_group_name) == null ? null : aws_db_parameter_group.instance_pg[0].id
+  db_parameter_group_name               = var.create_db_parameter_group ? aws_db_parameter_group.this[0].id : var.db_parameter_group_name
   apply_immediately                     = lookup(each.value, "apply_immediately", var.apply_immediately)
   monitoring_role_arn                   = local.rds_enhanced_monitoring_arn
   monitoring_interval                   = lookup(each.value, "monitoring_interval", var.monitoring_interval)
@@ -357,15 +357,15 @@ resource "aws_security_group_rule" "egress" {
 # Parameter Group
 ################################################################################
 
-resource "aws_rds_cluster_parameter_group" "cluster_pg" {
-  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_cluster_parameter_group_name == null ? 0 : 1
+resource "aws_rds_cluster_parameter_group" "this" {
+  count = var.create_cluster && var.create_db_cluster_parameter_group ? 1 : 0
 
   name        = var.db_cluster_parameter_group_name
-  description = var.parameter_group_settings["pg_description_cluster"]
-  family      = var.parameter_group_settings["pg_family"]
+  description = var.db_cluster_parameter_group["description_cluster"]
+  family      = var.db_cluster_parameter_group["family"]
 
   dynamic "parameter" {
-    for_each = coalesce(var.parameter_group_settings["parameters_cluster"], {})
+    for_each = coalesce(var.db_cluster_parameter_group["parameters_cluster"], {})
     content {
       name         = parameter.key
       value        = keys(parameter.value)[0]
@@ -374,15 +374,15 @@ resource "aws_rds_cluster_parameter_group" "cluster_pg" {
   }
 }
 
-resource "aws_db_parameter_group" "instance_pg" {
-  count = var.create_cluster == false || var.parameter_group_settings == null || var.db_parameter_group_name == null ? 0 : 1
+resource "aws_db_parameter_group" "this" {
+  count = var.create_cluster && var.create_db_parameter_group ? 1 : 0
 
   name        = var.db_parameter_group_name
-  description = var.parameter_group_settings["pg_description_instance"]
-  family      = var.parameter_group_settings["pg_family"]
+  description = var.db_parameter_group["description_instance"]
+  family      = var.db_parameter_group["family"]
 
   dynamic "parameter" {
-    for_each = coalesce(var.parameter_group_settings["parameters_instance"], {})
+    for_each = coalesce(var.db_parameter_group["parameters_instance"], {})
     content {
       name         = parameter.key
       value        = keys(parameter.value)[0]

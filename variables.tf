@@ -10,14 +10,34 @@ variable "autoscaling_policy_name" {
   default     = "target-metric"
 }
 
-variable "parameter_group_settings" {
-  description = "Map holding all parameter group related settings."
+variable "create_db_cluster_parameter_group" {
+  description = "Whether db_cluster_parameter_group should be created"
+  type        = bool
+  default     = false
+}
+
+variable "db_cluster_parameter_group" {
+  description = "Object holding all parameter group related settings for cluster."
   type = object({
-    pg_family               = optional(string)
-    pg_description_cluster  = optional(string)
-    parameters_cluster      = optional(map(map(string)))
-    pg_description_instance = optional(string)
-    parameters_instance     = optional(map(map(string)))
+    family              = string
+    description_cluster = string
+    parameters_cluster  = map(map(string))
+  })
+  default = null
+}
+
+variable "create_db_parameter_group" {
+  description = "Whether db_parameter_group should be created"
+  type        = bool
+  default     = false
+}
+
+variable "db_parameter_group" {
+  description = "Object holding all parameter group related settings for db instance."
+  type = object({
+    family               = string
+    description_instance = string
+    parameters_instance  = map(map(string))
   })
   default = null
 }

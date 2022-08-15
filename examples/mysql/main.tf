@@ -76,25 +76,43 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  db_parameter_group_name           = "db-pg-aurora2"
+  db_cluster_parameter_group_name   = "db-aurora2-cluster-pg"
+  create_db_cluster_parameter_group = true
+  create_db_parameter_group         = true
+  db_cluster_parameter_group = {
+    family              = "aurora-mysql5.7"
+    description_cluster = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
+    parameters_cluster = {
+      "connect_timeout"                 = { "120" = "immediate" }
+      "innodb_lock_wait_timeout"        = { "300" = "immediate" }
+      "log_output"                      = { "FILE" = "immediate" }
+      "max_allowed_packet"              = { "67108864" = "immediate" }
+      "aurora_parallel_query"           = { "OFF" = "pending-reboot" }
+      "binlog_format"                   = { "ROW" = "pending-reboot" }
+      "log_bin_trust_function_creators" = { "1" = "immediate" }
+      "require_secure_transport"        = { "ON" = "immediate" }
+      "tls_version"                     = { "TLSv1.2" = "pending-reboot" }
+    }
+  }
+  db_parameter_group = {
+    family               = "aurora-mysql5.7"
+    description_instance = "dev-rds-1-aurora2 Aurora2 5.7 DB Parameter Group"
+    parameters_instance = {
+      "connect_timeout"                 = { "60" = "immediate" }
+      "general_log"                     = { "0" = "immediate" }
+      "innodb_lock_wait_timeout"        = { "300" = "immediate" }
+      "log_output"                      = { "FILE" = "immediate" }
+      "long_query_time"                 = { "5" = "immediate" }
+      "max_connections"                 = { "2000" = "immediate" }
+      "slow_query_log"                  = { "1" = "immediate" }
+      "log_bin_trust_function_creators" = { "1" = "immediate" }
+    }
+  }
+
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
 
   security_group_use_name_prefix = false
 
   tags = local.tags
-}
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-57-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-db-57-parameter-group"
-  tags        = local.tags
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-57-cluster-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-57-cluster-parameter-group"
-  tags        = local.tags
 }
