@@ -84,29 +84,15 @@ module "aurora" {
     family              = "aurora-mysql5.7"
     description_cluster = "dev-rds-1-aurora2-cluster Aurora2 5.7 DB Cluster Parameter Group"
     parameters_cluster = {
-      "aurora_disable_hash_join"                              = { "1" = "immediate" }
-      "aurora_load_from_s3_role"                              = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
-      "aurora_select_into_s3_role"                            = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
-      "aws_default_lambda_role"                               = { "arn:aws:iam::095326208734:role/dev-rds-lambda" = "immediate" }
-      "aws_default_s3_role"                                   = { "arn:aws:iam::095326208734:role/rds-aurora-logs-to-s3" = "immediate" }
-      "binlog_checksum"                                       = { "NONE" = "immediate" }
-      "connect_timeout"                                       = { "120" = "immediate" }
-      "innodb_lock_wait_timeout"                              = { "300" = "immediate" }
-      "log_output"                                            = { "FILE" = "immediate" }
-      "max_allowed_packet"                                    = { "67108864" = "immediate" }
-      "server_audit_events"                                   = { "QUERY" = "immediate" }
-      "server_audit_excl_users"                               = { "rdsadmin" = "immediate" }
-      "server_audit_logging"                                  = { "1" = "immediate" }
-      "server_audit_logs_upload"                              = { "1" = "immediate" }
-      "aurora_parallel_query"                                 = { "OFF" = "pending-reboot" }
-      "binlog_format"                                         = { "ROW" = "pending-reboot" }
-      "log_bin_trust_function_creators"                       = { "1" = "immediate" }
-      "require_secure_transport"                              = { "ON" = "immediate" }
-      "tls_version"                                           = { "TLSv1.2" = "pending-reboot" }
-      "server_audit_events"                                   = { "CONNECT,QUERY" = "immediate" }
-      "performance_schema"                                    = { "1" = "pending-reboot" }
-      "performance_schema_consumer_events_statements_current" = { "1" = "pending-reboot" }
-      "performance_schema_consumer_events_statements_history" = { "1" = "pending-reboot" }
+      "connect_timeout"                 = { "120" = "immediate" }
+      "innodb_lock_wait_timeout"        = { "300" = "immediate" }
+      "log_output"                      = { "FILE" = "immediate" }
+      "max_allowed_packet"              = { "67108864" = "immediate" }
+      "aurora_parallel_query"           = { "OFF" = "pending-reboot" }
+      "binlog_format"                   = { "ROW" = "pending-reboot" }
+      "log_bin_trust_function_creators" = { "1" = "immediate" }
+      "require_secure_transport"        = { "ON" = "immediate" }
+      "tls_version"                     = { "TLSv1.2" = "pending-reboot" }
     }
   }
   db_parameter_group = {
