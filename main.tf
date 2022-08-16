@@ -352,41 +352,53 @@ resource "aws_security_group_rule" "egress" {
   source_security_group_id = lookup(each.value, "source_security_group_id", null)
 }
 
-
 ################################################################################
 # Parameter Group
 ################################################################################
 
+locals {
+  cluster_parameter_group_name = try(coalesce(var.db_cluster_parameter_group_name, var.name), null)
+  db_parameter_group_name      = try(coalesce(var.db_parameter_group_name, var.name), null)
+}
+
 resource "aws_rds_cluster_parameter_group" "this" {
   count = var.create_cluster && var.create_db_cluster_parameter_group ? 1 : 0
 
-  name        = var.db_cluster_parameter_group_name
-  description = var.db_cluster_parameter_group["description_cluster"]
-  family      = var.db_cluster_parameter_group["family"]
+  name        = var.db_cluster_parameter_group_use_name_prefix ? null : local.cluster_parameter_group_name
+  name_prefix = var.db_cluster_parameter_group_use_name_prefix ? "${local.cluster_parameter_group_name}-" : null
+  description = var.db_cluster_parameter_group_description
+  family      = var.db_cluster_parameter_group_family
 
   dynamic "parameter" {
-    for_each = coalesce(var.db_cluster_parameter_group["parameters_cluster"], {})
+    for_each = var.db_cluster_parameter_group_parameters
+
     content {
-      name         = parameter.key
-      value        = keys(parameter.value)[0]
-      apply_method = values(parameter.value)[0]
+      name         = parameter.value.name
+      value        = parameter.value.value
+      apply_method = try(parameter.value.apply_method)
     }
   }
+
+  tags = var.tags
 }
 
 resource "aws_db_parameter_group" "this" {
   count = var.create_cluster && var.create_db_parameter_group ? 1 : 0
 
-  name        = var.db_parameter_group_name
-  description = var.db_parameter_group["description_instance"]
-  family      = var.db_parameter_group["family"]
+  name        = var.db_parameter_group_use_name_prefix ? null : local.db_parameter_group_name
+  name_prefix = var.db_parameter_group_use_name_prefix ? "${local.db_parameter_group_name}-" : null
+  description = var.db_parameter_group_description
+  family      = var.db_parameter_group_family
 
   dynamic "parameter" {
-    for_each = coalesce(var.db_parameter_group["parameters_instance"], {})
+    for_each = var.db_parameter_group_parameters
+
     content {
-      name         = parameter.key
-      value        = keys(parameter.value)[0]
-      apply_method = values(parameter.value)[0]
+      name         = parameter.value.name
+      value        = parameter.value.value
+      apply_method = try(parameter.value.apply_method)
     }
   }
+
+  tags = var.tags
 }

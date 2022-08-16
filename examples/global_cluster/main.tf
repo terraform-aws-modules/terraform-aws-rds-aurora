@@ -9,6 +9,7 @@ provider "aws" {
 
 locals {
   name = "example-${replace(basename(path.cwd), "_", "-")}"
+
   primary = {
     region      = "eu-west-1"
     cidr_prefix = "10.99"
@@ -17,6 +18,7 @@ locals {
     region      = "us-east-1"
     cidr_prefix = "10.98"
   }
+
   tags = {
     Owner       = "user"
     Environment = "dev"
@@ -24,6 +26,72 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
+
+################################################################################
+# RDS Aurora Module
+################################################################################
+
+resource "aws_rds_global_cluster" "this" {
+  global_cluster_identifier = local.name
+  engine                    = "aurora-postgresql"
+  engine_version            = "11.12"
+  database_name             = "example_db"
+  storage_encrypted         = true
+}
+
+module "aurora_primary" {
+  source = "../../"
+
+  name                      = local.name
+  database_name             = aws_rds_global_cluster.this.database_name
+  engine                    = aws_rds_global_cluster.this.engine
+  engine_version            = aws_rds_global_cluster.this.engine_version
+  global_cluster_identifier = aws_rds_global_cluster.this.id
+  instance_class            = "db.r6g.large"
+  instances                 = { for i in range(2) : i => {} }
+  kms_key_id                = aws_kms_key.primary.arn
+
+  vpc_id                 = module.primary_vpc.vpc_id
+  db_subnet_group_name   = module.primary_vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.primary_vpc.private_subnets_cidr_blocks
+
+  skip_final_snapshot = true
+
+  tags = local.tags
+}
+
+module "aurora_secondary" {
+  source = "../../"
+
+  providers = { aws = aws.secondary }
+
+  is_primary_cluster = false
+
+  name                      = local.name
+  engine                    = aws_rds_global_cluster.this.engine
+  engine_version            = aws_rds_global_cluster.this.engine_version
+  global_cluster_identifier = aws_rds_global_cluster.this.id
+  source_region             = local.primary.region
+  instance_class            = "db.r6g.large"
+  instances                 = { for i in range(2) : i => {} }
+  kms_key_id                = aws_kms_key.secondary.arn
+
+  vpc_id                 = module.secondary_vpc.vpc_id
+  db_subnet_group_name   = module.secondary_vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.secondary_vpc.private_subnets_cidr_blocks
+
+  skip_final_snapshot = true
+
+  depends_on = [
+    module.aurora_primary
+  ]
+
+  tags = local.tags
+}
 
 ################################################################################
 # Supporting Resources
@@ -107,70 +175,4 @@ resource "aws_kms_key" "secondary" {
 
   policy = data.aws_iam_policy_document.rds.json
   tags   = local.tags
-}
-
-################################################################################
-# RDS Aurora Module
-################################################################################
-
-resource "aws_rds_global_cluster" "this" {
-  global_cluster_identifier = local.name
-  engine                    = "aurora-postgresql"
-  engine_version            = "11.12"
-  database_name             = "example_db"
-  storage_encrypted         = true
-}
-
-module "aurora_primary" {
-  source = "../../"
-
-  name                      = local.name
-  database_name             = aws_rds_global_cluster.this.database_name
-  engine                    = aws_rds_global_cluster.this.engine
-  engine_version            = aws_rds_global_cluster.this.engine_version
-  global_cluster_identifier = aws_rds_global_cluster.this.id
-  instance_class            = "db.r6g.large"
-  instances                 = { for i in range(2) : i => {} }
-  kms_key_id                = aws_kms_key.primary.arn
-
-  vpc_id                 = module.primary_vpc.vpc_id
-  db_subnet_group_name   = module.primary_vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.primary_vpc.private_subnets_cidr_blocks
-
-  skip_final_snapshot = true
-
-  tags = local.tags
-}
-
-module "aurora_secondary" {
-  source = "../../"
-
-  providers = { aws = aws.secondary }
-
-  is_primary_cluster = false
-
-  name                      = local.name
-  engine                    = aws_rds_global_cluster.this.engine
-  engine_version            = aws_rds_global_cluster.this.engine_version
-  global_cluster_identifier = aws_rds_global_cluster.this.id
-  source_region             = local.primary.region
-  instance_class            = "db.r6g.large"
-  instances                 = { for i in range(2) : i => {} }
-  kms_key_id                = aws_kms_key.secondary.arn
-
-  vpc_id                 = module.secondary_vpc.vpc_id
-  db_subnet_group_name   = module.secondary_vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.secondary_vpc.private_subnets_cidr_blocks
-
-  skip_final_snapshot = true
-
-  depends_on = [
-    module.aurora_primary
-  ]
-
-  tags = local.tags
 }
