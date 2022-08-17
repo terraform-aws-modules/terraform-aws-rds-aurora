@@ -5,36 +5,11 @@ provider "aws" {
 locals {
   name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "dev"
   }
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
-
-resource "random_password" "master" {
-  length = 10
-}
-
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
-
-  name = local.name
-  cidr = "10.99.0.0/18"
-
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
-
-  tags = local.tags
 }
 
 ################################################################################
@@ -97,23 +72,61 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  create_db_cluster_parameter_group      = true
+  db_cluster_parameter_group_name        = local.name
+  db_cluster_parameter_group_family      = "aurora-postgresql11"
+  db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
+  db_cluster_parameter_group_parameters = [
+    {
+      name         = "log_min_duration_statement"
+      value        = 4000
+      apply_method = "immediate"
+      }, {
+      name         = "rds.force_ssl"
+      value        = 1
+      apply_method = "immediate"
+    }
+  ]
+
+  create_db_parameter_group      = true
+  db_parameter_group_name        = local.name
+  db_parameter_group_family      = "aurora-postgresql11"
+  db_parameter_group_description = "${local.name} example DB parameter group"
+  db_parameter_group_parameters = [
+    {
+      name         = "log_min_duration_statement"
+      value        = 4000
+      apply_method = "immediate"
+    }
+  ]
+
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   tags = local.tags
 }
 
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-postgres11-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-db-postgres11-parameter-group"
-  tags        = local.tags
+################################################################################
+# Supporting Resources
+################################################################################
+
+resource "random_password" "master" {
+  length = 10
 }
 
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  family      = "aurora-postgresql11"
-  description = "${local.name}-aurora-postgres11-cluster-parameter-group"
-  tags        = local.tags
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 3.0"
+
+  name = local.name
+  cidr = "10.99.0.0/18"
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+
+  tags = local.tags
 }
