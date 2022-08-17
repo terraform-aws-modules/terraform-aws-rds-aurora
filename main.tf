@@ -73,6 +73,7 @@ resource "aws_rds_cluster" "this" {
   preferred_maintenance_window        = local.is_serverless ? null : var.preferred_maintenance_window
   port                                = local.port
   db_subnet_group_name                = local.db_subnet_group_name
+  vpc_id                              = var.vpc_id
   vpc_security_group_ids              = compact(concat(aws_security_group.this.*.id, var.vpc_security_group_ids))
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
