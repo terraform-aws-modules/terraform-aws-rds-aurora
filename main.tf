@@ -375,7 +375,7 @@ resource "aws_rds_cluster_parameter_group" "this" {
     content {
       name         = parameter.value.name
       value        = parameter.value.value
-      apply_method = try(parameter.value.apply_method)
+      apply_method = try(parameter.value.apply_method, "immediate")
     }
   }
 
