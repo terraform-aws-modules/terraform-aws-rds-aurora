@@ -10,38 +10,6 @@ variable "autoscaling_policy_name" {
   default     = "target-metric"
 }
 
-variable "create_db_cluster_parameter_group" {
-  description = "Whether db_cluster_parameter_group should be created"
-  type        = bool
-  default     = false
-}
-
-variable "db_cluster_parameter_group" {
-  description = "Object holding all parameter group related settings for cluster."
-  type = object({
-    family              = string
-    description_cluster = string
-    parameters_cluster  = map(map(string))
-  })
-  default = null
-}
-
-variable "create_db_parameter_group" {
-  description = "Whether db_parameter_group should be created"
-  type        = bool
-  default     = false
-}
-
-variable "db_parameter_group" {
-  description = "Object holding all parameter group related settings for db instance."
-  type = object({
-    family               = string
-    description_instance = string
-    parameters_instance  = map(map(string))
-  })
-  default = null
-}
-
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -236,12 +204,6 @@ variable "apply_immediately" {
   default     = null
 }
 
-variable "db_cluster_parameter_group_name" {
-  description = "A cluster parameter group to associate with the cluster"
-  type        = string
-  default     = null
-}
-
 variable "db_cluster_db_instance_parameter_group_name" {
   description = "Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
   type        = string
@@ -330,12 +292,6 @@ variable "instance_class" {
 variable "publicly_accessible" {
   description = "Determines whether instances are publicly accessible. Default false"
   type        = bool
-  default     = null
-}
-
-variable "db_parameter_group_name" {
-  description = "The name of the DB parameter group to associate with instances"
-  type        = string
   default     = null
 }
 
@@ -552,6 +508,82 @@ variable "security_group_use_name_prefix" {
   description = "Determines whether the security group name (`name`) is used as a prefix"
   type        = bool
   default     = true
+}
+
+################################################################################
+# Parameter Group
+################################################################################
+
+variable "create_db_cluster_parameter_group" {
+  description = "Determines whether a cluster parameter should be created or use existing"
+  type        = bool
+  default     = false
+}
+
+variable "db_cluster_parameter_group_name" {
+  description = "The name of the DB cluster parameter group"
+  type        = string
+  default     = ""
+}
+
+variable "db_cluster_parameter_group_use_name_prefix" {
+  description = "Determines whether the DB cluster parameter group name is used as a prefix"
+  type        = bool
+  default     = true
+}
+
+variable "db_cluster_parameter_group_description" {
+  description = "The description of the DB cluster parameter group. Defaults to \"Managed by Terraform\""
+  type        = string
+  default     = null
+}
+
+variable "db_cluster_parameter_group_family" {
+  description = "The family of the DB cluster parameter group"
+  type        = string
+  default     = ""
+}
+
+variable "db_cluster_parameter_group_parameters" {
+  description = "A list of DB cluster parameters to apply. Note that parameters may differ from a family to an other"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "create_db_parameter_group" {
+  description = "Determines whether a DB parameter should be created or use existing"
+  type        = bool
+  default     = false
+}
+
+variable "db_parameter_group_name" {
+  description = "The name of the DB parameter group"
+  type        = string
+  default     = ""
+}
+
+variable "db_parameter_group_use_name_prefix" {
+  description = "Determines whether the DB parameter group name is used as a prefix"
+  type        = bool
+  default     = true
+}
+
+variable "db_parameter_group_description" {
+  description = "The description of the DB parameter group. Defaults to \"Managed by Terraform\""
+  type        = string
+  default     = null
+}
+
+variable "db_parameter_group_family" {
+  description = "The family of the DB parameter group"
+  type        = string
+  default     = ""
+}
+
+variable "db_parameter_group_parameters" {
+  description = "A list of DB parameters to apply. Note that parameters may differ from a family to an other"
+  type        = list(map(string))
+  default     = []
 }
 
 variable "putin_khuylo" {

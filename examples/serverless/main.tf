@@ -5,6 +5,7 @@ provider "aws" {
 locals {
   name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "dev"
