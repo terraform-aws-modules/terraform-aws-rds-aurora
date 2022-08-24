@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.3.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.2.2...v7.3.0) (2022-08-17)
+
+
+### Features
+
+* Support feature to create parameter group for aws-rds-aurora cluster and instances ([#307](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/307)) ([45d7bf7](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/45d7bf742e1ffe9cc49b0e9e3e5be6e89414640a))
+
 ### [7.2.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.2.1...v7.2.2) (2022-07-11)
 
 

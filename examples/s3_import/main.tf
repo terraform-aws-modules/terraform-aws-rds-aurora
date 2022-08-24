@@ -5,10 +5,67 @@ provider "aws" {
 locals {
   name   = "example-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "dev"
   }
+}
+
+################################################################################
+# RDS Aurora Module
+################################################################################
+
+module "aurora" {
+  source = "../../"
+
+  name           = local.name
+  engine         = "aurora-mysql"
+  engine_version = "5.7.12"
+  instance_class = "db.r5.large"
+  instances      = { 1 = {} }
+
+  vpc_id                 = module.vpc.vpc_id
+  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
+
+  iam_roles = {
+    s3_import = {
+      role_arn     = aws_iam_role.s3_import.arn
+      feature_name = "s3Import"
+    }
+  }
+
+  # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
+  s3_import = {
+    source_engine_version = "5.7.12"
+    bucket_name           = module.import_s3_bucket.s3_bucket_id
+    ingestion_role        = aws_iam_role.s3_import.arn
+  }
+
+  skip_final_snapshot = true
+
+  db_parameter_group_name         = aws_db_parameter_group.example.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
+  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+
+  tags = local.tags
+}
+
+resource "aws_db_parameter_group" "example" {
+  name        = "${local.name}-aurora-db-57-parameter-group"
+  family      = "aurora-mysql5.7"
+  description = "${local.name}-aurora-db-57-parameter-group"
+  tags        = local.tags
+}
+
+resource "aws_rds_cluster_parameter_group" "example" {
+  name        = "${local.name}-aurora-57-cluster-parameter-group"
+  family      = "aurora-mysql5.7"
+  description = "${local.name}-aurora-57-cluster-parameter-group"
+  tags        = local.tags
 }
 
 ################################################################################
@@ -104,60 +161,4 @@ resource "aws_iam_role_policy" "s3_import" {
   provisioner "local-exec" {
     command = "unzip backup.zip && aws s3 sync ${path.module}/backup s3://${module.import_s3_bucket.s3_bucket_id}"
   }
-}
-
-################################################################################
-# RDS Aurora Module
-################################################################################
-
-module "aurora" {
-  source = "../../"
-
-  name           = local.name
-  engine         = "aurora-mysql"
-  engine_version = "5.7.12"
-  instance_class = "db.r5.large"
-  instances      = { 1 = {} }
-
-  vpc_id                 = module.vpc.vpc_id
-  db_subnet_group_name   = module.vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
-
-  iam_roles = {
-    s3_import = {
-      role_arn     = aws_iam_role.s3_import.arn
-      feature_name = "s3Import"
-    }
-  }
-
-  # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
-  s3_import = {
-    source_engine_version = "5.7.12"
-    bucket_name           = module.import_s3_bucket.s3_bucket_id
-    ingestion_role        = aws_iam_role.s3_import.arn
-  }
-
-  skip_final_snapshot = true
-
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
-  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
-
-  tags = local.tags
-}
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-57-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-db-57-parameter-group"
-  tags        = local.tags
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-57-cluster-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-57-cluster-parameter-group"
-  tags        = local.tags
 }

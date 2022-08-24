@@ -83,7 +83,7 @@ resource "aws_rds_cluster" "this" {
   snapshot_identifier                 = var.snapshot_identifier
   storage_encrypted                   = var.storage_encrypted
   apply_immediately                   = var.apply_immediately
-  db_cluster_parameter_group_name     = var.db_cluster_parameter_group_name
+  db_cluster_parameter_group_name     = var.create_db_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.db_cluster_parameter_group_name
   db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   backtrack_window                    = local.backtrack_window
@@ -165,7 +165,7 @@ resource "aws_rds_cluster_instance" "this" {
   instance_class                        = lookup(each.value, "instance_class", var.instance_class)
   publicly_accessible                   = lookup(each.value, "publicly_accessible", var.publicly_accessible)
   db_subnet_group_name                  = local.db_subnet_group_name
-  db_parameter_group_name               = lookup(each.value, "db_parameter_group_name", var.db_parameter_group_name)
+  db_parameter_group_name               = var.create_db_parameter_group ? aws_db_parameter_group.this[0].id : var.db_parameter_group_name
   apply_immediately                     = lookup(each.value, "apply_immediately", var.apply_immediately)
   monitoring_role_arn                   = local.rds_enhanced_monitoring_arn
   monitoring_interval                   = lookup(each.value, "monitoring_interval", var.monitoring_interval)
@@ -271,7 +271,7 @@ resource "aws_appautoscaling_target" "this" {
 resource "aws_appautoscaling_policy" "this" {
   count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
-  name               = "target-metric"
+  name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
   resource_id        = "cluster:${try(aws_rds_cluster.this[0].cluster_identifier, "")}"
   scalable_dimension = "rds:cluster:ReadReplicaCount"
@@ -356,4 +356,55 @@ resource "aws_security_group_rule" "egress" {
   ipv6_cidr_blocks         = lookup(each.value, "ipv6_cidr_blocks", null)
   prefix_list_ids          = lookup(each.value, "prefix_list_ids", null)
   source_security_group_id = lookup(each.value, "source_security_group_id", null)
+}
+
+################################################################################
+# Parameter Group
+################################################################################
+
+locals {
+  cluster_parameter_group_name = try(coalesce(var.db_cluster_parameter_group_name, var.name), null)
+  db_parameter_group_name      = try(coalesce(var.db_parameter_group_name, var.name), null)
+}
+
+resource "aws_rds_cluster_parameter_group" "this" {
+  count = var.create_cluster && var.create_db_cluster_parameter_group ? 1 : 0
+
+  name        = var.db_cluster_parameter_group_use_name_prefix ? null : local.cluster_parameter_group_name
+  name_prefix = var.db_cluster_parameter_group_use_name_prefix ? "${local.cluster_parameter_group_name}-" : null
+  description = var.db_cluster_parameter_group_description
+  family      = var.db_cluster_parameter_group_family
+
+  dynamic "parameter" {
+    for_each = var.db_cluster_parameter_group_parameters
+
+    content {
+      name         = parameter.value.name
+      value        = parameter.value.value
+      apply_method = try(parameter.value.apply_method, "immediate")
+    }
+  }
+
+  tags = var.tags
+}
+
+resource "aws_db_parameter_group" "this" {
+  count = var.create_cluster && var.create_db_parameter_group ? 1 : 0
+
+  name        = var.db_parameter_group_use_name_prefix ? null : local.db_parameter_group_name
+  name_prefix = var.db_parameter_group_use_name_prefix ? "${local.db_parameter_group_name}-" : null
+  description = var.db_parameter_group_description
+  family      = var.db_parameter_group_family
+
+  dynamic "parameter" {
+    for_each = var.db_parameter_group_parameters
+
+    content {
+      name         = parameter.value.name
+      value        = parameter.value.value
+      apply_method = try(parameter.value.apply_method, "immediate")
+    }
+  }
+
+  tags = var.tags
 }
