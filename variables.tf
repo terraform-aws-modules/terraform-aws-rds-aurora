@@ -66,6 +66,30 @@ variable "source_region" {
   default     = null
 }
 
+variable "storage_type" {
+  description = "Specifies the storage type to be associated with the DB cluster. (This setting is required to create a Multi-AZ DB cluster). Valid values: io1"
+  type        = string
+  default     = null
+}
+
+variable "iops" {
+  description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'"
+  type        = number
+  default     = null
+}
+
+variable "allocated_storage" {
+  description = "he amount of storage in gibibytes (GiB) to allocate to each DB instance in the Multi-AZ DB cluster"
+  type        = number
+  default     = null
+}
+
+variable "db_cluster_instance_class" {
+  description = "The instance type of the RDS instance"
+  type        = string
+  default     = null
+}
+
 variable "engine" {
   description = "The name of the database engine to be used for this DB cluster. Defaults to `aurora`. Valid Values: `aurora`, `aurora-mysql`, `aurora-postgresql`"
   type        = string

@@ -56,6 +56,12 @@ resource "aws_rds_cluster" "this" {
   replication_source_identifier  = var.replication_source_identifier
   source_region                  = var.source_region
 
+  # These attributes are also required for non-aurora multi-az deployments
+  storage_type              = var.storage_type
+  iops                      = var.iops
+  allocated_storage         = var.allocated_storage
+  db_cluster_instance_class = var.db_cluster_instance_class
+
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = local.is_serverless ? null : var.engine_version
