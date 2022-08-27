@@ -79,19 +79,19 @@ variable "storage_type" {
 }
 
 variable "iops" {
-  description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'"
+  description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'. (This setting is required to create a Multi-AZ DB cluster)."
   type        = number
   default     = null
 }
 
 variable "allocated_storage" {
-  description = "he amount of storage in gibibytes (GiB) to allocate to each DB instance in the Multi-AZ DB cluster"
+  description = "he amount of storage in gibibytes (GiB) to allocate to each DB instance in the Multi-AZ DB cluster. (This setting is required to create a Multi-AZ DB cluster)."
   type        = number
   default     = null
 }
 
 variable "db_cluster_instance_class" {
-  description = "The instance type of the RDS instance"
+  description = "The compute and memory capacity of each DB instance in the Multi-AZ DB cluster. (This setting is required to create a Multi-AZ DB cluster)"
   type        = string
   default     = null
 }
