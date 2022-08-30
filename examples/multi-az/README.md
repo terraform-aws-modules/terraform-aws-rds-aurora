@@ -1,6 +1,6 @@
-# PostgreSQL Example
+# AWS RDS Multi-AZ Example
 
-Configuration in this directory creates a PostgreSQL Aurora cluster.
+Configuration in this directory creates a PostgreSQL RDS Multi-AZ cluster. This is *NOT using the Aurora engine. See more details [here](https://aws.amazon.com/blogs/aws/amazon-rds-multi-az-db-cluster/)
 
 ## Usage
 
@@ -21,13 +21,10 @@ Note that this example may create resources which cost money. Run `terraform des
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.12 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.2 |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_random"></a> [random](#provider\_random) | >= 2.2 |
+No providers.
 
 ## Modules
 
@@ -38,9 +35,7 @@ Note that this example may create resources which cost money. Run `terraform des
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+No resources.
 
 ## Inputs
 

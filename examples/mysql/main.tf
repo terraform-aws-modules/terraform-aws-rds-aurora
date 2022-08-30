@@ -3,12 +3,13 @@ provider "aws" {
 }
 
 locals {
-  name   = "example-${replace(basename(path.cwd), "_", "-")}"
+  name   = "ex-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Example    = local.name
+    GithubRepo = "terraform-aws-rds-aurora"
+    GithubOrg  = "terraform-aws-modules"
   }
 }
 
@@ -163,6 +164,8 @@ module "vpc" {
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
   private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
   database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+
+  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
 
   tags = local.tags
 }

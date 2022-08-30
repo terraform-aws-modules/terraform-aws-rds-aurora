@@ -1,10 +1,16 @@
-# aws_db_subnet_group
+################################################################################
+# DB Subnet Group
+################################################################################
+
 output "db_subnet_group_name" {
   description = "The db subnet group name"
   value       = local.db_subnet_group_name
 }
 
-# aws_rds_cluster
+################################################################################
+# Cluster
+################################################################################
+
 output "cluster_arn" {
   description = "Amazon Resource Name (ARN) of cluster"
   value       = try(aws_rds_cluster.this[0].arn, "")
@@ -68,25 +74,37 @@ output "cluster_hosted_zone_id" {
   value       = try(aws_rds_cluster.this[0].hosted_zone_id, "")
 }
 
-# aws_rds_cluster_instances
+################################################################################
+# Cluster Instance(s)
+################################################################################
+
 output "cluster_instances" {
   description = "A map of cluster instances and their attributes"
   value       = aws_rds_cluster_instance.this
 }
 
-# aws_rds_cluster_endpoint
+################################################################################
+# Cluster Endpoint(s)
+################################################################################
+
 output "additional_cluster_endpoints" {
   description = "A map of additional cluster endpoints and their attributes"
   value       = aws_rds_cluster_endpoint.this
 }
 
-# aws_rds_cluster_role_association
+################################################################################
+# Cluster IAM Roles
+################################################################################
+
 output "cluster_role_associations" {
   description = "A map of IAM roles associated with the cluster and their attributes"
   value       = aws_rds_cluster_role_association.this
 }
 
-# Enhanced monitoring role
+################################################################################
+# Enhanced Monitoring
+################################################################################
+
 output "enhanced_monitoring_iam_role_name" {
   description = "The name of the enhanced monitoring role"
   value       = try(aws_iam_role.rds_enhanced_monitoring[0].name, "")
@@ -102,14 +120,17 @@ output "enhanced_monitoring_iam_role_unique_id" {
   value       = try(aws_iam_role.rds_enhanced_monitoring[0].unique_id, "")
 }
 
-# aws_security_group
+################################################################################
+# Security Group
+################################################################################
+
 output "security_group_id" {
   description = "The security group ID of the cluster"
-  value       = local.rds_security_group_id
+  value       = try(aws_security_group.this[0].id, "")
 }
 
 ################################################################################
-# Parameter Group
+# Cluster Parameter Group
 ################################################################################
 
 output "db_cluster_parameter_group_arn" {
@@ -121,6 +142,10 @@ output "db_cluster_parameter_group_id" {
   description = "The ID of the DB cluster parameter group created"
   value       = try(aws_rds_cluster_parameter_group.this[0].id, "")
 }
+
+################################################################################
+# DB Parameter Group
+################################################################################
 
 output "db_parameter_group_arn" {
   description = "The ARN of the DB parameter group created"
