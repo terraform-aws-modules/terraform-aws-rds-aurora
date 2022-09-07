@@ -192,9 +192,7 @@ resource "aws_rds_cluster_instance" "this" {
   preferred_maintenance_window = try(each.value.preferred_maintenance_window, var.preferred_maintenance_window)
   promotion_tier               = try(each.value.promotion_tier, null)
   publicly_accessible          = try(each.value.publicly_accessible, var.publicly_accessible)
-  # TODO - not sure why this is failing and throwing type mis-match errors
-  # tags = merge(var.tags, try(each.value.tags, {}))
-  tags = var.tags
+  tags                         = merge(var.tags, try(each.value.tags, {}))
 
   timeouts {
     create = try(var.instance_timeouts.create, null)
