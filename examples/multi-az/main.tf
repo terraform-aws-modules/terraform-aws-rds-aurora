@@ -34,7 +34,7 @@ module "aurora" {
   # Multi-AZ
   availability_zones        = module.vpc.azs
   allocated_storage         = 256
-  db_cluster_instance_class = "db.r6gd.xlarge"
+  db_cluster_instance_class = "db.r6gd.large"
   iops                      = 2500
   storage_type              = "io1"
 
