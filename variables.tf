@@ -357,7 +357,7 @@ variable "instance_class" {
 }
 
 variable "monitoring_interval" {
-  description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for instances. Set to `0` to disble. Default is `0`"
+  description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for instances. Set to `0` to disable. Default is `0`"
   type        = number
   default     = 0
 }
@@ -575,7 +575,7 @@ variable "allowed_cidr_blocks" {
 }
 
 variable "security_group_egress_rules" {
-  description = "A map of security group egress rule defintions to add to the security group created"
+  description = "A map of security group egress rule definitions to add to the security group created"
   type        = map(any)
   default     = {}
 }
