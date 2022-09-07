@@ -8,7 +8,7 @@ provider "aws" {
 }
 
 locals {
-  name = "example-${replace(basename(path.cwd), "_", "-")}"
+  name = "ex-${replace(basename(path.cwd), "_", "-")}"
 
   primary = {
     region      = "eu-west-1"
@@ -20,8 +20,9 @@ locals {
   }
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Example    = local.name
+    GithubRepo = "terraform-aws-rds-aurora"
+    GithubOrg  = "terraform-aws-modules"
   }
 }
 

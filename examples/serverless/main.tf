@@ -3,17 +3,18 @@ provider "aws" {
 }
 
 locals {
-  name   = "example-${replace(basename(path.cwd), "_", "-")}"
+  name   = "ex-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Example    = local.name
+    GithubRepo = "terraform-aws-rds-aurora"
+    GithubOrg  = "terraform-aws-modules"
   }
 }
 
 ################################################################################
-# RDS Aurora Module - PostgreSQL
+# PostgreSQL Serverless v1
 ################################################################################
 
 module "aurora_postgresql" {
@@ -62,7 +63,7 @@ resource "aws_rds_cluster_parameter_group" "example_postgresql" {
 }
 
 ################################################################################
-# RDS Aurora Module - MySQL
+# MySQL Serverless v1
 ################################################################################
 
 module "aurora_mysql" {
@@ -111,10 +112,10 @@ resource "aws_rds_cluster_parameter_group" "example_mysql" {
 }
 
 ################################################################################
-# RDS Aurora Module - MySQL Serverless V2
+# MySQL Serverless v2
 ################################################################################
 
-module "aurora_mysql_serverlessv2" {
+module "aurora_mysql_v2" {
   source = "../../"
 
   name              = "${local.name}-mysqlv2"
@@ -163,7 +164,7 @@ resource "aws_rds_cluster_parameter_group" "example_mysql8" {
 }
 
 ################################################################################
-# RDS Aurora Module - PostgreSQL Serverless V2
+# PostgreSQL Serverless v2
 ################################################################################
 
 data "aws_rds_engine_version" "postgresql" {
@@ -171,7 +172,7 @@ data "aws_rds_engine_version" "postgresql" {
   version = "13.6"
 }
 
-module "aurora_postgresql_serverlessv2" {
+module "aurora_postgresql_v2" {
   source = "../../"
 
   name              = "${local.name}-postgresqlv2"
@@ -229,6 +230,9 @@ module "vpc" {
 
   name = local.name
   cidr = "10.99.0.0/18"
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
   public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
