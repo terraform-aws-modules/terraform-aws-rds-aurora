@@ -1,6 +1,6 @@
 # AWS RDS Multi-AZ Example
 
-Configuration in this directory creates a PostgreSQL RDS Multi-AZ cluster. This is *NOT using the Aurora engine. See more details [here](https://aws.amazon.com/blogs/aws/amazon-rds-multi-az-db-cluster/)
+Configuration in this directory creates a PostgreSQL RDS Multi-AZ cluster. This is *NOT* using the Aurora engine. See more details [here](https://aws.amazon.com/blogs/aws/amazon-rds-multi-az-db-cluster/)
 
 ## Usage
 
