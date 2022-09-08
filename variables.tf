@@ -599,7 +599,7 @@ variable "create_db_cluster_parameter_group" {
 variable "db_cluster_parameter_group_name" {
   description = "The name of the DB cluster parameter group"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "db_cluster_parameter_group_use_name_prefix" {
