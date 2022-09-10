@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [7.4.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.4.1...v7.4.2) (2022-09-10)
+
+
+### Bug Fixes
+
+* Correct DB instance parameter group used when users do not create one nor provide the name of existing, will use default ([#321](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/321)) ([3a5ba14](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/3a5ba1441905f6e100a129f37f421f45e0d2ec1f))
+
 ### [7.4.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.4.0...v7.4.1) (2022-09-08)
 
 
