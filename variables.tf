@@ -51,7 +51,7 @@ variable "subnets" {
 variable "network_type" {
   description = "The type of network stack to use (IPV4 or DUAL)"
   type        = string
-  default     = "IPV4"
+  default     = null
 }
 
 ################################################################################
