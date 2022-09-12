@@ -20,7 +20,7 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.12 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.30 |
 
 ## Providers
 
