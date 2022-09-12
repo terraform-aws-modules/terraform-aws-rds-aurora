@@ -48,6 +48,12 @@ variable "subnets" {
   default     = []
 }
 
+variable "network_type" {
+  description = "The type of network stack to use (IPV4 or DUAL)"
+  type        = string
+  default     = null
+}
+
 ################################################################################
 # Cluster
 ################################################################################
