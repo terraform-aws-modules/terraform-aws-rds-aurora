@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [7.5.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.5.0...v7.5.1) (2022-09-12)
+
+
+### Bug Fixes
+
+* Update miminum provider version required for current arguments supported ([#324](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/324)) ([5f61877](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/5f61877726774ce49d9bfdc77f9934e33eb3f06e))
+
 ## [7.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.4.2...v7.5.0) (2022-09-12)
 
 
