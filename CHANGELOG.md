@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.4.2...v7.5.0) (2022-09-12)
+
+
+### Features
+
+* Add support for network_type argument ([#322](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/322)) ([e54fbd7](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/e54fbd775ebd2c26ce6e61012b5cf52b1def1640))
+
 ### [7.4.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.4.1...v7.4.2) (2022-09-10)
 
 
