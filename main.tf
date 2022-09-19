@@ -169,7 +169,7 @@ resource "aws_rds_cluster" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_instance" "this" {
-  for_each = { for k, v in var.instances : k => v if local.create_cluster && !local.is_serverless }
+  for_each = { for k, v in var.instances : k => v if local.create_cluster && !local.is_serverless && !var.is_headless_cluster }
 
   apply_immediately                     = try(each.value.apply_immediately, var.apply_immediately)
   auto_minor_version_upgrade            = try(each.value.auto_minor_version_upgrade, var.auto_minor_version_upgrade)

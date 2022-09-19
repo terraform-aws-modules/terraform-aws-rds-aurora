@@ -68,7 +68,8 @@ module "aurora_secondary" {
 
   providers = { aws = aws.secondary }
 
-  is_primary_cluster = false
+  is_primary_cluster  = false
+  is_headless_cluster = var.create_secondary_headless_cluster
 
   name                      = local.name
   engine                    = aws_rds_global_cluster.this.engine

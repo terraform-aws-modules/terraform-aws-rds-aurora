@@ -70,6 +70,12 @@ variable "is_primary_cluster" {
   default     = true
 }
 
+variable "is_headless_cluster" {
+  description = "Determines whether cluster is headless (tipically set to `true` for replica clusters, a headless secondary Aurora DB cluster is one without a DB instance, check https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-getting-started.html#aurora-global-database-attach.console.headless for more info)"
+  type        = bool
+  default     = false
+}
+
 variable "cluster_use_name_prefix" {
   description = "Whether to use `name` as a prefix for the cluster"
   type        = bool

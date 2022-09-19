@@ -50,7 +50,9 @@ Note that this example may create resources which cost money. Run `terraform des
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_create_secondary_headless_cluster"></a> [create\_secondary\_headless\_cluster](#input\_create\_secondary\_headless\_cluster) | Creates the secondary cluster as headless | `bool` | `false` | no |
 
 ## Outputs
 
