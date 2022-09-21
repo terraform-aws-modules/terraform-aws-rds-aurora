@@ -345,7 +345,7 @@ resource "aws_security_group_rule" "default_ingress" {
 
 # TODO - change to map of ingress rules under one resource at next breaking change
 resource "aws_security_group_rule" "cidr_ingress" {
-  count = local.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+  count = local.create_cluster && var.create_security_group && (length(var.allowed_cidr_blocks) > 0 || length(var.allowed_ipv6_cidr_blocks) > 0) ? 1 : 0
 
   description = "From allowed CIDRs"
 
@@ -354,6 +354,7 @@ resource "aws_security_group_rule" "cidr_ingress" {
   to_port           = local.port
   protocol          = "tcp"
   cidr_blocks       = var.allowed_cidr_blocks
+  ipv6_cidr_blocks  = var.allowed_ipv6_cidr_blocks
   security_group_id = aws_security_group.this[0].id
 }
 

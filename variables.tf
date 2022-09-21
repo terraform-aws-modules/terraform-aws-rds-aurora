@@ -580,6 +580,12 @@ variable "allowed_cidr_blocks" {
   default     = []
 }
 
+variable "allowed_ipv6_cidr_blocks" {
+  description = "A list of IPv6 CIDR blocks which are allowed to access the database"
+  type        = list(string)
+  default     = []
+}
+
 variable "security_group_egress_rules" {
   description = "A map of security group egress rule definitions to add to the security group created"
   type        = map(any)
