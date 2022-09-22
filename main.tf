@@ -65,7 +65,7 @@ resource "aws_rds_cluster" "this" {
   availability_zones                  = var.availability_zones
   backup_retention_period             = var.backup_retention_period
   backtrack_window                    = local.backtrack_window
-  cluster_identifier                  = var.cluster_use_name_prefix ? null : var.name
+  cluster_identifier                  = var.cluster_use_name_prefix ? var.name : null
   cluster_identifier_prefix           = var.cluster_use_name_prefix ? "${var.name}-" : null
   cluster_members                     = var.cluster_members
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
@@ -181,7 +181,7 @@ resource "aws_rds_cluster_instance" "this" {
   db_subnet_group_name                  = local.db_subnet_group_name
   engine                                = var.engine
   engine_version                        = var.engine_version
-  identifier                            = var.instances_use_identifier_prefix ? null : try(each.value.identifier, "${var.name}-${each.key}")
+  identifier                            = var.instances_use_identifier_prefix ? try(each.value.identifier, "${var.name}-${each.key}") : null
   identifier_prefix                     = var.instances_use_identifier_prefix ? try(each.value.identifier_prefix, "${var.name}-${each.key}-") : null
   instance_class                        = try(each.value.instance_class, var.instance_class)
   monitoring_interval                   = try(each.value.monitoring_interval, var.monitoring_interval)
