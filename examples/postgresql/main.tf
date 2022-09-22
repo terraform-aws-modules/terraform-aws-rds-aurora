@@ -43,13 +43,13 @@ module "aurora" {
     static = {
       identifier     = "static-custom-endpt"
       type           = "ANY"
-      static_members = ["static-member-1"]
+      static-members = ["static-member-1"]
       tags           = { Endpoint = "static-members" }
     }
     excluded = {
       identifier       = "excluded-custom-endpt"
       type             = "READER"
-      excluded_members = ["excluded-member-1"]
+      excluded-members = ["excluded-member-1"]
       tags             = { Endpoint = "excluded-members" }
     }
   }
