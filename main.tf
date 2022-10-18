@@ -15,6 +15,8 @@ locals {
   backtrack_window = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   is_serverless = var.engine_mode == "serverless"
+
+  final_snapshot_identifier_prefix = "${var.final_snapshot_identifier_prefix}-${var.name}-${try(random_id.snapshot_identifier[0].hex, "")}"
 }
 
 ################################################################################
@@ -29,7 +31,7 @@ resource "random_password" "master_password" {
 }
 
 resource "random_id" "snapshot_identifier" {
-  count = local.create_cluster ? 1 : 0
+  count = local.create_cluster && !var.skip_final_snapshot ? 1 : 0
 
   keepers = {
     id = var.name
@@ -81,7 +83,7 @@ resource "aws_rds_cluster" "this" {
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_version
-  final_snapshot_identifier           = "${var.final_snapshot_identifier_prefix}-${var.name}-${try(random_id.snapshot_identifier[0].hex, "")}"
+  final_snapshot_identifier           = var.skip_final_snapshot ? null : local.final_snapshot_identifier_prefix
   global_cluster_identifier           = var.global_cluster_identifier
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
