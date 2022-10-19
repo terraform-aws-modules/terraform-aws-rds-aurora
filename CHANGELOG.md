@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.6.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.5.1...v7.6.0) (2022-10-19)
+
+
+### Features
+
+* Do not create `snapshot_identifier` when `skip_final_snapshot = true` ([#332](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/332)) ([7ce592e](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/7ce592ea90caea4adc8a0d3e74e83a478b17b374))
+
 ### [7.5.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.5.0...v7.5.1) (2022-09-12)
 
 
