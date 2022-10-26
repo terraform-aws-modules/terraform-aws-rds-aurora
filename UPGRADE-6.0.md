@@ -165,7 +165,7 @@ module "cluster_after" {
       instance_class          = "db.r5.large"
       instance_promotion_tier = 15
     }
-  ]
+  }
 
   + autoscaling_enabled      = true
   + autoscaling_min_capacity = 1
