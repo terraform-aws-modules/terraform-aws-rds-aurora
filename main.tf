@@ -424,5 +424,10 @@ resource "aws_db_parameter_group" "this" {
     }
   }
 
+  # https://github.com/hashicorp/terraform-provider-aws/issues/6448#issuecomment-848389991
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = var.tags
 }
