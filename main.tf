@@ -164,6 +164,8 @@ resource "aws_rds_cluster" "this" {
       global_cluster_identifier,
     ]
   }
+
+  depends_on = [aws_cloudwatch_log_group.this]
 }
 
 ################################################################################
@@ -423,6 +425,20 @@ resource "aws_db_parameter_group" "this" {
       apply_method = try(parameter.value.apply_method, "immediate")
     }
   }
+
+  tags = var.tags
+}
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+resource "aws_cloudwatch_log_group" "this" {
+  for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create_cluster && var.create_cloudwatch_log_group])
+
+  name              = "/aws/rds/cluster/${var.name}/${each.value}"
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
+  kms_key_id        = var.cloudwatch_log_group_kms_key_id
 
   tags = var.tags
 }
