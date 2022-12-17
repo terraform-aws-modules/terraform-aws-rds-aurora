@@ -131,3 +131,12 @@ output "db_parameter_group_id" {
   description = "The ID of the DB parameter group created"
   value       = module.aurora.db_parameter_group_id
 }
+
+################################################################################
+# Cloudwatch Log Group
+################################################################################
+
+output "db_default_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora.db_cluster_cloudwatch_log_groups
+}

@@ -156,3 +156,12 @@ output "db_parameter_group_id" {
   description = "The ID of the DB parameter group created"
   value       = try(aws_db_parameter_group.this[0].id, "")
 }
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+output "db_cluster_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = aws_cloudwatch_log_group.this
+}
