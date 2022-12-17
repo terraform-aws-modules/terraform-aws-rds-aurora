@@ -454,3 +454,9 @@ output "aurora_postgresql_v2_security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora_postgresql_v2.security_group_id
 }
+
+# Cloudwatch Log groups
+output "db_default_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora_postgresql_v2.db_cluster_cloudwatch_log_groups
+}

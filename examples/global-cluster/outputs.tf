@@ -112,6 +112,12 @@ output "primary_security_group_id" {
   value       = module.aurora_primary.security_group_id
 }
 
+# Cloudwatch log groups
+output "primary_cluster_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora_primary.db_cluster_cloudwatch_log_groups
+}
+
 ################################################################################
 # RDS Aurora Module - Secondary
 ################################################################################
@@ -224,4 +230,10 @@ output "mysql_enhanced_monitoring_iam_role_unique_id" {
 output "mysql_security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora_secondary.security_group_id
+}
+
+# Cloudwatch log group
+output "mysql_cluster_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora_secondary.db_cluster_cloudwatch_log_groups
 }

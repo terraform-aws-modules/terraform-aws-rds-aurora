@@ -58,7 +58,6 @@ module "aurora_primary" {
   create_security_group           = true
   allowed_cidr_blocks             = module.primary_vpc.private_subnets_cidr_blocks
   enabled_cloudwatch_logs_exports = ["postgresql"]
-  create_cloudwatch_log_group     = true
 
   skip_final_snapshot = true
 
