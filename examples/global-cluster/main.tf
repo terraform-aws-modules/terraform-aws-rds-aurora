@@ -52,12 +52,11 @@ module "aurora_primary" {
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.primary.arn
 
-  vpc_id                          = module.primary_vpc.vpc_id
-  db_subnet_group_name            = module.primary_vpc.database_subnet_group_name
-  create_db_subnet_group          = false
-  create_security_group           = true
-  allowed_cidr_blocks             = module.primary_vpc.private_subnets_cidr_blocks
-  enabled_cloudwatch_logs_exports = ["postgresql"]
+  vpc_id                 = module.primary_vpc.vpc_id
+  db_subnet_group_name   = module.primary_vpc.database_subnet_group_name
+  create_db_subnet_group = false
+  create_security_group  = true
+  allowed_cidr_blocks    = module.primary_vpc.private_subnets_cidr_blocks
 
   skip_final_snapshot = true
 
