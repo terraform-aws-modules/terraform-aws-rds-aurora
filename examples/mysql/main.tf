@@ -2,9 +2,14 @@ provider "aws" {
   region = local.region
 }
 
+data "aws_availability_zones" "available" {}
+
 locals {
-  name   = "ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "ex-${basename(path.cwd)}"
   region = "eu-west-1"
+
+  vpc_cidr = "10.0.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
     Example    = local.name
@@ -22,7 +27,7 @@ module "aurora" {
 
   name           = local.name
   engine         = "aurora-mysql"
-  engine_version = "5.7"
+  engine_version = "8.0"
   instances = {
     1 = {
       instance_class      = "db.r5.large"
@@ -39,11 +44,13 @@ module "aurora" {
     }
   }
 
-  vpc_id                 = module.vpc.vpc_id
-  db_subnet_group_name   = module.vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
+  security_group_rules = {
+    vpc_ingress = {
+      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    }
+  }
 
   iam_database_authentication_enabled = true
   master_password                     = random_password.master.result
@@ -137,7 +144,6 @@ module "aurora" {
   ]
 
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
-  security_group_use_name_prefix  = false
 
   tags = local.tags
 }
@@ -155,15 +161,15 @@ module "vpc" {
   version = "~> 3.0"
 
   name = local.name
-  cidr = "10.99.0.0/18"
+  cidr = local.vpc_cidr
+
+  azs              = local.azs
+  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
 
   enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
 

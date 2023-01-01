@@ -331,42 +331,14 @@ resource "aws_security_group" "this" {
   }
 }
 
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "default_ingress" {
-  count = local.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
-
-  description = "From allowed SGs"
-
-  type                     = "ingress"
-  from_port                = local.port
-  to_port                  = local.port
-  protocol                 = "tcp"
-  source_security_group_id = element(var.allowed_security_groups, count.index)
-  security_group_id        = aws_security_group.this[0].id
-}
-
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "cidr_ingress" {
-  count = local.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
-
-  description = "From allowed CIDRs"
-
-  type              = "ingress"
-  from_port         = local.port
-  to_port           = local.port
-  protocol          = "tcp"
-  cidr_blocks       = var.allowed_cidr_blocks
-  security_group_id = aws_security_group.this[0].id
-}
-
-resource "aws_security_group_rule" "egress" {
-  for_each = local.create_cluster && var.create_security_group ? var.security_group_egress_rules : {}
+resource "aws_security_group_rule" "this" {
+  for_each = { for k, v in var.security_group_rules : k => v if local.create_cluster && var.create_security_group }
 
   # required
-  type              = "egress"
+  type              = try(each.value.type, "ingress")
   from_port         = try(each.value.from_port, local.port)
   to_port           = try(each.value.to_port, local.port)
-  protocol          = "tcp"
+  protocol          = try(each.value.protocol, "tcp")
   security_group_id = aws_security_group.this[0].id
 
   # optional

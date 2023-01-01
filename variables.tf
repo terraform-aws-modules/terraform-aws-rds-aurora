@@ -33,7 +33,7 @@ variable "random_password_length" {
 variable "create_db_subnet_group" {
   description = "Determines whether to create the database subnet group or use existing"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "db_subnet_group_name" {
@@ -46,12 +46,6 @@ variable "subnets" {
   description = "List of subnet IDs used by database subnet group created"
   type        = list(string)
   default     = []
-}
-
-variable "network_type" {
-  description = "The type of network stack to use (IPV4 or DUAL)"
-  type        = string
-  default     = null
 }
 
 ################################################################################
@@ -226,6 +220,12 @@ variable "master_username" {
   default     = "root"
 }
 
+variable "network_type" {
+  description = "The type of network stack to use (IPV4 or DUAL)"
+  type        = string
+  default     = null
+}
+
 variable "port" {
   description = "The port on which the DB accepts connections"
   type        = string
@@ -311,7 +311,7 @@ variable "cluster_tags" {
 }
 
 variable "vpc_security_group_ids" {
-  description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
+  description = "List of VPC security groups to associate to the cluster in addition to the security group created"
   type        = list(string)
   default     = []
 }
@@ -387,7 +387,7 @@ variable "performance_insights_retention_period" {
 }
 
 variable "publicly_accessible" {
-  description = "Determines whether instances are publicly accessible. Default false"
+  description = "Determines whether instances are publicly accessible. Default `false`"
   type        = bool
   default     = null
 }
@@ -551,7 +551,7 @@ variable "create_security_group" {
 }
 
 variable "security_group_use_name_prefix" {
-  description = "Determines whether the security group name (`name`) is used as a prefix"
+  description = "Determines whether the security group name (`var.name`) is used as a prefix"
   type        = bool
   default     = true
 }
@@ -568,21 +568,9 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "allowed_security_groups" {
-  description = "A list of Security Group ID's to allow access to"
-  type        = list(string)
-  default     = []
-}
-
-variable "allowed_cidr_blocks" {
-  description = "A list of CIDR blocks which are allowed to access the database"
-  type        = list(string)
-  default     = []
-}
-
-variable "security_group_egress_rules" {
-  description = "A map of security group egress rule definitions to add to the security group created"
-  type        = map(any)
+variable "security_group_rules" {
+  description = "Map of security group rules to add to the cluster security group created"
+  type        = any
   default     = {}
 }
 
@@ -635,7 +623,6 @@ variable "db_cluster_parameter_group_parameters" {
 ################################################################################
 # DB Parameter Group
 ################################################################################
-
 
 variable "create_db_parameter_group" {
   description = "Determines whether a DB parameter should be created or use existing"

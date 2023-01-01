@@ -7,8 +7,20 @@ provider "aws" {
   region = local.secondary.region
 }
 
+data "aws_caller_identity" "current" {}
+data "aws_availability_zones" "primary" {}
+data "aws_availability_zones" "secondary" {
+  provider = aws.secondary
+}
+
 locals {
-  name = "ex-${replace(basename(path.cwd), "_", "-")}"
+  name = "ex-${basename(path.cwd)}"
+
+  primary_vpc_cidr = "10.0.0.0/16"
+  primary_azs      = slice(data.aws_availability_zones.primary.names, 0, 3)
+
+  secondary_vpc_cidr = "10.0.1.0/16"
+  secondary_azs      = slice(data.aws_availability_zones.secondary.names, 0, 3)
 
   primary = {
     region      = "eu-west-1"
@@ -26,8 +38,6 @@ locals {
   }
 }
 
-data "aws_caller_identity" "current" {}
-
 ################################################################################
 # RDS Aurora Module
 ################################################################################
@@ -35,7 +45,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_rds_global_cluster" "this" {
   global_cluster_identifier = local.name
   engine                    = "aurora-postgresql"
-  engine_version            = "11.12"
+  engine_version            = "14.5"
   database_name             = "example_db"
   storage_encrypted         = true
 }
@@ -52,11 +62,13 @@ module "aurora_primary" {
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.primary.arn
 
-  vpc_id                 = module.primary_vpc.vpc_id
-  db_subnet_group_name   = module.primary_vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.primary_vpc.private_subnets_cidr_blocks
+  vpc_id               = module.primary_vpc.vpc_id
+  db_subnet_group_name = module.primary_vpc.database_subnet_group_name
+  security_group_rules = {
+    vpc_ingress = {
+      cidr_blocks = module.primary_vpc.private_subnets_cidr_blocks
+    }
+  }
 
   skip_final_snapshot = true
 
@@ -79,11 +91,13 @@ module "aurora_secondary" {
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.secondary.arn
 
-  vpc_id                 = module.secondary_vpc.vpc_id
-  db_subnet_group_name   = module.secondary_vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.secondary_vpc.private_subnets_cidr_blocks
+  vpc_id               = module.secondary_vpc.vpc_id
+  db_subnet_group_name = module.secondary_vpc.database_subnet_group_name
+  security_group_rules = {
+    vpc_ingress = {
+      cidr_blocks = module.secondary_vpc.private_subnets_cidr_blocks
+    }
+  }
 
   skip_final_snapshot = true
 
@@ -103,15 +117,21 @@ module "primary_vpc" {
   version = "~> 3.0"
 
   name = local.name
-  cidr = "${local.primary.cidr_prefix}.0.0/18"
+  cidr = local.primary_vpc_cidr
 
-  azs              = ["${local.primary.region}a", "${local.primary.region}b", "${local.primary.region}c"]
-  public_subnets   = ["${local.primary.cidr_prefix}.0.0/24", "${local.primary.cidr_prefix}.1.0/24", "${local.primary.cidr_prefix}.2.0/24"]
-  private_subnets  = ["${local.primary.cidr_prefix}.3.0/24", "${local.primary.cidr_prefix}.4.0/24", "${local.primary.cidr_prefix}.5.0/24"]
-  database_subnets = ["${local.primary.cidr_prefix}.7.0/24", "${local.primary.cidr_prefix}.8.0/24", "${local.primary.cidr_prefix}.9.0/24"]
+  azs              = local.primary_azs
+  public_subnets   = [for k, v in local.primary_azs : cidrsubnet(local.primary_vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.primary_azs : cidrsubnet(local.primary_vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.primary_azs : cidrsubnet(local.primary_vpc_cidr, 8, k + 6)]
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
 
   tags = local.tags
 }
+
 
 module "secondary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -120,12 +140,17 @@ module "secondary_vpc" {
   providers = { aws = aws.secondary }
 
   name = local.name
-  cidr = "${local.secondary.cidr_prefix}.0.0/18"
+  cidr = local.secondary_vpc_cidr
 
-  azs              = ["${local.secondary.region}a", "${local.secondary.region}b", "${local.secondary.region}c"]
-  public_subnets   = ["${local.secondary.cidr_prefix}.0.0/24", "${local.secondary.cidr_prefix}.1.0/24", "${local.secondary.cidr_prefix}.2.0/24"]
-  private_subnets  = ["${local.secondary.cidr_prefix}.3.0/24", "${local.secondary.cidr_prefix}.4.0/24", "${local.secondary.cidr_prefix}.5.0/24"]
-  database_subnets = ["${local.secondary.cidr_prefix}.7.0/24", "${local.secondary.cidr_prefix}.8.0/24", "${local.secondary.cidr_prefix}.9.0/24"]
+  azs              = local.secondary_azs
+  public_subnets   = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k + 6)]
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
 
   tags = local.tags
 }

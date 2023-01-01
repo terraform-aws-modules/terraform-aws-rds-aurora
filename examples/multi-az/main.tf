@@ -2,9 +2,14 @@ provider "aws" {
   region = local.region
 }
 
+data "aws_availability_zones" "available" {}
+
 locals {
-  name   = "ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "ex-${basename(path.cwd)}"
   region = "eu-west-1"
+
+  vpc_cidr = "10.0.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
     Example    = local.name
@@ -21,15 +26,13 @@ module "aurora" {
   source = "../../"
 
   name           = local.name
-  engine         = "postgres" # This uses RDS, not Aurora
-  engine_version = "13.7"
+  engine         = "postgres" # This uses RDS engine, not Aurora
+  engine_version = "14.5"
 
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.private_subnets
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
 
-  create_db_cluster_parameter_group = true
-  db_cluster_parameter_group_family = "postgres13"
-  enabled_cloudwatch_logs_exports   = ["postgresql"]
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
   # Multi-AZ
   availability_zones        = module.vpc.azs
@@ -50,18 +53,17 @@ module "vpc" {
   version = "~> 3.0"
 
   name = local.name
-  cidr = "10.99.0.0/18"
+  cidr = local.vpc_cidr
+
+  azs              = local.azs
+  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
-
-  create_database_subnet_group = false
-  enable_nat_gateway           = false # Disabled NAT to be able to run this example quicker
+  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
 
   tags = local.tags
 }
