@@ -80,7 +80,7 @@ module "aurora" {
 
   create_db_cluster_parameter_group      = true
   db_cluster_parameter_group_name        = local.name
-  db_cluster_parameter_group_family      = "aurora-postgresql11"
+  db_cluster_parameter_group_family      = "aurora-postgresql14"
   db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
   db_cluster_parameter_group_parameters = [
     {
@@ -96,7 +96,7 @@ module "aurora" {
 
   create_db_parameter_group      = true
   db_parameter_group_name        = local.name
-  db_parameter_group_family      = "aurora-postgresql11"
+  db_parameter_group_family      = "aurora-postgresql14"
   db_parameter_group_description = "${local.name} example DB parameter group"
   db_parameter_group_parameters = [
     {
@@ -116,7 +116,8 @@ module "aurora" {
 ################################################################################
 
 resource "random_password" "master" {
-  length = 10
+  length  = 10
+  special = false
 }
 
 module "vpc" {

@@ -30,8 +30,8 @@ module "aurora_postgresql" {
   engine_mode       = "serverless"
   storage_encrypted = true
 
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.database_subnets
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
   security_group_rules = {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
@@ -52,6 +52,8 @@ module "aurora_postgresql" {
     seconds_until_auto_pause = 300
     timeout_action           = "ForceApplyCapacityChange"
   }
+
+  tags = local.tags
 }
 
 ################################################################################
@@ -66,8 +68,8 @@ module "aurora_mysql" {
   engine_mode       = "serverless"
   storage_encrypted = true
 
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.database_subnets
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
   security_group_rules = {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
@@ -88,6 +90,8 @@ module "aurora_mysql" {
     seconds_until_auto_pause = 300
     timeout_action           = "ForceApplyCapacityChange"
   }
+
+  tags = local.tags
 }
 
 ################################################################################
@@ -103,8 +107,8 @@ module "aurora_mysql_v2" {
   engine_version    = "8.0"
   storage_encrypted = true
 
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.database_subnets
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
   security_group_rules = {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
@@ -126,6 +130,8 @@ module "aurora_mysql_v2" {
     one = {}
     two = {}
   }
+
+  tags = local.tags
 }
 
 ################################################################################
@@ -146,8 +152,8 @@ module "aurora_postgresql_v2" {
   engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
 
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.database_subnets
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
   security_group_rules = {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
@@ -169,6 +175,8 @@ module "aurora_postgresql_v2" {
     one = {}
     two = {}
   }
+
+  tags = local.tags
 }
 
 ################################################################################
