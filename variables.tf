@@ -175,7 +175,7 @@ variable "engine" {
 variable "engine_mode" {
   description = "The database engine mode. Valid values: `global`, `multimaster`, `parallelquery`, `provisioned`, `serverless`. Defaults to: `provisioned`"
   type        = string
-  default     = null
+  default     = "provisioned"
 }
 
 variable "engine_version" {
