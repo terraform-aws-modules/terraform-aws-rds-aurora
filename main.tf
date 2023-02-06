@@ -399,6 +399,10 @@ resource "aws_rds_cluster_parameter_group" "this" {
     }
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = var.tags
 }
 
@@ -422,6 +426,10 @@ resource "aws_db_parameter_group" "this" {
       value        = parameter.value.value
       apply_method = try(parameter.value.apply_method, "immediate")
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = var.tags
