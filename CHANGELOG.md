@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [7.6.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.1...v7.6.2) (2023-02-07)
+
+
+### Bug Fixes
+
+* Add explicit default value for `engine_mode` used in conditiona logic internally ([#347](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/347)) ([7ffa33f](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/7ffa33f82603830713ba31aa2d18f421a0abf4d8))
+
 ### [7.6.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.0...v7.6.1) (2023-02-06)
 
 
