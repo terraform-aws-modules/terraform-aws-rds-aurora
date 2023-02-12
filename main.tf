@@ -441,6 +441,7 @@ resource "aws_db_parameter_group" "this" {
 # CloudWatch Log Group
 ################################################################################
 
+# Log groups will not be created if using a cluster identifier prefix
 resource "aws_cloudwatch_log_group" "this" {
   for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create_cluster && var.create_cloudwatch_log_group && !var.cluster_use_name_prefix])
 
