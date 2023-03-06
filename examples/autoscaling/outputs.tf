@@ -107,3 +107,9 @@ output "security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.security_group_id
 }
+
+# Cloudwatch log groups
+output "db_cluster_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora.db_cluster_cloudwatch_log_groups
+}

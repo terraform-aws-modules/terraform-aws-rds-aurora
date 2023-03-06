@@ -58,6 +58,7 @@ No inputs.
 |------|-------------|
 | <a name="output_mysql_additional_cluster_endpoints"></a> [mysql\_additional\_cluster\_endpoints](#output\_mysql\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_mysql_cluster_arn"></a> [mysql\_cluster\_arn](#output\_mysql\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
+| <a name="output_mysql_cluster_cloudwatch_log_groups"></a> [mysql\_cluster\_cloudwatch\_log\_groups](#output\_mysql\_cluster\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_mysql_cluster_database_name"></a> [mysql\_cluster\_database\_name](#output\_mysql\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_mysql_cluster_endpoint"></a> [mysql\_cluster\_endpoint](#output\_mysql\_cluster\_endpoint) | Writer endpoint for the cluster |
 | <a name="output_mysql_cluster_engine_version_actual"></a> [mysql\_cluster\_engine\_version\_actual](#output\_mysql\_cluster\_engine\_version\_actual) | The running version of the cluster database |
@@ -78,6 +79,7 @@ No inputs.
 | <a name="output_mysql_security_group_id"></a> [mysql\_security\_group\_id](#output\_mysql\_security\_group\_id) | The security group ID of the cluster |
 | <a name="output_primary_additional_cluster_endpoints"></a> [primary\_additional\_cluster\_endpoints](#output\_primary\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_primary_cluster_arn"></a> [primary\_cluster\_arn](#output\_primary\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
+| <a name="output_primary_cluster_cloudwatch_log_groups"></a> [primary\_cluster\_cloudwatch\_log\_groups](#output\_primary\_cluster\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_primary_cluster_database_name"></a> [primary\_cluster\_database\_name](#output\_primary\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_primary_cluster_endpoint"></a> [primary\_cluster\_endpoint](#output\_primary\_cluster\_endpoint) | Writer endpoint for the cluster |
 | <a name="output_primary_cluster_engine_version_actual"></a> [primary\_cluster\_engine\_version\_actual](#output\_primary\_cluster\_engine\_version\_actual) | The running version of the cluster database |
