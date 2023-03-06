@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.7.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.2...v7.7.0) (2023-03-06)
+
+
+### Features
+
+* Add support for creating CloudWatch log groups ([#346](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/346)) ([40cef84](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/40cef841e42cffa9c379397a4294f7a5650c4993))
+
 ### [7.6.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.1...v7.6.2) (2023-02-07)
 
 
