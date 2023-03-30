@@ -204,6 +204,10 @@ resource "aws_rds_cluster_instance" "this" {
     update = try(var.instance_timeouts.update, null)
     delete = try(var.instance_timeouts.delete, null)
   }
+
+  depends_on = [
+    aws_rds_cluster.this
+  ]
 }
 
 ################################################################################
