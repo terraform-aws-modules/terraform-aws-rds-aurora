@@ -368,7 +368,7 @@ resource "aws_security_group_rule" "egress" {
   type              = "egress"
   from_port         = try(each.value.from_port, local.port)
   to_port           = try(each.value.to_port, local.port)
-  protocol          = "tcp"
+  protocol          = try(each.value.protocol, "tcp")
   security_group_id = aws_security_group.this[0].id
 
   # optional
