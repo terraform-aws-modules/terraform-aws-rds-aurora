@@ -1,3 +1,9 @@
+variable "create" {
+  description = "Whether cluster should be created (affects nearly all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "name" {
   description = "Name used across resources created"
   type        = string
@@ -8,22 +14,6 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
   default     = {}
-}
-
-################################################################################
-# Random Password & Snapshot ID
-################################################################################
-
-variable "create_random_password" {
-  description = "Determines whether to create random password for RDS primary cluster"
-  type        = bool
-  default     = true
-}
-
-variable "random_password_length" {
-  description = "Length of random password to create. Defaults to `10`"
-  type        = number
-  default     = 10
 }
 
 ################################################################################
@@ -51,12 +41,6 @@ variable "subnets" {
 ################################################################################
 # Cluster
 ################################################################################
-
-variable "create_cluster" {
-  description = "Whether cluster should be created (affects nearly all resources)"
-  type        = bool
-  default     = true
-}
 
 variable "is_primary_cluster" {
   description = "Determines whether cluster is primary cluster with writer instance (set to `false` for global cluster and replica clusters)"
@@ -178,10 +162,10 @@ variable "engine_version" {
   default     = null
 }
 
-variable "final_snapshot_identifier_prefix" {
-  description = "The prefix name to use when creating a final snapshot on cluster destroy; a 8 random digits are appended to name to ensure it's unique"
+variable "final_snapshot_identifier" {
+  description = "The name of your final DB snapshot when this DB cluster is deleted. If omitted, no final snapshot will be made"
   type        = string
-  default     = "final"
+  default     = null
 }
 
 variable "global_cluster_identifier" {
@@ -208,16 +192,28 @@ variable "kms_key_id" {
   default     = null
 }
 
+variable "manage_master_user_password" {
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager. Cannot be set if `master_password` is provided"
+  type        = bool
+  default     = true
+}
+
+variable "master_user_secret_kms_key_id" {
+  description = "The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key"
+  type        = string
+  default     = null
+}
+
 variable "master_password" {
-  description = "Password for the master DB user. Note - when specifying a value here, 'create_random_password' should be set to `false`"
+  description = "Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
   default     = null
 }
 
 variable "master_username" {
-  description = "Username for the master DB user"
+  description = "Username for the master DB user. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
-  default     = "root"
+  default     = null
 }
 
 variable "network_type" {

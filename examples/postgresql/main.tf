@@ -73,7 +73,6 @@ module "aurora" {
 
   iam_database_authentication_enabled = true
   master_password                     = random_password.master.result
-  create_random_password              = false
 
   apply_immediately   = true
   skip_final_snapshot = true
@@ -135,8 +134,7 @@ module "vpc" {
 
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
+  enable_nat_gateway   = false
 
   tags = local.tags
 }

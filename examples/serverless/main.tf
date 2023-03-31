@@ -197,8 +197,7 @@ module "vpc" {
 
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
+  enable_nat_gateway   = false
 
   tags = local.tags
 }

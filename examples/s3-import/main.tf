@@ -64,10 +64,6 @@ module "aurora" {
 # Supporting Resources
 ################################################################################
 
-resource "random_pet" "this" {
-  length = 2
-}
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 3.0"
@@ -82,8 +78,7 @@ module "vpc" {
 
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  enable_nat_gateway = false # Disabled NAT to be able to run this example quicker
+  enable_nat_gateway   = false
 
   tags = local.tags
 }
@@ -92,7 +87,7 @@ module "import_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket        = "${local.name}-${random_pet.this.id}"
+  bucket_prefix = "${local.name}-"
   acl           = "private"
   force_destroy = true
 
@@ -113,7 +108,7 @@ data "aws_iam_policy_document" "s3_import_assume" {
 }
 
 resource "aws_iam_role" "s3_import" {
-  name                  = "${local.name}-${random_pet.this.id}"
+  name_prefix           = "${local.name}-"
   description           = "IAM role to allow RDS to import MySQL backup from S3"
   assume_role_policy    = data.aws_iam_policy_document.s3_import_assume.json
   force_detach_policies = true
@@ -145,9 +140,9 @@ data "aws_iam_policy_document" "s3_import" {
 }
 
 resource "aws_iam_role_policy" "s3_import" {
-  name   = "${local.name}-${random_pet.this.id}"
-  role   = aws_iam_role.s3_import.id
-  policy = data.aws_iam_policy_document.s3_import.json
+  name_prefix = "${local.name}-"
+  role        = aws_iam_role.s3_import.id
+  policy      = data.aws_iam_policy_document.s3_import.json
 
   # We need the files uploaded before the RDS instance is created, and the instance
   # also needs this role so this is an easy way of ensuring the backup is uploaded before
