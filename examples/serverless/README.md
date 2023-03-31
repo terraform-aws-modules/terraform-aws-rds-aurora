@@ -93,6 +93,7 @@ No inputs.
 | <a name="output_aurora_postgresql_v2_enhanced_monitoring_iam_role_name"></a> [aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_name](#output\_aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
 | <a name="output_aurora_postgresql_v2_enhanced_monitoring_iam_role_unique_id"></a> [aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_unique\_id](#output\_aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_aurora_postgresql_v2_security_group_id"></a> [aurora\_postgresql\_v2\_security\_group\_id](#output\_aurora\_postgresql\_v2\_security\_group\_id) | The security group ID of the cluster |
+| <a name="output_aurora_postresql_v2_cloudwatch_log_groups"></a> [aurora\_postresql\_v2\_cloudwatch\_log\_groups](#output\_aurora\_postresql\_v2\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_mysql_additional_cluster_endpoints"></a> [mysql\_additional\_cluster\_endpoints](#output\_mysql\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_mysql_cluster_arn"></a> [mysql\_cluster\_arn](#output\_mysql\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
 | <a name="output_mysql_cluster_database_name"></a> [mysql\_cluster\_database\_name](#output\_mysql\_cluster\_database\_name) | Name for an automatically created database on cluster creation |

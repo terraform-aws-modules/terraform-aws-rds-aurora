@@ -169,7 +169,7 @@ variable "engine" {
 variable "engine_mode" {
   description = "The database engine mode. Valid values: `global`, `multimaster`, `parallelquery`, `provisioned`, `serverless`. Defaults to: `provisioned`"
   type        = string
-  default     = null
+  default     = "provisioned"
 }
 
 variable "engine_version" {
@@ -658,4 +658,26 @@ variable "putin_khuylo" {
   description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool
   default     = true
+}
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+variable "create_cloudwatch_log_group" {
+  description = "Determines whether a CloudWatch log group is created for each `enabled_cloudwatch_logs_exports`"
+  type        = bool
+  default     = false
+}
+
+variable "cloudwatch_log_group_retention_in_days" {
+  description = "The number of days to retain CloudWatch logs for the DB instance"
+  type        = number
+  default     = 7
+}
+
+variable "cloudwatch_log_group_kms_key_id" {
+  description = "The ARN of the KMS Key to use when encrypting log data"
+  type        = string
+  default     = null
 }

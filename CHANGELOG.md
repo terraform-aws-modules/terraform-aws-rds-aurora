@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.7.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.2...v7.7.0) (2023-03-06)
+
+
+### Features
+
+* Add support for creating CloudWatch log groups ([#346](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/346)) ([40cef84](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/40cef841e42cffa9c379397a4294f7a5650c4993))
+
+### [7.6.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.1...v7.6.2) (2023-02-07)
+
+
+### Bug Fixes
+
+* Add explicit default value for `engine_mode` used in conditiona logic internally ([#347](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/347)) ([7ffa33f](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/7ffa33f82603830713ba31aa2d18f421a0abf4d8))
+
+### [7.6.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.0...v7.6.1) (2023-02-06)
+
+
+### Bug Fixes
+
+* Use `create_before_destroy` lifecycle on parameter groups to support major version upgrades ([#354](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/354)) ([97c417a](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/97c417aeddf9b5e51183f50a3fa1fe2a9be0a2c9))
+
 ## [7.6.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.5.1...v7.6.0) (2022-10-19)
 
 
