@@ -3,7 +3,7 @@ data "aws_partition" "current" {}
 locals {
   create = var.create && var.putin_khuylo
 
-  port = coalesce(var.port, (var.engine == "aurora-postgresql" ? 5432 : 3306))
+  port = coalesce(var.port, (var.engine == "aurora-postgresql" || var.engine == "postgres" ? 5432 : 3306))
 
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
   db_subnet_group_name          = var.create_db_subnet_group ? try(aws_db_subnet_group.this[0].name, null) : local.internal_db_subnet_group_name

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [7.7.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.7.0...v7.7.1) (2023-04-04)
+
+
+### Bug Fixes
+
+* Postgres port conditional adjustment ([#362](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/362)) ([980ce16](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/980ce164cc66d5b7ef1dca02cc64f47bc3ab4e66))
+
 ## [7.7.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.6.2...v7.7.0) (2023-03-06)
 
 
