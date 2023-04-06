@@ -62,17 +62,18 @@ resource "aws_rds_cluster" "this" {
   final_snapshot_identifier           = var.final_snapshot_identifier
   global_cluster_identifier           = var.global_cluster_identifier
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
-  iops                                = var.iops
-  kms_key_id                          = var.kms_key_id
-  manage_master_user_password         = var.is_primary_cluster ? var.manage_master_user_password : null
-  master_user_secret_kms_key_id       = var.is_primary_cluster ? var.master_user_secret_kms_key_id : null
-  master_password                     = var.is_primary_cluster ? var.master_password : null
-  master_username                     = var.is_primary_cluster ? var.master_username : null
-  network_type                        = var.network_type
-  port                                = local.port
-  preferred_backup_window             = local.is_serverless ? null : var.preferred_backup_window
-  preferred_maintenance_window        = local.is_serverless ? null : var.preferred_maintenance_window
-  replication_source_identifier       = var.replication_source_identifier
+  # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
+  iops                          = var.iops
+  kms_key_id                    = var.kms_key_id
+  manage_master_user_password   = var.global_cluster_identifier == null && var.manage_master_user_password ? var.manage_master_user_password : null
+  master_user_secret_kms_key_id = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
+  master_password               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
+  master_username               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_username : null
+  network_type                  = var.network_type
+  port                          = local.port
+  preferred_backup_window       = local.is_serverless ? null : var.preferred_backup_window
+  preferred_maintenance_window  = local.is_serverless ? null : var.preferred_maintenance_window
+  replication_source_identifier = var.replication_source_identifier
 
   dynamic "restore_to_point_in_time" {
     for_each = length(var.restore_to_point_in_time) > 0 ? [var.restore_to_point_in_time] : []

@@ -1,10 +1,10 @@
 provider "aws" {
-  region = local.primary.region
+  region = local.primary_region
 }
 
 provider "aws" {
   alias  = "secondary"
-  region = local.secondary.region
+  region = local.secondary_region
 }
 
 data "aws_caller_identity" "current" {}
@@ -16,20 +16,13 @@ data "aws_availability_zones" "secondary" {
 locals {
   name = "ex-${basename(path.cwd)}"
 
+  primary_region   = "eu-west-1"
   primary_vpc_cidr = "10.0.0.0/16"
   primary_azs      = slice(data.aws_availability_zones.primary.names, 0, 3)
 
-  secondary_vpc_cidr = "10.0.1.0/16"
+  secondary_region   = "us-east-1"
+  secondary_vpc_cidr = "10.1.0.0/16"
   secondary_azs      = slice(data.aws_availability_zones.secondary.names, 0, 3)
-
-  primary = {
-    region      = "eu-west-1"
-    cidr_prefix = "10.99"
-  }
-  secondary = {
-    region      = "us-east-1"
-    cidr_prefix = "10.98"
-  }
 
   tags = {
     Example    = local.name
@@ -70,6 +63,9 @@ module "aurora_primary" {
     }
   }
 
+  # Global clusters do not support managed master user password
+  master_password = random_password.master.result
+
   skip_final_snapshot = true
 
   tags = local.tags
@@ -86,7 +82,7 @@ module "aurora_secondary" {
   engine                    = aws_rds_global_cluster.this.engine
   engine_version            = aws_rds_global_cluster.this.engine_version
   global_cluster_identifier = aws_rds_global_cluster.this.id
-  source_region             = local.primary.region
+  source_region             = local.primary_region
   instance_class            = "db.r6g.large"
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.secondary.arn
@@ -98,6 +94,9 @@ module "aurora_secondary" {
       cidr_blocks = module.secondary_vpc.private_subnets_cidr_blocks
     }
   }
+
+  # Global clusters do not support managed master user password
+  master_password = random_password.master.result
 
   skip_final_snapshot = true
 
@@ -111,6 +110,11 @@ module "aurora_secondary" {
 ################################################################################
 # Supporting Resources
 ################################################################################
+
+resource "random_password" "master" {
+  length  = 20
+  special = false
+}
 
 module "primary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"

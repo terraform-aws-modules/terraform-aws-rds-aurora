@@ -52,9 +52,6 @@ module "aurora" {
     }
   }
 
-  iam_database_authentication_enabled = true
-  master_password                     = random_password.master.result
-
   apply_immediately   = true
   skip_final_snapshot = true
 
@@ -150,11 +147,6 @@ module "aurora" {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-resource "random_password" "master" {
-  length  = 10
-  special = false
-}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
