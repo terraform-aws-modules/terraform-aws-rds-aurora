@@ -36,7 +36,7 @@ Note that this example may create resources which cost money. Run `terraform des
 | <a name="module_aurora_mysql_v2"></a> [aurora\_mysql\_v2](#module\_aurora\_mysql\_v2) | ../../ | n/a |
 | <a name="module_aurora_postgresql"></a> [aurora\_postgresql](#module\_aurora\_postgresql) | ../../ | n/a |
 | <a name="module_aurora_postgresql_v2"></a> [aurora\_postgresql\_v2](#module\_aurora\_postgresql\_v2) | ../../ | n/a |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 4.0 |
 
 ## Resources
 

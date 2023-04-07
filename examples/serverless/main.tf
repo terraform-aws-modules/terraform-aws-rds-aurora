@@ -185,7 +185,7 @@ module "aurora_postgresql_v2" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -194,10 +194,6 @@ module "vpc" {
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
-
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  enable_nat_gateway   = false
 
   tags = local.tags
 }

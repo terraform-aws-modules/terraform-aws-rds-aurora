@@ -118,7 +118,7 @@ resource "random_password" "master" {
 
 module "primary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   name = local.name
   cidr = local.primary_vpc_cidr
@@ -128,17 +128,13 @@ module "primary_vpc" {
   private_subnets  = [for k, v in local.primary_azs : cidrsubnet(local.primary_vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.primary_azs : cidrsubnet(local.primary_vpc_cidr, 8, k + 6)]
 
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  enable_nat_gateway   = false
-
   tags = local.tags
 }
 
 
 module "secondary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   providers = { aws = aws.secondary }
 
@@ -149,10 +145,6 @@ module "secondary_vpc" {
   public_subnets   = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.secondary_azs : cidrsubnet(local.secondary_vpc_cidr, 8, k + 6)]
-
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  enable_nat_gateway   = false
 
   tags = local.tags
 }

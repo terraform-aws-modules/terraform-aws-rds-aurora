@@ -37,8 +37,8 @@ Note that this example may create resources which cost money. Run `terraform des
 |------|--------|---------|
 | <a name="module_aurora_primary"></a> [aurora\_primary](#module\_aurora\_primary) | ../../ | n/a |
 | <a name="module_aurora_secondary"></a> [aurora\_secondary](#module\_aurora\_secondary) | ../../ | n/a |
-| <a name="module_primary_vpc"></a> [primary\_vpc](#module\_primary\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
-| <a name="module_secondary_vpc"></a> [secondary\_vpc](#module\_secondary\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
+| <a name="module_primary_vpc"></a> [primary\_vpc](#module\_primary\_vpc) | terraform-aws-modules/vpc/aws | ~> 4.0 |
+| <a name="module_secondary_vpc"></a> [secondary\_vpc](#module\_secondary\_vpc) | terraform-aws-modules/vpc/aws | ~> 4.0 |
 
 ## Resources
 
