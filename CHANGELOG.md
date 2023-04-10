@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.7.1...v8.0.0) (2023-04-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Terraform MSV increased to 1.0, consolidate security group rules under one generic resource, add support for managed master password (#335)
+
+### Features
+
+* Terraform MSV increased to 1.0, consolidate security group rules under one generic resource, add support for managed master password ([#335](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/335)) ([e054f77](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/e054f77c700128c206b0912c51712313981d6fae))
+
 ### [7.7.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v7.7.0...v7.7.1) (2023-04-04)
 
 
