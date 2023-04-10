@@ -1,7 +1,7 @@
 data "aws_partition" "current" {}
 
 locals {
-  create_cluster = var.create_cluster && var.putin_khuylo
+  create = var.create && var.putin_khuylo
 
   port = coalesce(var.port, (var.engine == "aurora-postgresql" || var.engine == "postgres" ? 5432 : 3306))
 
@@ -11,33 +11,9 @@ locals {
   cluster_parameter_group_name = try(coalesce(var.db_cluster_parameter_group_name, var.name), null)
   db_parameter_group_name      = try(coalesce(var.db_parameter_group_name, var.name), null)
 
-  master_password  = local.create_cluster && var.create_random_password ? random_password.master_password[0].result : var.master_password
   backtrack_window = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   is_serverless = var.engine_mode == "serverless"
-
-  final_snapshot_identifier_prefix = "${var.final_snapshot_identifier_prefix}-${var.name}-${try(random_id.snapshot_identifier[0].hex, "")}"
-}
-
-################################################################################
-# Random Password & Snapshot ID
-################################################################################
-
-resource "random_password" "master_password" {
-  count = local.create_cluster && var.create_random_password ? 1 : 0
-
-  length  = var.random_password_length
-  special = false
-}
-
-resource "random_id" "snapshot_identifier" {
-  count = local.create_cluster && !var.skip_final_snapshot ? 1 : 0
-
-  keepers = {
-    id = var.name
-  }
-
-  byte_length = 4
 }
 
 ################################################################################
@@ -45,7 +21,7 @@ resource "random_id" "snapshot_identifier" {
 ################################################################################
 
 resource "aws_db_subnet_group" "this" {
-  count = local.create_cluster && var.create_db_subnet_group ? 1 : 0
+  count = local.create && var.create_db_subnet_group ? 1 : 0
 
   name        = local.internal_db_subnet_group_name
   description = "For Aurora cluster ${var.name}"
@@ -59,7 +35,7 @@ resource "aws_db_subnet_group" "this" {
 ################################################################################
 
 resource "aws_rds_cluster" "this" {
-  count = local.create_cluster ? 1 : 0
+  count = local.create ? 1 : 0
 
   allocated_storage                   = var.allocated_storage
   allow_major_version_upgrade         = var.allow_major_version_upgrade
@@ -83,14 +59,16 @@ resource "aws_rds_cluster" "this" {
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_version
-  final_snapshot_identifier           = var.skip_final_snapshot ? null : local.final_snapshot_identifier_prefix
+  final_snapshot_identifier           = var.final_snapshot_identifier
   global_cluster_identifier           = var.global_cluster_identifier
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
   iops                          = var.iops
   kms_key_id                    = var.kms_key_id
-  master_password               = var.is_primary_cluster ? local.master_password : null
-  master_username               = var.is_primary_cluster ? var.master_username : null
+  manage_master_user_password   = var.global_cluster_identifier == null && var.manage_master_user_password ? var.manage_master_user_password : null
+  master_user_secret_kms_key_id = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
+  master_password               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
+  master_username               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_username : null
   network_type                  = var.network_type
   port                          = local.port
   preferred_backup_window       = local.is_serverless ? null : var.preferred_backup_window
@@ -162,6 +140,7 @@ resource "aws_rds_cluster" "this" {
       replication_source_identifier,
       # See docs here https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_global_cluster#new-global-cluster-from-existing-db-cluster
       global_cluster_identifier,
+      snapshot_identifier,
     ]
   }
 
@@ -173,7 +152,7 @@ resource "aws_rds_cluster" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_instance" "this" {
-  for_each = { for k, v in var.instances : k => v if local.create_cluster && !local.is_serverless }
+  for_each = { for k, v in var.instances : k => v if local.create && !local.is_serverless }
 
   apply_immediately                     = try(each.value.apply_immediately, var.apply_immediately)
   auto_minor_version_upgrade            = try(each.value.auto_minor_version_upgrade, var.auto_minor_version_upgrade)
@@ -211,7 +190,7 @@ resource "aws_rds_cluster_instance" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_endpoint" "this" {
-  for_each = { for k, v in var.endpoints : k => v if local.create_cluster && !local.is_serverless }
+  for_each = { for k, v in var.endpoints : k => v if local.create && !local.is_serverless }
 
   cluster_endpoint_identifier = each.value.identifier
   cluster_identifier          = aws_rds_cluster.this[0].id
@@ -230,7 +209,7 @@ resource "aws_rds_cluster_endpoint" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_role_association" "this" {
-  for_each = { for k, v in var.iam_roles : k => v if local.create_cluster }
+  for_each = { for k, v in var.iam_roles : k => v if local.create }
 
   db_cluster_identifier = aws_rds_cluster.this[0].id
   feature_name          = each.value.feature_name
@@ -241,26 +220,32 @@ resource "aws_rds_cluster_role_association" "this" {
 # Enhanced Monitoring
 ################################################################################
 
+locals {
+  create_monitoring_role = local.create && var.create_monitoring_role && var.monitoring_interval > 0
+}
+
 data "aws_iam_policy_document" "monitoring_rds_assume_role" {
+  count = local.create_monitoring_role ? 1 : 0
+
   statement {
     actions = ["sts:AssumeRole"]
 
     principals {
       type        = "Service"
-      identifiers = ["monitoring.rds.amazonaws.com"]
+      identifiers = ["monitoring.rds.${data.aws_partition.current.dns_suffix}"]
     }
   }
 }
 
 resource "aws_iam_role" "rds_enhanced_monitoring" {
-  count = local.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = local.create_monitoring_role ? 1 : 0
 
   name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
   name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
   description = var.iam_role_description
   path        = var.iam_role_path
 
-  assume_role_policy    = data.aws_iam_policy_document.monitoring_rds_assume_role.json
+  assume_role_policy    = data.aws_iam_policy_document.monitoring_rds_assume_role[0].json
   managed_policy_arns   = var.iam_role_managed_policy_arns
   permissions_boundary  = var.iam_role_permissions_boundary
   force_detach_policies = var.iam_role_force_detach_policies
@@ -270,7 +255,7 @@ resource "aws_iam_role" "rds_enhanced_monitoring" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
-  count = local.create_cluster && var.create_monitoring_role && var.monitoring_interval > 0 ? 1 : 0
+  count = local.create_monitoring_role ? 1 : 0
 
   role       = aws_iam_role.rds_enhanced_monitoring[0].name
   policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
@@ -281,7 +266,7 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 ################################################################################
 
 resource "aws_appautoscaling_target" "this" {
-  count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+  count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   max_capacity       = var.autoscaling_max_capacity
   min_capacity       = var.autoscaling_min_capacity
@@ -291,7 +276,7 @@ resource "aws_appautoscaling_target" "this" {
 }
 
 resource "aws_appautoscaling_policy" "this" {
-  count = local.create_cluster && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+  count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
   name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
@@ -319,7 +304,7 @@ resource "aws_appautoscaling_policy" "this" {
 ################################################################################
 
 resource "aws_security_group" "this" {
-  count = local.create_cluster && var.create_security_group ? 1 : 0
+  count = local.create && var.create_security_group ? 1 : 0
 
   name        = var.security_group_use_name_prefix ? null : var.name
   name_prefix = var.security_group_use_name_prefix ? "${var.name}-" : null
@@ -333,42 +318,14 @@ resource "aws_security_group" "this" {
   }
 }
 
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "default_ingress" {
-  count = local.create_cluster && var.create_security_group ? length(var.allowed_security_groups) : 0
-
-  description = "From allowed SGs"
-
-  type                     = "ingress"
-  from_port                = local.port
-  to_port                  = local.port
-  protocol                 = "tcp"
-  source_security_group_id = element(var.allowed_security_groups, count.index)
-  security_group_id        = aws_security_group.this[0].id
-}
-
-# TODO - change to map of ingress rules under one resource at next breaking change
-resource "aws_security_group_rule" "cidr_ingress" {
-  count = local.create_cluster && var.create_security_group && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
-
-  description = "From allowed CIDRs"
-
-  type              = "ingress"
-  from_port         = local.port
-  to_port           = local.port
-  protocol          = "tcp"
-  cidr_blocks       = var.allowed_cidr_blocks
-  security_group_id = aws_security_group.this[0].id
-}
-
-resource "aws_security_group_rule" "egress" {
-  for_each = local.create_cluster && var.create_security_group ? var.security_group_egress_rules : {}
+resource "aws_security_group_rule" "this" {
+  for_each = { for k, v in var.security_group_rules : k => v if local.create && var.create_security_group }
 
   # required
-  type              = "egress"
+  type              = try(each.value.type, "ingress")
   from_port         = try(each.value.from_port, local.port)
   to_port           = try(each.value.to_port, local.port)
-  protocol          = "tcp"
+  protocol          = try(each.value.protocol, "tcp")
   security_group_id = aws_security_group.this[0].id
 
   # optional
@@ -384,7 +341,7 @@ resource "aws_security_group_rule" "egress" {
 ################################################################################
 
 resource "aws_rds_cluster_parameter_group" "this" {
-  count = local.create_cluster && var.create_db_cluster_parameter_group ? 1 : 0
+  count = local.create && var.create_db_cluster_parameter_group ? 1 : 0
 
   name        = var.db_cluster_parameter_group_use_name_prefix ? null : local.cluster_parameter_group_name
   name_prefix = var.db_cluster_parameter_group_use_name_prefix ? "${local.cluster_parameter_group_name}-" : null
@@ -413,7 +370,7 @@ resource "aws_rds_cluster_parameter_group" "this" {
 ################################################################################
 
 resource "aws_db_parameter_group" "this" {
-  count = local.create_cluster && var.create_db_parameter_group ? 1 : 0
+  count = local.create && var.create_db_parameter_group ? 1 : 0
 
   name        = var.db_parameter_group_use_name_prefix ? null : local.db_parameter_group_name
   name_prefix = var.db_parameter_group_use_name_prefix ? "${local.db_parameter_group_name}-" : null
@@ -443,7 +400,7 @@ resource "aws_db_parameter_group" "this" {
 
 # Log groups will not be created if using a cluster identifier prefix
 resource "aws_cloudwatch_log_group" "this" {
-  for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create_cluster && var.create_cloudwatch_log_group && !var.cluster_use_name_prefix])
+  for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create && var.create_cloudwatch_log_group && !var.cluster_use_name_prefix])
 
   name              = "/aws/rds/cluster/${var.name}/${each.value}"
   retention_in_days = var.cloudwatch_log_group_retention_in_days

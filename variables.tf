@@ -1,3 +1,9 @@
+variable "create" {
+  description = "Whether cluster should be created (affects nearly all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "name" {
   description = "Name used across resources created"
   type        = string
@@ -11,29 +17,13 @@ variable "tags" {
 }
 
 ################################################################################
-# Random Password & Snapshot ID
-################################################################################
-
-variable "create_random_password" {
-  description = "Determines whether to create random password for RDS primary cluster"
-  type        = bool
-  default     = true
-}
-
-variable "random_password_length" {
-  description = "Length of random password to create. Defaults to `10`"
-  type        = number
-  default     = 10
-}
-
-################################################################################
 # DB Subnet Group
 ################################################################################
 
 variable "create_db_subnet_group" {
   description = "Determines whether to create the database subnet group or use existing"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "db_subnet_group_name" {
@@ -48,21 +38,9 @@ variable "subnets" {
   default     = []
 }
 
-variable "network_type" {
-  description = "The type of network stack to use (IPV4 or DUAL)"
-  type        = string
-  default     = null
-}
-
 ################################################################################
 # Cluster
 ################################################################################
-
-variable "create_cluster" {
-  description = "Whether cluster should be created (affects nearly all resources)"
-  type        = bool
-  default     = true
-}
 
 variable "is_primary_cluster" {
   description = "Determines whether cluster is primary cluster with writer instance (set to `false` for global cluster and replica clusters)"
@@ -184,10 +162,10 @@ variable "engine_version" {
   default     = null
 }
 
-variable "final_snapshot_identifier_prefix" {
-  description = "The prefix name to use when creating a final snapshot on cluster destroy; a 8 random digits are appended to name to ensure it's unique"
+variable "final_snapshot_identifier" {
+  description = "The name of your final DB snapshot when this DB cluster is deleted. If omitted, no final snapshot will be made"
   type        = string
-  default     = "final"
+  default     = null
 }
 
 variable "global_cluster_identifier" {
@@ -214,16 +192,34 @@ variable "kms_key_id" {
   default     = null
 }
 
+variable "manage_master_user_password" {
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager. Cannot be set if `master_password` is provided"
+  type        = bool
+  default     = true
+}
+
+variable "master_user_secret_kms_key_id" {
+  description = "The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key"
+  type        = string
+  default     = null
+}
+
 variable "master_password" {
-  description = "Password for the master DB user. Note - when specifying a value here, 'create_random_password' should be set to `false`"
+  description = "Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
   default     = null
 }
 
 variable "master_username" {
-  description = "Username for the master DB user"
+  description = "Username for the master DB user. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
-  default     = "root"
+  default     = null
+}
+
+variable "network_type" {
+  description = "The type of network stack to use (IPV4 or DUAL)"
+  type        = string
+  default     = null
 }
 
 variable "port" {
@@ -311,7 +307,7 @@ variable "cluster_tags" {
 }
 
 variable "vpc_security_group_ids" {
-  description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
+  description = "List of VPC security groups to associate to the cluster in addition to the security group created"
   type        = list(string)
   default     = []
 }
@@ -387,7 +383,7 @@ variable "performance_insights_retention_period" {
 }
 
 variable "publicly_accessible" {
-  description = "Determines whether instances are publicly accessible. Default false"
+  description = "Determines whether instances are publicly accessible. Default `false`"
   type        = bool
   default     = null
 }
@@ -551,7 +547,7 @@ variable "create_security_group" {
 }
 
 variable "security_group_use_name_prefix" {
-  description = "Determines whether the security group name (`name`) is used as a prefix"
+  description = "Determines whether the security group name (`var.name`) is used as a prefix"
   type        = bool
   default     = true
 }
@@ -568,21 +564,9 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "allowed_security_groups" {
-  description = "A list of Security Group ID's to allow access to"
-  type        = list(string)
-  default     = []
-}
-
-variable "allowed_cidr_blocks" {
-  description = "A list of CIDR blocks which are allowed to access the database"
-  type        = list(string)
-  default     = []
-}
-
-variable "security_group_egress_rules" {
-  description = "A map of security group egress rule definitions to add to the security group created"
-  type        = map(any)
+variable "security_group_rules" {
+  description = "Map of security group rules to add to the cluster security group created"
+  type        = any
   default     = {}
 }
 
@@ -635,7 +619,6 @@ variable "db_cluster_parameter_group_parameters" {
 ################################################################################
 # DB Parameter Group
 ################################################################################
-
 
 variable "create_db_parameter_group" {
   description = "Determines whether a DB parameter should be created or use existing"
