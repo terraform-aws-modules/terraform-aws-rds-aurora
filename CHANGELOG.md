@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [8.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.0.1...v8.0.2) (2023-04-11)
+
+
+### Bug Fixes
+
+* Allow setting `master_username` when using `manage_master_user_password` ([#369](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/369)) ([f48f824](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/f48f824d76ff1970cff91d336349f956556c75b2))
+
 ### [8.0.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.0.0...v8.0.1) (2023-04-10)
 
 
