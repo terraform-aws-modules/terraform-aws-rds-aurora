@@ -68,7 +68,7 @@ resource "aws_rds_cluster" "this" {
   manage_master_user_password   = var.global_cluster_identifier == null && var.manage_master_user_password ? var.manage_master_user_password : null
   master_user_secret_kms_key_id = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
   master_password               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
-  master_username               = var.is_primary_cluster && !var.manage_master_user_password ? var.master_username : null
+  master_username               = var.is_primary_cluster ? var.master_username : null
   network_type                  = var.network_type
   port                          = local.port
   preferred_backup_window       = local.is_serverless ? null : var.preferred_backup_window
