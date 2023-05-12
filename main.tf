@@ -8,6 +8,8 @@ locals {
   internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
   db_subnet_group_name          = var.create_db_subnet_group ? try(aws_db_subnet_group.this[0].name, null) : local.internal_db_subnet_group_name
 
+  security_group_name = try(coalesce(var.security_group_name, var.name), "")
+
   cluster_parameter_group_name = try(coalesce(var.db_cluster_parameter_group_name, var.name), null)
   db_parameter_group_name      = try(coalesce(var.db_parameter_group_name, var.name), null)
 
@@ -306,8 +308,8 @@ resource "aws_appautoscaling_policy" "this" {
 resource "aws_security_group" "this" {
   count = local.create && var.create_security_group ? 1 : 0
 
-  name        = var.security_group_use_name_prefix ? null : var.name
-  name_prefix = var.security_group_use_name_prefix ? "${var.name}-" : null
+  name        = var.security_group_use_name_prefix ? null : local.security_group_name
+  name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
   vpc_id      = var.vpc_id
   description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
 
