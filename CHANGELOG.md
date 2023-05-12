@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [8.1.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.1.0...v8.1.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* Tag security group with correct name ([#380](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/380)) ([71d23db](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/71d23db753184f416e06c0d0c6f4f73ec8d95184))
+
 ## [8.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.0.2...v8.1.0) (2023-05-12)
 
 
