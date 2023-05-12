@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.0.2...v8.1.0) (2023-05-12)
+
+
+### Features
+
+* Ability to set custom `security_group_name` ([#379](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/379)) ([67edcaa](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/67edcaafe8b08226929a0cc989b1fbc39fcff8d1))
+
 ### [8.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.0.1...v8.0.2) (2023-04-11)
 
 
