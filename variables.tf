@@ -546,6 +546,12 @@ variable "create_security_group" {
   default     = true
 }
 
+variable "security_group_name" {
+  description = "The security group name. Default value is (`var.name`)"
+  type        = string
+  default     = ""
+}
+
 variable "security_group_use_name_prefix" {
   description = "Determines whether the security group name (`var.name`) is used as a prefix"
   type        = bool
