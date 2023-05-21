@@ -25,9 +25,10 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name           = local.name
-  engine         = "postgres" # This uses RDS engine, not Aurora
-  engine_version = "14.5"
+  name            = local.name
+  engine          = "postgres" # This uses RDS engine, not Aurora
+  engine_version  = "14.5"
+  master_username = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name

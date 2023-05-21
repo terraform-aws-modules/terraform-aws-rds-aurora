@@ -29,6 +29,7 @@ module "aurora_postgresql" {
   engine            = "aurora-postgresql"
   engine_mode       = "serverless"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -67,6 +68,7 @@ module "aurora_mysql" {
   engine            = "aurora-mysql"
   engine_mode       = "serverless"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -106,6 +108,7 @@ module "aurora_mysql_v2" {
   engine_mode       = "provisioned"
   engine_version    = "8.0"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -151,6 +154,7 @@ module "aurora_postgresql_v2" {
   engine_mode       = "provisioned"
   engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name

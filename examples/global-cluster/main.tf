@@ -50,6 +50,7 @@ module "aurora_primary" {
   database_name             = aws_rds_global_cluster.this.database_name
   engine                    = aws_rds_global_cluster.this.engine
   engine_version            = aws_rds_global_cluster.this.engine_version
+  master_username           = "root"
   global_cluster_identifier = aws_rds_global_cluster.this.id
   instance_class            = "db.r6g.large"
   instances                 = { for i in range(2) : i => {} }

@@ -25,11 +25,12 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name           = local.name
-  engine         = "aurora-mysql"
-  engine_version = "5.7.12"
-  instance_class = "db.r5.large"
-  instances      = { 1 = {} }
+  name            = local.name
+  engine          = "aurora-mysql"
+  engine_version  = "5.7.12"
+  master_username = "root"
+  instance_class  = "db.r5.large"
+  instances       = { 1 = {} }
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
