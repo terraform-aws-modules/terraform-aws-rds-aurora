@@ -39,7 +39,7 @@ module "aurora_postgresql" {
     }
   }
 
-  # Serverless clusters do not support managed master user password
+  # Serverless v1 clusters do not support managed master user password
   manage_master_user_password = false
   master_password             = random_password.master.result
 
@@ -82,7 +82,7 @@ module "aurora_mysql" {
     }
   }
 
-  # Serverless clusters do not support managed master user password
+  # Serverless v1 clusters do not support managed master user password
   manage_master_user_password = false
   master_password             = random_password.master.result
 
