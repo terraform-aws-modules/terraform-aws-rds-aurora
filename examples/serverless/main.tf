@@ -39,6 +39,10 @@ module "aurora_postgresql" {
     }
   }
 
+  # Serverless clusters do not support managed master user password
+  manage_master_user_password = false
+  master_password             = random_password.master.result
+
   monitoring_interval = 60
 
   apply_immediately   = true
@@ -77,6 +81,10 @@ module "aurora_mysql" {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
     }
   }
+
+  # Serverless clusters do not support managed master user password
+  manage_master_user_password = false
+  master_password             = random_password.master.result
 
   monitoring_interval = 60
 
@@ -186,6 +194,10 @@ module "aurora_postgresql_v2" {
 ################################################################################
 # Supporting Resources
 ################################################################################
+resource "random_password" "master" {
+  length  = 20
+  special = false
+}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
