@@ -25,9 +25,11 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name           = local.name
-  engine         = "aurora-postgresql"
-  engine_version = "14.5"
+  name            = local.name
+  engine          = "aurora-postgresql"
+  engine_version  = "14.7"
+  master_username = "root"
+  storage_type    = "aurora-iopt1"
   instances = {
     1 = {
       instance_class      = "db.r5.2xlarge"

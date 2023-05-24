@@ -29,6 +29,7 @@ module "aurora_postgresql" {
   engine            = "aurora-postgresql"
   engine_mode       = "serverless"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -37,6 +38,10 @@ module "aurora_postgresql" {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
     }
   }
+
+  # Serverless v1 clusters do not support managed master user password
+  manage_master_user_password = false
+  master_password             = random_password.master.result
 
   monitoring_interval = 60
 
@@ -67,6 +72,7 @@ module "aurora_mysql" {
   engine            = "aurora-mysql"
   engine_mode       = "serverless"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -75,6 +81,10 @@ module "aurora_mysql" {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
     }
   }
+
+  # Serverless v1 clusters do not support managed master user password
+  manage_master_user_password = false
+  master_password             = random_password.master.result
 
   monitoring_interval = 60
 
@@ -106,6 +116,7 @@ module "aurora_mysql_v2" {
   engine_mode       = "provisioned"
   engine_version    = "8.0"
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -151,6 +162,7 @@ module "aurora_postgresql_v2" {
   engine_mode       = "provisioned"
   engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
+  master_username   = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -182,6 +194,10 @@ module "aurora_postgresql_v2" {
 ################################################################################
 # Supporting Resources
 ################################################################################
+resource "random_password" "master" {
+  length  = 20
+  special = false
+}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"

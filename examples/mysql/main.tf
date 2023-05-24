@@ -25,9 +25,10 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name           = local.name
-  engine         = "aurora-mysql"
-  engine_version = "8.0"
+  name            = local.name
+  engine          = "aurora-mysql"
+  engine_version  = "8.0"
+  master_username = "root"
   instances = {
     1 = {
       instance_class      = "db.r5.large"
