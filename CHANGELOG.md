@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.3.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.2.0...v8.3.0) (2023-06-01)
+
+
+### Features
+
+* Enable support for v5.0 of the AWS provider ([#385](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/385)) ([959228c](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/959228c5fa33277139432fe3a858013b2b93c3ab))
+
 ## [8.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.1.1...v8.2.0) (2023-05-24)
 
 
