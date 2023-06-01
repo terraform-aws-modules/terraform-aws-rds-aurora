@@ -120,7 +120,7 @@ resource "random_password" "master" {
 
 module "primary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   name = local.name
   cidr = local.primary_vpc_cidr
@@ -136,7 +136,7 @@ module "primary_vpc" {
 
 module "secondary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   providers = { aws = aws.secondary }
 
