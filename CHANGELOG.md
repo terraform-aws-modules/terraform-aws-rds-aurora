@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [8.3.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.3.0...v8.3.1) (2023-06-07)
+
+
+### Bug Fixes
+
+* Tag Application AutoScaling target ([#389](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/389)) ([04ffe1c](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/04ffe1ce2675eb1b230fc52f7a67473ae08ac019))
+
 ## [8.3.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.2.0...v8.3.0) (2023-06-01)
 
 
