@@ -352,6 +352,12 @@ variable "instances_use_identifier_prefix" {
   default     = false
 }
 
+variable "instances_use_cluster_name" {
+  description = "Determines whether cluster name is used instead of arn as the cluster identifier for instances"
+  type        = bool
+  default     = false
+}
+
 variable "instance_class" {
   description = "Instance type to use at master instance. Note: if `autoscaling_enabled` is `true`, this will be the same instance class used on instances created by autoscaling"
   type        = string
