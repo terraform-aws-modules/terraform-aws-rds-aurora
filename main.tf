@@ -162,7 +162,7 @@ resource "aws_rds_cluster_instance" "this" {
   ca_cert_identifier                    = var.ca_cert_identifier
   cluster_identifier                    = aws_rds_cluster.this[0].id
   copy_tags_to_snapshot                 = try(each.value.copy_tags_to_snapshot, var.copy_tags_to_snapshot)
-  db_parameter_group_name               = coalesce(each.value.db_parameter_group_name, var.create_db_parameter_group ? aws_db_parameter_group.this[0].id : var.db_parameter_group_name)
+  db_parameter_group_name               = coalesce(try(each.value.db_parameter_group_name, null), var.create_db_parameter_group ? aws_db_parameter_group.this[0].id : var.db_parameter_group_name)
   db_subnet_group_name                  = local.db_subnet_group_name
   engine                                = var.engine
   engine_version                        = var.engine_version
