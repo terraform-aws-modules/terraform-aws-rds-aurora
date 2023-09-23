@@ -170,3 +170,12 @@ output "db_cluster_cloudwatch_log_groups" {
   description = "Map of CloudWatch log groups created and their attributes"
   value       = aws_cloudwatch_log_group.this
 }
+
+################################################################################
+# Cluster Activity Stream
+################################################################################
+
+output "db_cluster_activity_stream_kinesis_stream_name" {
+  description = "The name of the Amazon Kinesis data stream to be used for the database activity stream"
+  value       = try(aws_rds_cluster_activity_stream.this[0].kinesis_stream_name, null)
+}
