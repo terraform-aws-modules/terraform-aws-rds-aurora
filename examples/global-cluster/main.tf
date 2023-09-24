@@ -68,10 +68,6 @@ module "aurora_primary" {
   manage_master_user_password = false
   master_password             = random_password.master.result
 
-  create_db_cluster_activity_stream     = true
-  db_cluster_activity_stream_kms_key_id = aws_kms_key.primary.key_id
-  db_cluster_activity_stream_mode       = "sync"
-
   skip_final_snapshot = true
 
   tags = local.tags
@@ -103,10 +99,6 @@ module "aurora_secondary" {
 
   # Global clusters do not support managed master user password
   master_password = random_password.master.result
-
-  create_db_cluster_activity_stream     = true
-  db_cluster_activity_stream_kms_key_id = aws_kms_key.secondary.key_id
-  db_cluster_activity_stream_mode       = "sync"
 
   skip_final_snapshot = true
 

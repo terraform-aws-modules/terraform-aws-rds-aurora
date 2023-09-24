@@ -157,3 +157,12 @@ output "db_cluster_cloudwatch_log_groups" {
   description = "Map of CloudWatch log groups created and their attributes"
   value       = module.aurora.db_cluster_cloudwatch_log_groups
 }
+
+################################################################################
+# Cluster Activity Stream
+################################################################################
+
+output "db_cluster_activity_stream_kinesis_stream_name" {
+  description = "The name of the Amazon Kinesis data stream to be used for the database activity stream"
+  value       = module.aurora.db_cluster_activity_stream_kinesis_stream_name
+}
