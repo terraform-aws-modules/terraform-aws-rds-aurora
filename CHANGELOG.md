@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.4.0...v8.5.0) (2023-10-09)
+
+
+### Features
+
+* Add RDS cluster activity stream ([#407](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/407)) ([783c686](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/783c6864d4fe0d610a62d00d5ff8e5edb08a008a))
+
 ## [8.4.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.3.1...v8.4.0) (2023-10-09)
 
 
