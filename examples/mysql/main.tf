@@ -51,6 +51,12 @@ module "aurora" {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
     }
+    kms_vpc_endpoint = {
+      type                     = "egress"
+      from_port                = 443
+      to_port                  = 443
+      source_security_group_id = module.vpc_endpoints.security_group_id
+    }
   }
 
   apply_immediately   = true
@@ -142,6 +148,12 @@ module "aurora" {
 
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
 
+  create_db_cluster_activity_stream     = true
+  db_cluster_activity_stream_kms_key_id = module.kms.key_id
+
+  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.Overview.html#DBActivityStreams.Overview.sync-mode
+  db_cluster_activity_stream_mode = "async"
+
   tags = local.tags
 }
 
@@ -160,6 +172,49 @@ module "vpc" {
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
+
+  tags = local.tags
+}
+
+module "kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "~> 2.0"
+
+  deletion_window_in_days = 7
+  description             = "KMS key for ${local.name} cluster activity stream."
+  enable_key_rotation     = true
+  is_enabled              = true
+  key_usage               = "ENCRYPT_DECRYPT"
+
+  aliases = [local.name]
+
+  tags = local.tags
+}
+
+# https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.Prereqs.html#DBActivityStreams.Prereqs.KMS
+module "vpc_endpoints" {
+  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version = "~> 5.0"
+
+  vpc_id = module.vpc.vpc_id
+
+  create_security_group      = true
+  security_group_name_prefix = "${local.name}-vpc-endpoints-"
+  security_group_description = "VPC endpoint security group"
+  security_group_rules = {
+    ingress_https = {
+      description = "HTTPS from VPC"
+      cidr_blocks = [module.vpc.vpc_cidr_block]
+    }
+  }
+
+  endpoints = {
+    kms = {
+      service             = "kms"
+      private_dns_enabled = true
+      subnet_ids          = module.vpc.database_subnets
+    }
+  }
 
   tags = local.tags
 }

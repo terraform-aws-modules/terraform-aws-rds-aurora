@@ -412,3 +412,18 @@ resource "aws_cloudwatch_log_group" "this" {
 
   tags = var.tags
 }
+
+################################################################################
+# Cluster Activity Stream
+################################################################################
+
+resource "aws_rds_cluster_activity_stream" "this" {
+  count = local.create && var.create_db_cluster_activity_stream ? 1 : 0
+
+  resource_arn                        = aws_rds_cluster.this[0].arn
+  mode                                = var.db_cluster_activity_stream_mode
+  kms_key_id                          = var.db_cluster_activity_stream_kms_key_id
+  engine_native_audit_fields_included = var.engine_native_audit_fields_included
+
+  depends_on = [aws_rds_cluster_instance.this]
+}
