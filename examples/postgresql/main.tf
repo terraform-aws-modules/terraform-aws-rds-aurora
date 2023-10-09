@@ -32,8 +32,9 @@ module "aurora" {
   storage_type    = "aurora-iopt1"
   instances = {
     1 = {
-      instance_class      = "db.r5.2xlarge"
-      publicly_accessible = true
+      instance_class          = "db.r5.2xlarge"
+      publicly_accessible     = true
+      db_parameter_group_name = "default.aurora-postgresql14"
     }
     2 = {
       identifier     = "static-member-1"
