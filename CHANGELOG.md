@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.4.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.3.1...v8.4.0) (2023-10-09)
+
+
+### Features
+
+* Enable db_parameter_group_name per instance ([#410](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/410)) ([d34e83c](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/d34e83c6ecfbf7625ca4f50f9a3d703a8fd39e9a))
+
 ### [8.3.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.3.0...v8.3.1) (2023-06-07)
 
 
