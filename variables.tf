@@ -120,6 +120,12 @@ variable "db_cluster_db_instance_parameter_group_name" {
   default     = null
 }
 
+variable "delete_automated_backups" {
+  description = "Specifies whether to remove automated backups immediately after the DB cluster is deleted"
+  type        = bool
+  default     = null
+}
+
 variable "deletion_protection" {
   description = "If the DB instance should have deletion protection enabled. The database can't be deleted when this value is set to `true`. The default is `false`"
   type        = bool
