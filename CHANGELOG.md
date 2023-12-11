@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.5.0...v9.0.0) (2023-12-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* Add `delete_automated_backups` and update MSV of AWS provider to `v5.26` to support (#415)
+
+### Features
+
+* Add `delete_automated_backups` and update MSV of AWS provider to `v5.26` to support ([#415](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/415)) ([c9e4933](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/c9e4933177c6d972dca6c45be0178dc2928e42b1))
+
 ## [8.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.4.0...v8.5.0) (2023-10-09)
 
 
