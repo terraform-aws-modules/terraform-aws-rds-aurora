@@ -79,9 +79,9 @@ variable "availability_zones" {
 }
 
 variable "backup_retention_period" {
-  description = "The days to retain backups for. Default `7`"
+  description = "The days to retain backups for"
   type        = number
-  default     = 7
+  default     = null
 }
 
 variable "backtrack_window" {
@@ -117,6 +117,12 @@ variable "db_cluster_instance_class" {
 variable "db_cluster_db_instance_parameter_group_name" {
   description = "Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
   type        = string
+  default     = null
+}
+
+variable "delete_automated_backups" {
+  description = "Specifies whether to remove automated backups immediately after the DB cluster is deleted"
+  type        = bool
   default     = null
 }
 

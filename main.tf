@@ -54,6 +54,7 @@ resource "aws_rds_cluster" "this" {
   db_cluster_parameter_group_name     = var.create_db_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.db_cluster_parameter_group_name
   db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
   db_subnet_group_name                = local.db_subnet_group_name
+  delete_automated_backups            = var.delete_automated_backups
   deletion_protection                 = var.deletion_protection
   enable_global_write_forwarding      = var.enable_global_write_forwarding
   enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
