@@ -8,8 +8,9 @@ locals {
   name   = "ex-${basename(path.cwd)}"
   region = "eu-west-1"
 
-  vpc_cidr = "10.0.0.0/16"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  vpc_cidr                     = "10.0.0.0/16"
+  azs                          = slice(data.aws_availability_zones.available.names, 0, 3)
+  preferred_maintenance_window = "sun:05:00-sun:06:00"
 
   tags = {
     Example    = local.name
@@ -45,8 +46,8 @@ module "aurora_postgresql" {
 
   monitoring_interval = 60
 
-  apply_immediately   = true
-  skip_final_snapshot = true
+  preferred_maintenance_window = local.preferred_maintenance_window
+  skip_final_snapshot          = true
 
   # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
 
