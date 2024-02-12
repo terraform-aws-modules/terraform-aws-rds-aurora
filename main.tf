@@ -64,6 +64,8 @@ resource "aws_rds_cluster" "this" {
   engine_version                      = var.engine_version
   final_snapshot_identifier           = var.final_snapshot_identifier
   global_cluster_identifier           = var.global_cluster_identifier
+  domain                              = var.domain
+  domain_iam_role_name                = var.domain_iam_role_name
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
   # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
   iops                          = var.iops
