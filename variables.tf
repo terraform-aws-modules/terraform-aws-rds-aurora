@@ -717,9 +717,3 @@ variable "engine_native_audit_fields_included" {
   type        = bool
   default     = false
 }
-
-variable "enable_appautoscaling_tags" {
-  type        = bool
-  default     = true
-  description = "Allow disabling tags on the aws_appautoscaling_target resource. Tags cannot be used on clusters created before 2023-03-30 and causes a perpetual drift."
-}
