@@ -277,7 +277,13 @@ resource "aws_appautoscaling_target" "this" {
   scalable_dimension = "rds:cluster:ReadReplicaCount"
   service_namespace  = "rds"
 
-  tags = var.enable_appautoscaling_tags ? var.tags : null
+  tags = var.tags
+  
+  lifecycle {
+    ignore_changes = [
+      tags_all,
+    ]
+  }
 }
 
 resource "aws_appautoscaling_policy" "this" {
