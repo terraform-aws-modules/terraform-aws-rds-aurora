@@ -75,7 +75,7 @@ resource "aws_rds_cluster" "this" {
   network_type                  = var.network_type
   port                          = local.port
   preferred_backup_window       = local.is_serverless ? null : var.preferred_backup_window
-  preferred_maintenance_window  = local.is_serverless ? null : var.preferred_maintenance_window
+  preferred_maintenance_window  = var.preferred_maintenance_window
   replication_source_identifier = var.replication_source_identifier
 
   dynamic "restore_to_point_in_time" {
