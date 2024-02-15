@@ -278,7 +278,7 @@ resource "aws_appautoscaling_target" "this" {
   service_namespace  = "rds"
 
   tags = var.tags
-  
+
   lifecycle {
     ignore_changes = [
       tags_all,
