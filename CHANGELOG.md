@@ -538,7 +538,7 @@ All notable changes to this project will be documented in this file
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
-### 
+###
 
 on ../../modules/aws-rds-aurora/main.tf line 4, in locals:
 
@@ -586,7 +586,7 @@ when calling import with this module in the configuration.
 - Add cluster ARN output as 'this_rds_cluster_arn' ([#48](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/48))
 - Upgraded module to support Terraform 0.12 ([#45](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/45))
 
-### 
+###
 
 on ../../modules/aws-rds-aurora/main.tf line 4, in locals:
 
