@@ -130,7 +130,7 @@ data "aws_iam_policy_document" "rds_assume_role" {
     ]
 
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = [
         "directoryservice.rds.amazonaws.com",
         "rds.amazonaws.com"
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "rds_assume_role" {
 }
 
 resource "aws_iam_role" "rds_ad_auth" {
-  name =             "${local.name}-directory-service-role"
+  name               = "${local.name}-directory-service-role"
   description        = "Role used by RDS for Active Directory authentication and authorization"
   assume_role_policy = data.aws_iam_policy_document.rds_assume_role.json
 }
