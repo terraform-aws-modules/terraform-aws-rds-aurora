@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [9.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.1...v9.0.2) (2024-02-15)
+
+
+### Bug Fixes
+
+* Ignore `tags_all` for `aws_appautoscaling_target` ([#431](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/431)) ([fa8caad](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/fa8caaddeb294e7898c081a63f2a144920a833e1))
+
 ### [9.0.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.0...v9.0.1) (2024-02-15)
 
 
