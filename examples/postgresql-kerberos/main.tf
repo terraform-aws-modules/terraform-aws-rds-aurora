@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 data "aws_availability_zones" "available" {}
-data "aws_partition" "current" {}
 
 locals {
   name   = "ex-${basename(path.cwd)}"
