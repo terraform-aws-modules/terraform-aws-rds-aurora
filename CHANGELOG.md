@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [9.0.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.0...v9.0.1) (2024-02-15)
+
+
+### Bug Fixes
+
+* Allow Serverless maintenance windows ([#427](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/427)) ([c7d2e77](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/c7d2e776cadc52d4ad59a8f8e1e5fbfe733f1f56))
+
 ## [9.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v8.5.0...v9.0.0) (2023-12-11)
 
 
