@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.2...v9.1.0) (2024-02-16)
+
+
+### Features
+
+* Add `domain` support ([#429](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/429)) ([29bb9d6](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/29bb9d68565cc1ecc73c142b14d61723a275ee30))
+
 ### [9.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.1...v9.0.2) (2024-02-15)
 
 
