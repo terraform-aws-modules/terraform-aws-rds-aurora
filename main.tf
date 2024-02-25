@@ -436,3 +436,20 @@ resource "aws_rds_cluster_activity_stream" "this" {
 
   depends_on = [aws_rds_cluster_instance.this]
 }
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+resource "aws_secretsmanager_secret_rotation" "this" {
+  count = local.create && var.manage_master_user_password && var.manage_master_user_password_rotation ? 1 : 0
+
+  secret_id          = aws_rds_cluster.this[0].master_user_secret[0].secret_arn
+  rotate_immediately = var.master_user_password_rotate_immediately
+
+  rotation_rules {
+    automatically_after_days = var.master_user_password_rotation_automatically_after_days
+    duration                 = var.master_user_password_rotation_duration
+    schedule_expression      = var.master_user_password_rotation_schedule_expression
+  }
+}

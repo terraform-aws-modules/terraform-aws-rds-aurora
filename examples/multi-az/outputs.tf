@@ -157,3 +157,12 @@ output "db_cluster_cloudwatch_log_groups" {
   description = "Map of CloudWatch log groups created and their attributes"
   value       = module.aurora.db_cluster_cloudwatch_log_groups
 }
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+output "db_cluster_secretsmanager_secret_rotation_enabled" {
+  description = "Specifies whether automatic rotation is enabled for the secret"
+  value       = module.aurora.db_cluster_secretsmanager_secret_rotation_enabled
+}

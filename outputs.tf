@@ -179,3 +179,12 @@ output "db_cluster_activity_stream_kinesis_stream_name" {
   description = "The name of the Amazon Kinesis data stream to be used for the database activity stream"
   value       = try(aws_rds_cluster_activity_stream.this[0].kinesis_stream_name, null)
 }
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+output "db_cluster_secretsmanager_secret_rotation_enabled" {
+  description = "Specifies whether automatic rotation is enabled for the secret"
+  value       = try(aws_secretsmanager_secret_rotation.this[0].rotation_enabled, null)
+}
