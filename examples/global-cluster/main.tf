@@ -189,6 +189,7 @@ data "aws_iam_policy_document" "rds" {
 
 resource "aws_kms_key" "primary" {
   policy = data.aws_iam_policy_document.rds.json
+  enable_key_rotation = true
   tags   = local.tags
 }
 
@@ -196,5 +197,6 @@ resource "aws_kms_key" "secondary" {
   provider = aws.secondary
 
   policy = data.aws_iam_policy_document.rds.json
+  enable_key_rotation = true
   tags   = local.tags
 }
