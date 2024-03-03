@@ -14,6 +14,37 @@ $ terraform apply
 
 Note that this example may create resources which cost money. Run `terraform destroy` when you don't need these resources.
 
+## Upgrading major version of global clusters
+
+Upgrading the major version of global clusters is possible, but due to a limitation in terraform, it requires some special consideration. As [documented in the provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_global_cluster#upgrading-engine-versions):
+
+> When you upgrade the version of an aws_rds_global_cluster, Terraform will attempt to in-place upgrade the engine versions of all associated clusters. Since the aws_rds_cluster resource is being updated through the aws_rds_global_cluster, you are likely to get an error (Provider produced inconsistent final plan). To avoid this, use the lifecycle ignore_changes meta argument as shown below on the aws_rds_cluster.
+
+In order to accomplish this in a module that is otherwise used for non-global clusters, we must duplicate the cluster resource. The limitation that requires this is, terraform [lifecycle meta-arguments](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle#literal-values-only) can contain only literal values:
+
+> The lifecycle settings all affect how Terraform constructs and traverses the dependency graph. As a result, only literal values can be used because the processing happens too early for arbitrary expression evaluation.
+
+That means, that to ignore the `engine_version` in some cases but not in others, we need another resource. So, if you intend to upgrade your global cluster in the future, you must set the new variable `global_upgradable` to `true`.
+
+### Migrating the resource
+
+If you already have a global cluster created with this module, and would like to make use of this feature, you'll need to move the cluster resource. That can be done with the cli:
+
+```sh
+terraform state mv 'module.this.aws_rds_cluster.this[0]' 'module.this.aws_rds_cluster.global_upgradable[0]'
+```
+
+Or via a new [moved block](https://developer.hashicorp.com/terraform/language/modules/develop/refactoring#moved-block-syntax):
+
+```tf
+moved {
+  from = module.this.aws_rds_cluster.this[0]
+  to   = module.this.aws_rds_cluster.global_upgradable[0]
+}
+```
+
+After that, changing the major version should work without issue.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 

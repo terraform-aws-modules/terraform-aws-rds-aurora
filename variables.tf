@@ -180,6 +180,12 @@ variable "global_cluster_identifier" {
   default     = null
 }
 
+variable "global_upgradable" {
+  description = "True if `engine_version` should be ignored for the cluster. This is only relevant if you want to be able to upgrade a member cluster of a global cluster. If this is enabled after creation, you'll need to `terraform mv` to move the resource to this new resource address."
+  type        = bool
+  default     = false
+}
+
 variable "iam_database_authentication_enabled" {
   description = "Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled"
   type        = bool
