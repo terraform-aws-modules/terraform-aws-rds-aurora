@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.1.0...v9.2.0) (2024-03-05)
+
+
+### Features
+
+* Secretsmanager secret rotation for master user password ([#433](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/433)) ([ae752de](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/ae752de086b9ab6f9a1178024d1e99dce9852d37))
+
 ## [9.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.0.2...v9.1.0) (2024-02-16)
 
 
