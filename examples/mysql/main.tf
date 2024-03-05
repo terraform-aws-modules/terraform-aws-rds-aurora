@@ -151,6 +151,9 @@ module "aurora" {
   create_db_cluster_activity_stream     = true
   db_cluster_activity_stream_kms_key_id = module.kms.key_id
 
+  manage_master_user_password_rotation              = true
+  master_user_password_rotation_schedule_expression = "rate(15 days)"
+
   # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/DBActivityStreams.Overview.html#DBActivityStreams.Overview.sync-mode
   db_cluster_activity_stream_mode = "async"
 

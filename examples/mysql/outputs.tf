@@ -166,3 +166,12 @@ output "db_cluster_activity_stream_kinesis_stream_name" {
   description = "The name of the Amazon Kinesis data stream to be used for the database activity stream"
   value       = module.aurora.db_cluster_activity_stream_kinesis_stream_name
 }
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+output "db_cluster_secretsmanager_secret_rotation_enabled" {
+  description = "Specifies whether automatic rotation is enabled for the secret"
+  value       = module.aurora.db_cluster_secretsmanager_secret_rotation_enabled
+}
