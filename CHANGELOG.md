@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.2.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.2.0...v9.2.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* Update CI workflow versions to remove deprecated runtime warnings ([#435](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/435)) ([98dd426](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/98dd426b9c0a7814921fc4239cf61a5401b488f6))
+
 ## [9.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.1.0...v9.2.0) (2024-03-05)
 
 
