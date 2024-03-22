@@ -57,6 +57,7 @@ resource "aws_rds_cluster" "this" {
   delete_automated_backups            = var.delete_automated_backups
   deletion_protection                 = var.deletion_protection
   enable_global_write_forwarding      = var.enable_global_write_forwarding
+  enable_local_write_forwarding       = var.enable_local_write_forwarding
   enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
   enable_http_endpoint                = var.enable_http_endpoint
   engine                              = var.engine

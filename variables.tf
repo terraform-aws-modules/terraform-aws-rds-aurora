@@ -138,6 +138,12 @@ variable "enable_global_write_forwarding" {
   default     = null
 }
 
+variable "enable_local_write_forwarding" {
+  description = "Whether read replicas can forward write operations to the writer DB instance in the DB cluster. By default, write operations aren't allowed on reader DB instances."
+  type        = bool
+  default     = null
+}
+
 variable "enabled_cloudwatch_logs_exports" {
   description = "Set of log types to export to cloudwatch. If omitted, no logs will be exported. The following log types are supported: `audit`, `error`, `general`, `slowquery`, `postgresql`"
   type        = list(string)
