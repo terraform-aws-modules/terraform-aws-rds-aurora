@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.3.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.2.1...v9.3.0) (2024-03-22)
+
+
+### Features
+
+* Support for `enable_local_write_forwarding` ([#441](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/441)) ([8c6039e](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/8c6039e9e0cf4d357b7f2af72c6551e5239e9f76))
+
 ## [9.2.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.2.0...v9.2.1) (2024-03-06)
 
 
