@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.3.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.3.0...v9.3.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* Do not create dynamic DNS suffix for service principals ([#442](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/442)) ([b79c17a](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/b79c17a0eaa1513f0949316b2f38b2becbb6add6))
+
 ## [9.3.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.2.1...v9.3.0) (2024-03-22)
 
 
