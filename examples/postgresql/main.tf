@@ -69,6 +69,7 @@ module "aurora" {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
     }
     egress_example = {
+      type        = "egress"
       cidr_blocks = ["10.33.0.0/28"]
       description = "Egress to corporate printer closet"
     }
