@@ -66,6 +66,16 @@ output "cluster_hosted_zone_id" {
   value       = module.aurora.cluster_hosted_zone_id
 }
 
+output "cluster_ca_certificate_identifier" {
+  description = "CA identifier of the CA certificate used for the DB instance's server certificate"
+  value       = module.aurora.cluster_ca_certificate_identifier
+}
+
+output "cluster_ca_certificate_valid_till" {
+  description = "Expiration date of the DB instance’s server certificate"
+  value       = module.aurora.cluster_ca_certificate_valid_till
+}
+
 ################################################################################
 # Cluster Instance(s)
 ################################################################################

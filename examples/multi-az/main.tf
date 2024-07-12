@@ -27,7 +27,7 @@ module "aurora" {
 
   name            = local.name
   engine          = "postgres" # This uses RDS engine, not Aurora
-  engine_version  = "14.5"
+  engine_version  = "15.7"
   master_username = "root"
 
   vpc_id               = module.vpc.vpc_id
@@ -44,6 +44,8 @@ module "aurora" {
   db_cluster_instance_class = "db.r6gd.large"
   iops                      = 2500
   storage_type              = "io1"
+
+  cluster_ca_cert_identifier = "rds-ca-rsa4096-g1"
 
   skip_final_snapshot = true
 
