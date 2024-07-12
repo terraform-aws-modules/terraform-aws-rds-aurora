@@ -91,7 +91,7 @@ variable "backtrack_window" {
 }
 
 variable "cluster_ca_cert_identifier" {
-  description = "The CA certificate identifier to use for the DB cluster's server certificate"
+  description = "The CA certificate identifier to use for the DB cluster's server certificate. Currently only supported for multi-az DB clusters"
   type        = string
   default     = null
 }
