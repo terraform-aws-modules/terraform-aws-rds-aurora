@@ -90,6 +90,12 @@ variable "backtrack_window" {
   default     = null
 }
 
+variable "cluster_ca_cert_identifier" {
+  description = "The CA certificate identifier to use for the DB cluster's server certificate"
+  type        = string
+  default     = null
+}
+
 variable "cluster_members" {
   description = "List of RDS Instances that are a part of this cluster"
   type        = list(string)
