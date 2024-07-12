@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.4.0...v9.5.0) (2024-07-12)
+
+
+### Features
+
+* Multi-az rds cluster ca cert identifier ([#458](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/458)) ([d320348](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/d320348984db35c28ca8d272407e5c45ead983ae))
+
 ## [9.4.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.3.1...v9.4.0) (2024-05-27)
 
 
