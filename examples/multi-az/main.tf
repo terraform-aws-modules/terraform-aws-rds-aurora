@@ -48,7 +48,6 @@ module "aurora" {
   cluster_ca_cert_identifier = "rds-ca-rsa4096-g1"
 
   skip_final_snapshot = true
-  apply_immediately   = true
 
   tags = local.tags
 }
