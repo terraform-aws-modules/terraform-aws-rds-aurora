@@ -64,6 +64,7 @@ resource "aws_rds_cluster" "this" {
   engine                              = var.engine
   engine_mode                         = var.engine_mode
   engine_version                      = var.engine_version
+  engine_lifecycle_support            = var.engine_lifecycle_support
   final_snapshot_identifier           = var.final_snapshot_identifier
   global_cluster_identifier           = var.global_cluster_identifier
   domain                              = var.domain

@@ -180,6 +180,12 @@ variable "engine_version" {
   default     = null
 }
 
+variable "engine_lifecycle_support" {
+  description = "The life cycle type for this DB instance. This setting is valid for cluster types Aurora DB clusters and Multi-AZ DB clusters. Valid values are `open-source-rds-extended-support`, `open-source-rds-extended-support-disabled`. Default value is `open-source-rds-extended-support`."
+  type        = string
+  default     = null
+}
+
 variable "final_snapshot_identifier" {
   description = "The name of your final DB snapshot when this DB cluster is deleted. If omitted, no final snapshot will be made"
   type        = string
