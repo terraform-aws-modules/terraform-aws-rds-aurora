@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.6.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.5.0...v9.6.0) (2024-07-20)
+
+
+### Features
+
+* Support `engine_lifecycle_support` ([#459](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/459)) ([466f090](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/466f090b277e92b6d26c00af97ab55e75439f736))
+
 ## [9.5.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.4.0...v9.5.0) (2024-07-12)
 
 
