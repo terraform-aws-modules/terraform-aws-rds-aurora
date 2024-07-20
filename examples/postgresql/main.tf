@@ -78,6 +78,8 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
+  engine_lifecycle_support = "open-source-rds-extended-support-disabled"
+
   create_db_cluster_parameter_group      = true
   db_cluster_parameter_group_name        = local.name
   db_cluster_parameter_group_family      = "aurora-postgresql14"
