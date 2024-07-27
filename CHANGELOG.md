@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.7.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.6.0...v9.7.0) (2024-07-27)
+
+
+### Features
+
+* Support for `scaling_configuration.seconds_before_timeout` in Serverless V1 ([#461](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/461)) ([d798147](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/d7981474a4ec2a0a53900c41d25b31329fab2afd))
+
 ## [9.6.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.5.0...v9.6.0) (2024-07-20)
 
 
