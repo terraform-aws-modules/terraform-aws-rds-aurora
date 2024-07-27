@@ -114,6 +114,7 @@ resource "aws_rds_cluster" "this" {
       max_capacity             = try(scaling_configuration.value.max_capacity, null)
       min_capacity             = try(scaling_configuration.value.min_capacity, null)
       seconds_until_auto_pause = try(scaling_configuration.value.seconds_until_auto_pause, null)
+      seconds_before_timeout   = try(scaling_configuration.value.seconds_before_timeout, null)
       timeout_action           = try(scaling_configuration.value.timeout_action, null)
     }
   }
