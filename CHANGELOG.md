@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.8.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.7.0...v9.8.0) (2024-08-05)
+
+
+### Features
+
+* Multi-AZ Cluster performance insights ([#462](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/462)) ([546c74a](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/546c74a87c1a1c09e486153651ccb4a6719cb39e))
+
 ## [9.7.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.6.0...v9.7.0) (2024-07-27)
 
 
