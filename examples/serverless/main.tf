@@ -56,6 +56,7 @@ module "aurora_postgresql" {
     min_capacity             = 2
     max_capacity             = 16
     seconds_until_auto_pause = 300
+    seconds_before_timeout   = 600
     timeout_action           = "ForceApplyCapacityChange"
   }
 
