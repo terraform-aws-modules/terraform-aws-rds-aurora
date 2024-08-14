@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.9.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.8.0...v9.9.0) (2024-08-14)
+
+
+### Features
+
+* Add "self" attribute to the security group rule ([#463](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/463)) ([6e4b82c](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/6e4b82c706c3587505cd50a992fa28b807eefcec))
+
 ## [9.8.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.7.0...v9.8.0) (2024-08-05)
 
 
