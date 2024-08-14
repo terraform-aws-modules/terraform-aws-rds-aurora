@@ -355,6 +355,7 @@ resource "aws_security_group_rule" "this" {
   ipv6_cidr_blocks         = try(each.value.ipv6_cidr_blocks, null)
   prefix_list_ids          = try(each.value.prefix_list_ids, null)
   source_security_group_id = try(each.value.source_security_group_id, null)
+  self                     = try(each.value.self, null)
 }
 
 ################################################################################
