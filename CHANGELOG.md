@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.9.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.9.0...v9.9.1) (2024-08-24)
+
+
+### Bug Fixes
+
+* AWS provider bump for bugfix on `enable_http_endpoint` ([#465](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/465)) ([f64d755](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/f64d755c46e6ca45a5f3d21d6578a14834e8b5e9))
+
 ## [9.9.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.8.0...v9.9.0) (2024-08-14)
 
 
