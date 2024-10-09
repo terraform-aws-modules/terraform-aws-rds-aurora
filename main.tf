@@ -318,6 +318,14 @@ resource "aws_appautoscaling_policy" "this" {
   depends_on = [
     aws_appautoscaling_target.this
   ]
+
+  tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags_all,
+    ]
+  }
 }
 
 ################################################################################
