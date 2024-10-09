@@ -320,12 +320,6 @@ resource "aws_appautoscaling_policy" "this" {
   ]
 
   tags = var.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags_all,
-    ]
-  }
 }
 
 ################################################################################
