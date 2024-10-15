@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.10.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.9.1...v9.10.0) (2024-10-15)
+
+
+### Features
+
+* Add `cloudwatch_log_group_tags` parameter for log group tags ([#472](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/472)) ([0962ab8](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/0962ab868a7967e03d16fca5f7f25cdf580bd13d))
+
+
+### Bug Fixes
+
+* Update CI workflow versions to latest ([#471](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/471)) ([a11c970](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/a11c97093dae1469722d503428953cfec0e16aa5))
+
 ## [9.9.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.9.0...v9.9.1) (2024-08-24)
 
 
