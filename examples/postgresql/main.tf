@@ -111,6 +111,10 @@ module "aurora" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
   create_cloudwatch_log_group     = true
 
+  cloudwatch_log_group_tags = {
+    Sensitivity = "high"
+  }
+
   create_db_cluster_activity_stream     = true
   db_cluster_activity_stream_kms_key_id = module.kms.key_id
   db_cluster_activity_stream_mode       = "async"
