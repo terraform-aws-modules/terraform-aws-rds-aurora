@@ -590,6 +590,12 @@ variable "autoscaling_target_connections" {
   default     = 700
 }
 
+variable "autoscaling_tags_ignore" {
+  description = "Scalable targets created before 2023-03-20 cannot use tags or default_tags. To prevent terraform plan showing differences that can never be reconciled, set this flag to true"
+  type        = bool
+  default     = false
+}
+
 ################################################################################
 # Security Group
 ################################################################################

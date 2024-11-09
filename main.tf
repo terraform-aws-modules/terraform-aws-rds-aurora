@@ -290,9 +290,10 @@ resource "aws_appautoscaling_target" "this" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [
+    ignore_changes = var.autoscaling_tags_ignore ? [
+      tags,
       tags_all,
-    ]
+    ] : []
   }
 }
 
