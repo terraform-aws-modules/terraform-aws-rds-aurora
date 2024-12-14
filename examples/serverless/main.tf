@@ -153,7 +153,7 @@ module "aurora_mysql_v2" {
 
 data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
-  version = "14.8"
+  version = "14.12"
 }
 
 module "aurora_postgresql_v2" {
@@ -182,8 +182,9 @@ module "aurora_postgresql_v2" {
   enable_http_endpoint = true
 
   serverlessv2_scaling_configuration = {
-    min_capacity = 2
-    max_capacity = 10
+    min_capacity             = 0
+    max_capacity             = 10
+    seconds_until_auto_pause = 3600
   }
 
   instance_class = "db.serverless"
