@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.11.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.10.0...v9.11.0) (2024-12-19)
+
+
+### Features
+
+* Support `serverlessv2_scaling_configuration.seconds_until_auto_pause` ([#477](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/477)) ([08dced9](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/08dced981559788559a3e69f288d51047aa64220))
+
 ## [9.10.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.9.1...v9.10.0) (2024-10-15)
 
 
