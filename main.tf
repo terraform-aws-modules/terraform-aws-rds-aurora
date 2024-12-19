@@ -127,8 +127,9 @@ resource "aws_rds_cluster" "this" {
     for_each = length(var.serverlessv2_scaling_configuration) > 0 && var.engine_mode == "provisioned" ? [var.serverlessv2_scaling_configuration] : []
 
     content {
-      max_capacity = serverlessv2_scaling_configuration.value.max_capacity
-      min_capacity = serverlessv2_scaling_configuration.value.min_capacity
+      max_capacity             = serverlessv2_scaling_configuration.value.max_capacity
+      min_capacity             = serverlessv2_scaling_configuration.value.min_capacity
+      seconds_until_auto_pause = try(serverlessv2_scaling_configuration.value.seconds_until_auto_pause, null)
     }
   }
 
