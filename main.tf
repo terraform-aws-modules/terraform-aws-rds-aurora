@@ -453,6 +453,12 @@ resource "aws_rds_cluster_activity_stream" "this" {
 # Managed Secret Rotation
 ################################################################################
 
+# There is not currently a way to disable secret rotation on an initial apply.
+# In order to use master password secrets management without a rotation, the following workaround can be used:
+# `manage_master_user_password_rotation` must be set to true first and applied followed by setting it to false and another apply.
+# Note: when setting `manage_master_user_password_rotation` to true, a schedule must also be set using `master_user_password_rotation_schedule_expression` or `master_user_password_rotation_automatically_after_days`.
+# To prevent password from being immediately rotated when implementing this workaround, set `master_user_password_rotate_immediately` to false.
+# See: https://github.com/hashicorp/terraform-provider-aws/issues/37779
 resource "aws_secretsmanager_secret_rotation" "this" {
   count = local.create && var.manage_master_user_password && var.manage_master_user_password_rotation ? 1 : 0
 
