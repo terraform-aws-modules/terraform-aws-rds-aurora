@@ -103,7 +103,7 @@ variable "cluster_members" {
 }
 
 variable "cluster_performance_insights_enabled" {
-  description = "Valid only for Non-Aurora Multi-AZ DB Clusters. Enables Performance Insights for the RDS Cluster"
+  description = "Enables cluster-level Performance Insights"
   type        = bool
   default     = null
 }
@@ -419,7 +419,7 @@ variable "monitoring_interval" {
 }
 
 variable "performance_insights_enabled" {
-  description = "Specifies whether Performance Insights is enabled or not"
+  description = "Specifies whether Performance Insights is enabled or not. Note that this setting cannot be set to a value that conflicts with `cluster_performance_insights_enabled` if it is configured"
   type        = bool
   default     = null
 }
