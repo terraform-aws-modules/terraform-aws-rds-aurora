@@ -181,7 +181,7 @@ variable "enable_http_endpoint" {
 }
 
 variable "engine" {
-  description = "The name of the database engine to be used for this DB cluster. Defaults to `aurora`. Valid Values: `aurora`, `aurora-mysql`, `aurora-postgresql`"
+  description = "The name of the database engine to be used for this DB cluster. Defaults to `aurora`. Valid Values: `aurora`, `aurora-mysql`, `aurora-postgresql`, `mysql`, `postgres`"
   type        = string
   default     = null
 }
