@@ -26,43 +26,33 @@ module "aurora" {
   source = "../../"
 
   name            = local.name
-  engine          = "aurora-postgresql"
-  engine_version  = "14.5"
-  instance_class  = "db.r6g.large"
-  instances       = { 1 = {} }
+  engine          = "postgres" # This uses RDS engine, not Aurora
+  engine_version  = "15.7"
   master_username = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
-    }
-  }
 
-  autoscaling_enabled      = true
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 5
-
-  monitoring_interval           = 60
-  iam_role_name                 = "${local.name}-monitor"
-  iam_role_use_name_prefix      = true
-  iam_role_description          = "${local.name} RDS enhanced monitoring IAM role"
-  iam_role_path                 = "/autoscaling/"
-  iam_role_max_session_duration = 7200
-
-  apply_immediately   = true
-  skip_final_snapshot = true
+  manage_master_user_password_rotation                   = true
+  master_user_password_rotation_automatically_after_days = 30
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
+  cluster_performance_insights_enabled          = true
+  cluster_performance_insights_retention_period = 31
+
+  # Multi-AZ
+  availability_zones        = module.vpc.azs
+  allocated_storage         = 256
+  db_cluster_instance_class = "db.r6gd.large"
+  iops                      = 2500
+  storage_type              = "io1"
+
+  cluster_ca_cert_identifier = "rds-ca-rsa4096-g1"
+
+  skip_final_snapshot = true
+
   tags = local.tags
-}
-
-module "disabled_aurora" {
-  source = "../../"
-
-  create = false
 }
 
 ################################################################################

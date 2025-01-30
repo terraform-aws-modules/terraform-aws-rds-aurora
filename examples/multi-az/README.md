@@ -1,6 +1,6 @@
-# MySQL Example
+# AWS RDS Multi-AZ Example
 
-Configuration in this directory creates a MySQL Aurora cluster.
+Configuration in this directory creates a PostgreSQL RDS Multi-AZ cluster. This is *NOT* using the Aurora engine. See more details [here](https://aws.amazon.com/blogs/aws/amazon-rds-multi-az-db-cluster/)
 
 ## Usage
 
@@ -33,9 +33,7 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aurora"></a> [aurora](#module\_aurora) | ../../ | n/a |
-| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | ~> 2.0 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 5.0 |
-| <a name="module_vpc_endpoints"></a> [vpc\_endpoints](#module\_vpc\_endpoints) | terraform-aws-modules/vpc/aws//modules/vpc-endpoints | ~> 5.0 |
 
 ## Resources
 
@@ -53,6 +51,8 @@ No inputs.
 |------|-------------|
 | <a name="output_additional_cluster_endpoints"></a> [additional\_cluster\_endpoints](#output\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_cluster_arn"></a> [cluster\_arn](#output\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
+| <a name="output_cluster_ca_certificate_identifier"></a> [cluster\_ca\_certificate\_identifier](#output\_cluster\_ca\_certificate\_identifier) | CA identifier of the CA certificate used for the DB instance's server certificate |
+| <a name="output_cluster_ca_certificate_valid_till"></a> [cluster\_ca\_certificate\_valid\_till](#output\_cluster\_ca\_certificate\_valid\_till) | Expiration date of the DB instance’s server certificate |
 | <a name="output_cluster_database_name"></a> [cluster\_database\_name](#output\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
 | <a name="output_cluster_endpoint"></a> [cluster\_endpoint](#output\_cluster\_endpoint) | Writer endpoint for the cluster |
 | <a name="output_cluster_engine_version_actual"></a> [cluster\_engine\_version\_actual](#output\_cluster\_engine\_version\_actual) | The running version of the cluster database |
@@ -65,7 +65,6 @@ No inputs.
 | <a name="output_cluster_reader_endpoint"></a> [cluster\_reader\_endpoint](#output\_cluster\_reader\_endpoint) | A read-only endpoint for the cluster, automatically load-balanced across replicas |
 | <a name="output_cluster_resource_id"></a> [cluster\_resource\_id](#output\_cluster\_resource\_id) | The RDS Cluster Resource ID |
 | <a name="output_cluster_role_associations"></a> [cluster\_role\_associations](#output\_cluster\_role\_associations) | A map of IAM roles associated with the cluster and their attributes |
-| <a name="output_db_cluster_activity_stream_kinesis_stream_name"></a> [db\_cluster\_activity\_stream\_kinesis\_stream\_name](#output\_db\_cluster\_activity\_stream\_kinesis\_stream\_name) | The name of the Amazon Kinesis data stream to be used for the database activity stream |
 | <a name="output_db_cluster_cloudwatch_log_groups"></a> [db\_cluster\_cloudwatch\_log\_groups](#output\_db\_cluster\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_db_cluster_parameter_group_arn"></a> [db\_cluster\_parameter\_group\_arn](#output\_db\_cluster\_parameter\_group\_arn) | The ARN of the DB cluster parameter group created |
 | <a name="output_db_cluster_parameter_group_id"></a> [db\_cluster\_parameter\_group\_id](#output\_db\_cluster\_parameter\_group\_id) | The ID of the DB cluster parameter group created |
