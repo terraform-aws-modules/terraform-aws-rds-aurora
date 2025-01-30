@@ -66,6 +66,16 @@ output "cluster_hosted_zone_id" {
   value       = module.aurora.cluster_hosted_zone_id
 }
 
+output "cluster_ca_certificate_identifier" {
+  description = "CA identifier of the CA certificate used for the DB instance's server certificate"
+  value       = module.aurora.cluster_ca_certificate_identifier
+}
+
+output "cluster_ca_certificate_valid_till" {
+  description = "Expiration date of the DB instance’s server certificate"
+  value       = module.aurora.cluster_ca_certificate_valid_till
+}
+
 ################################################################################
 # Cluster Instance(s)
 ################################################################################
@@ -156,4 +166,13 @@ output "db_parameter_group_id" {
 output "db_cluster_cloudwatch_log_groups" {
   description = "Map of CloudWatch log groups created and their attributes"
   value       = module.aurora.db_cluster_cloudwatch_log_groups
+}
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+output "db_cluster_secretsmanager_secret_rotation_enabled" {
+  description = "Specifies whether automatic rotation is enabled for the secret"
+  value       = module.aurora.db_cluster_secretsmanager_secret_rotation_enabled
 }
