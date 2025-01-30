@@ -1,10 +1,16 @@
-# aws_db_subnet_group
+################################################################################
+# DB Subnet Group
+################################################################################
+
 output "db_subnet_group_name" {
   description = "The db subnet group name"
   value       = module.aurora.db_subnet_group_name
 }
 
-# aws_rds_cluster
+################################################################################
+# Cluster
+################################################################################
+
 output "cluster_arn" {
   description = "Amazon Resource Name (ARN) of cluster"
   value       = module.aurora.cluster_arn
@@ -40,7 +46,6 @@ output "cluster_engine_version_actual" {
   value       = module.aurora.cluster_engine_version_actual
 }
 
-# database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
 output "cluster_database_name" {
   description = "Name for an automatically created database on cluster creation"
   value       = module.aurora.cluster_database_name
@@ -51,16 +56,9 @@ output "cluster_port" {
   value       = module.aurora.cluster_port
 }
 
-output "cluster_master_password" {
-  description = "The database master password"
-  value       = module.aurora.cluster_master_password
-  sensitive   = true
-}
-
-output "cluster_master_username" {
-  description = "The database master username"
-  value       = module.aurora.cluster_master_username
-  sensitive   = true
+output "cluster_master_user_secret" {
+  description = "The generated database master user secret when `manage_master_user_password` is set to `true`"
+  value       = module.aurora.cluster_master_user_secret
 }
 
 output "cluster_hosted_zone_id" {
@@ -68,25 +66,37 @@ output "cluster_hosted_zone_id" {
   value       = module.aurora.cluster_hosted_zone_id
 }
 
-# aws_rds_cluster_instances
+################################################################################
+# Cluster Instance(s)
+################################################################################
+
 output "cluster_instances" {
   description = "A map of cluster instances and their attributes"
   value       = module.aurora.cluster_instances
 }
 
-# aws_rds_cluster_endpoint
+################################################################################
+# Cluster Endpoint(s)
+################################################################################
+
 output "additional_cluster_endpoints" {
   description = "A map of additional cluster endpoints and their attributes"
   value       = module.aurora.additional_cluster_endpoints
 }
 
-# aws_rds_cluster_role_association
+################################################################################
+# Cluster IAM Roles
+################################################################################
+
 output "cluster_role_associations" {
   description = "A map of IAM roles associated with the cluster and their attributes"
   value       = module.aurora.cluster_role_associations
 }
 
-# Enhanced monitoring role
+################################################################################
+# Enhanced Monitoring
+################################################################################
+
 output "enhanced_monitoring_iam_role_name" {
   description = "The name of the enhanced monitoring role"
   value       = module.aurora.enhanced_monitoring_iam_role_name
@@ -102,8 +112,57 @@ output "enhanced_monitoring_iam_role_unique_id" {
   value       = module.aurora.enhanced_monitoring_iam_role_unique_id
 }
 
-# aws_security_group
+################################################################################
+# Security Group
+################################################################################
+
 output "security_group_id" {
   description = "The security group ID of the cluster"
   value       = module.aurora.security_group_id
+}
+
+################################################################################
+# Cluster Parameter Group
+################################################################################
+
+output "db_cluster_parameter_group_arn" {
+  description = "The ARN of the DB cluster parameter group created"
+  value       = module.aurora.db_cluster_parameter_group_arn
+}
+
+output "db_cluster_parameter_group_id" {
+  description = "The ID of the DB cluster parameter group created"
+  value       = module.aurora.db_cluster_parameter_group_id
+}
+
+################################################################################
+# DB Parameter Group
+################################################################################
+
+output "db_parameter_group_arn" {
+  description = "The ARN of the DB parameter group created"
+  value       = module.aurora.db_parameter_group_arn
+}
+
+output "db_parameter_group_id" {
+  description = "The ID of the DB parameter group created"
+  value       = module.aurora.db_parameter_group_id
+}
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+output "db_cluster_cloudwatch_log_groups" {
+  description = "Map of CloudWatch log groups created and their attributes"
+  value       = module.aurora.db_cluster_cloudwatch_log_groups
+}
+
+################################################################################
+# Cluster Activity Stream
+################################################################################
+
+output "db_cluster_activity_stream_kinesis_stream_name" {
+  description = "The name of the Amazon Kinesis data stream to be used for the database activity stream"
+  value       = module.aurora.db_cluster_activity_stream_kinesis_stream_name
 }
