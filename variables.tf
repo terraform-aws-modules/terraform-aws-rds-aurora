@@ -120,6 +120,18 @@ variable "cluster_performance_insights_retention_period" {
   default     = null
 }
 
+variable "cluster_monitoring_interval" {
+  description = "Interval, in seconds, in seconds, between points when Enhanced Monitoring metrics are collected for the DB cluster. To turn off collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60"
+  type        = number
+  default     = 0
+}
+
+variable "cluster_monitoring_role_arn" {
+  description = "ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. You can find more information on the AWS Documentation what IAM permissions are needed to allow Enhanced Monitoring for RDS Clusters"
+  type        = string
+  default     = null
+}
+
 variable "copy_tags_to_snapshot" {
   description = "Copy all Cluster `tags` to snapshots"
   type        = bool

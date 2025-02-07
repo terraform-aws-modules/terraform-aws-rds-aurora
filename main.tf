@@ -77,6 +77,8 @@ resource "aws_rds_cluster" "this" {
   master_user_secret_kms_key_id         = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
   master_password                       = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
   master_username                       = var.is_primary_cluster ? var.master_username : null
+  monitoring_interval                   = var.cluster_monitoring_interval
+  monitoring_role_arn                   = var.create_monitoring_role && var.cluster_monitoring_interval > 0 ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.cluster_monitoring_role_arn
   network_type                          = var.network_type
   performance_insights_enabled          = var.cluster_performance_insights_enabled
   performance_insights_kms_key_id       = var.cluster_performance_insights_kms_key_id
@@ -181,7 +183,7 @@ resource "aws_rds_cluster_instance" "this" {
   identifier                            = var.instances_use_identifier_prefix ? null : try(each.value.identifier, "${var.name}-${each.key}")
   identifier_prefix                     = var.instances_use_identifier_prefix ? try(each.value.identifier_prefix, "${var.name}-${each.key}-") : null
   instance_class                        = try(each.value.instance_class, var.instance_class)
-  monitoring_interval                   = try(each.value.monitoring_interval, var.monitoring_interval)
+  monitoring_interval                   = var.cluster_monitoring_interval > 0 ? var.cluster_monitoring_interval : try(each.value.monitoring_interval, var.monitoring_interval)
   monitoring_role_arn                   = var.create_monitoring_role ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.monitoring_role_arn
   performance_insights_enabled          = try(each.value.performance_insights_enabled, var.performance_insights_enabled)
   performance_insights_kms_key_id       = try(each.value.performance_insights_kms_key_id, var.performance_insights_kms_key_id)
@@ -235,7 +237,7 @@ resource "aws_rds_cluster_role_association" "this" {
 ################################################################################
 
 locals {
-  create_monitoring_role = local.create && var.create_monitoring_role && var.monitoring_interval > 0
+  create_monitoring_role = local.create && var.create_monitoring_role && (var.monitoring_interval > 0 || var.cluster_monitoring_interval > 0)
 }
 
 data "aws_iam_policy_document" "monitoring_rds_assume_role" {

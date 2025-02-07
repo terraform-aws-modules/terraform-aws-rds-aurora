@@ -25,11 +25,16 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name            = local.name
-  engine          = "aurora-postgresql"
-  engine_version  = "14.7"
-  master_username = "root"
-  storage_type    = "aurora-iopt1"
+  name                        = local.name
+  engine                      = "aurora-postgresql"
+  engine_version              = "14.13"
+  master_username             = "root"
+  storage_type                = "aurora-iopt1"
+  cluster_monitoring_interval = 30
+  iam_role_name               = "${local.name}-monitor"
+  iam_role_use_name_prefix    = true
+  iam_role_description        = "${local.name} RDS enhanced monitoring IAM role"
+
   instances = {
     1 = {
       instance_class          = "db.r5.2xlarge"
@@ -115,7 +120,7 @@ module "aurora" {
     Sensitivity = "high"
   }
 
-  create_db_cluster_activity_stream     = true
+  create_db_cluster_activity_stream     = false
   db_cluster_activity_stream_kms_key_id = module.kms.key_id
   db_cluster_activity_stream_mode       = "async"
 
