@@ -31,9 +31,6 @@ module "aurora" {
   master_username             = "root"
   storage_type                = "aurora-iopt1"
   cluster_monitoring_interval = 30
-  iam_role_name               = "${local.name}-monitor"
-  iam_role_use_name_prefix    = true
-  iam_role_description        = "${local.name} RDS enhanced monitoring IAM role"
 
   instances = {
     1 = {

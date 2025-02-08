@@ -126,12 +126,6 @@ variable "cluster_monitoring_interval" {
   default     = 0
 }
 
-variable "cluster_monitoring_role_arn" {
-  description = "ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. You can find more information on the AWS Documentation what IAM permissions are needed to allow Enhanced Monitoring for RDS Clusters"
-  type        = string
-  default     = null
-}
-
 variable "copy_tags_to_snapshot" {
   description = "Copy all Cluster `tags` to snapshots"
   type        = bool
