@@ -314,13 +314,24 @@ variable "s3_import" {
 
 variable "scaling_configuration" {
   description = "Map of nested attributes with scaling properties. Only valid when `engine_mode` is set to `serverless`"
-  type        = map(string)
+  type        = object({
+    auto_pause                = optional(bool)
+    min_capacity              = optional(number)
+    max_capacity              = optional(number)
+    seconds_before_timeout    = optional(number)
+    seconds_until_auto_pause  = optional(number)
+    timeout_action            = optional(string)
+  })
   default     = {}
 }
 
 variable "serverlessv2_scaling_configuration" {
   description = "Map of nested attributes with serverless v2 scaling properties. Only valid when `engine_mode` is set to `provisioned`"
-  type        = map(string)
+  type        = object({
+    min_capacity              = optional(number)
+    max_capacity              = optional(number)
+    seconds_until_auto_pause  = optional(number)
+  })
   default     = {}
 }
 
