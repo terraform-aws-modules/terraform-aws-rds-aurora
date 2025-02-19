@@ -121,7 +121,7 @@ variable "cluster_performance_insights_retention_period" {
 }
 
 variable "cluster_monitoring_interval" {
-  description = "Interval, in seconds, in seconds, between points when Enhanced Monitoring metrics are collected for the DB cluster. To turn off collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60"
+  description = "Interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB cluster. To turn off collecting Enhanced Monitoring metrics, specify 0. Valid Values: 0, 1, 5, 10, 15, 30, 60"
   type        = number
   default     = 0
 }
