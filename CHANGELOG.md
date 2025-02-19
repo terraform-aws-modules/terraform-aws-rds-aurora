@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.12.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.11.0...v9.12.0) (2025-02-19)
+
+
+### Features
+
+* Support RDS Cluster monitoring interval and role arn  ([#485](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/485)) ([b172e08](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/b172e0815292229ede381e2f8132b83ba7ad418c))
+
 ## [9.11.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.10.0...v9.11.0) (2024-12-19)
 
 
