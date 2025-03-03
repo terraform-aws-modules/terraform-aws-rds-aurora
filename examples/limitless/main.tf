@@ -25,13 +25,15 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name                                          = local.name
-  engine                                        = "aurora-postgresql"
-  engine_version                                = "16.6-limitless"
-  master_username                               = "root"
-  storage_type                                  = "aurora-iopt1"
-  cluster_monitoring_interval                   = 30
-  cluster_scalability_type                      = "limitless"
+  name                        = local.name
+  engine                      = "aurora-postgresql"
+  engine_version              = "16.6-limitless"
+  master_username             = "root"
+  storage_type                = "aurora-iopt1"
+  cluster_monitoring_interval = 30
+  cluster_scalability_type    = "limitless"
+
+  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/limitless-reqs-limits.html
   cluster_performance_insights_enabled          = true
   cluster_performance_insights_retention_period = 31
 
