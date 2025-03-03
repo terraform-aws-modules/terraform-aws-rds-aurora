@@ -198,3 +198,22 @@ output "db_cluster_secretsmanager_secret_rotation_enabled" {
   description = "Specifies whether automatic rotation is enabled for the secret"
   value       = try(aws_secretsmanager_secret_rotation.this[0].rotation_enabled, null)
 }
+
+################################################################################
+# RDS Shard Group
+################################################################################
+
+output "db_shard_group_arn" {
+  description = "ARN of the shard group"
+  value       = try(aws_rds_shard_group.this[0].arn, null)
+}
+
+output "db_shard_group_resource_id" {
+  description = "The AWS Region-unique, immutable identifier for the DB shard group"
+  value       = try(aws_rds_shard_group.this[0].db_shard_group_resource_id, null)
+}
+
+output "db_shard_group_endpoint" {
+  description = "The connection endpoint for the DB shard group"
+  value       = try(aws_rds_shard_group.this[0].endpoint, null)
+}

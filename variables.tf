@@ -102,6 +102,12 @@ variable "cluster_members" {
   default     = null
 }
 
+variable "cluster_scalability_type" {
+  description = "Specifies the scalability mode of the Aurora DB cluster. When set to limitless, the cluster operates as an Aurora Limitless Database. When set to standard (the default), the cluster uses normal DB instance creation. Valid values: limitless, standard"
+  type        = string
+  default     = null
+}
+
 variable "cluster_performance_insights_enabled" {
   description = "Valid only for Non-Aurora Multi-AZ DB Clusters. Enables Performance Insights for the RDS Cluster"
   type        = bool
@@ -129,6 +135,12 @@ variable "cluster_monitoring_interval" {
 variable "copy_tags_to_snapshot" {
   description = "Copy all Cluster `tags` to snapshots"
   type        = bool
+  default     = null
+}
+
+variable "database_insights_mode" {
+  description = "The mode of Database Insights to enable for the DB cluster. Valid values: standard, advanced"
+  type        = string
   default     = null
 }
 
@@ -822,4 +834,44 @@ variable "master_user_password_rotation_schedule_expression" {
   description = "A cron() or rate() expression that defines the schedule for rotating your secret. Either `master_user_password_rotation_automatically_after_days` or `master_user_password_rotation_schedule_expression` must be specified"
   type        = string
   default     = null
+}
+
+################################################################################
+# RDS Shard Group
+################################################################################
+
+variable "create_shard_group" {
+  description = "Whether to create a shard group resource"
+  type        = bool
+  default     = false
+}
+
+variable "compute_redundancy" {
+  description = "Specifies whether to create standby DB shard groups for the DB shard group"
+  type        = number
+  default     = null
+}
+
+variable "db_shard_group_identifier" {
+  description = "The name of the DB shard group"
+  type        = string
+  default     = null
+}
+
+variable "max_acu" {
+  description = "The maximum capacity of the DB shard group in Aurora capacity units (ACUs)"
+  type        = number
+  default     = null
+}
+
+variable "min_acu" {
+  description = "The minimum capacity of the DB shard group in Aurora capacity units (ACUs)"
+  type        = number
+  default     = null
+}
+
+variable "shard_group_timeouts" {
+  description = "Create, update, and delete timeout configurations for the shard group"
+  type        = map(string)
+  default     = {}
 }
