@@ -870,6 +870,12 @@ variable "min_acu" {
   default     = null
 }
 
+variable "shard_group_tags" {
+  description = "Additional tags for the shard group"
+  type        = map(string)
+  default     = {}
+}
+
 variable "shard_group_timeouts" {
   description = "Create, update, and delete timeout configurations for the shard group"
   type        = map(string)

@@ -489,7 +489,7 @@ resource "aws_rds_shard_group" "this" {
   max_acu                   = var.max_acu
   min_acu                   = var.min_acu
   publicly_accessible       = var.publicly_accessible
-  tags                      = var.tags
+  tags                      = merge(var.tags, var.shard_group_tags)
 
   timeouts {
     create = try(var.shard_group_timeouts.create, null)
