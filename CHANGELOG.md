@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.13.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.12.0...v9.13.0) (2025-03-04)
+
+
+### Features
+
+* Support Aurora Limitless ([#488](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/488)) ([cf96537](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/cf965379f7370be440566156bcfa0e2883277629))
+
 ## [9.12.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.11.0...v9.12.0) (2025-02-19)
 
 
