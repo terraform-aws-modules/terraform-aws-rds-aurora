@@ -49,7 +49,9 @@ resource "aws_rds_cluster" "this" {
   cluster_identifier                  = var.cluster_use_name_prefix ? null : var.name
   cluster_identifier_prefix           = var.cluster_use_name_prefix ? "${var.name}-" : null
   cluster_members                     = var.cluster_members
+  cluster_scalability_type            = var.cluster_scalability_type
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
+  database_insights_mode              = var.database_insights_mode
   database_name                       = var.is_primary_cluster ? var.database_name : null
   db_cluster_instance_class           = var.db_cluster_instance_class
   db_cluster_parameter_group_name     = var.create_db_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.db_cluster_parameter_group_name
@@ -62,7 +64,7 @@ resource "aws_rds_cluster" "this" {
   enabled_cloudwatch_logs_exports     = var.enabled_cloudwatch_logs_exports
   enable_http_endpoint                = var.enable_http_endpoint
   engine                              = var.engine
-  engine_mode                         = var.engine_mode
+  engine_mode                         = var.cluster_scalability_type == "limitless" ? "" : var.engine_mode
   engine_version                      = var.engine_version
   engine_lifecycle_support            = var.engine_lifecycle_support
   final_snapshot_identifier           = var.final_snapshot_identifier
@@ -471,5 +473,27 @@ resource "aws_secretsmanager_secret_rotation" "this" {
     automatically_after_days = var.master_user_password_rotation_automatically_after_days
     duration                 = var.master_user_password_rotation_duration
     schedule_expression      = var.master_user_password_rotation_schedule_expression
+  }
+}
+
+################################################################################
+# RDS Shard Group
+################################################################################
+
+resource "aws_rds_shard_group" "this" {
+  count = local.create && var.create_shard_group ? 1 : 0
+
+  compute_redundancy        = var.compute_redundancy
+  db_cluster_identifier     = aws_rds_cluster.this[0].id
+  db_shard_group_identifier = var.db_shard_group_identifier
+  max_acu                   = var.max_acu
+  min_acu                   = var.min_acu
+  publicly_accessible       = var.publicly_accessible
+  tags                      = merge(var.tags, var.shard_group_tags)
+
+  timeouts {
+    create = try(var.shard_group_timeouts.create, null)
+    update = try(var.shard_group_timeouts.update, null)
+    delete = try(var.shard_group_timeouts.delete, null)
   }
 }
