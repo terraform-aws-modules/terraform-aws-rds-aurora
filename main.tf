@@ -337,7 +337,7 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
   description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
 
-  tags = merge(var.tags, var.security_group_tags, { Name = local.security_group_name })
+  tags = merge(var.tags, { Name = local.security_group_name }, var.security_group_tags)
 
   lifecycle {
     create_before_destroy = true
