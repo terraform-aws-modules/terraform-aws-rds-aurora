@@ -199,6 +199,11 @@ output "db_cluster_secretsmanager_secret_rotation_enabled" {
   value       = try(aws_secretsmanager_secret_rotation.this[0].rotation_enabled, null)
 }
 
+output "db_cluster_secretsmanager_secret_arn" {
+  description = "Specifies Amazon Resource Name (ARN) of the secret"
+  value       = try(aws_secretsmanager_secret_rotation.this[0].secret_id, null)
+}
+
 ################################################################################
 # RDS Shard Group
 ################################################################################
