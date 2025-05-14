@@ -43,7 +43,7 @@ module "aurora" {
   iam_roles = {
     s3_import = {
       role_arn     = aws_iam_role.s3_import.arn
-      feature_name = "s3Import"
+      feature_name = ""
     }
   }
 
