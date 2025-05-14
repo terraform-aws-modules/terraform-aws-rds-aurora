@@ -40,13 +40,6 @@ module "aurora" {
     }
   }
 
-  iam_roles = {
-    s3_import = {
-      role_arn     = aws_iam_role.s3_import.arn
-      feature_name = ""
-    }
-  }
-
   # S3 import https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html
   s3_import = {
     source_engine_version = "5.7.12"
