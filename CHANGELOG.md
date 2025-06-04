@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.14.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.13.0...v9.14.0) (2025-06-04)
+
+
+### Features
+
+* Add `create_before_destroy` to Aurora DB instance resource ([#506](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/506)) ([6468f81](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/6468f81cf317a95a4810f1d796a7ca4abeb276f2))
+
 ## [9.13.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.12.0...v9.13.0) (2025-03-04)
 
 
