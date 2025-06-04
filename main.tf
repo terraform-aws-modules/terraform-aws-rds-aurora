@@ -201,6 +201,11 @@ resource "aws_rds_cluster_instance" "this" {
     update = try(var.instance_timeouts.update, null)
     delete = try(var.instance_timeouts.delete, null)
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 ################################################################################
