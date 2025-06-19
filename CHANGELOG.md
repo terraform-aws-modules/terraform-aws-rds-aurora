@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.15.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.14.0...v9.15.0) (2025-06-19)
+
+
+### Features
+
+* DSQL Support ([#508](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/508)) ([dad2482](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/dad2482222e16cf62ba528c5bb15185b6f584d9d))
+
 ## [9.14.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.13.0...v9.14.0) (2025-06-04)
 
 
