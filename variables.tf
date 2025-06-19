@@ -109,19 +109,19 @@ variable "cluster_scalability_type" {
 }
 
 variable "cluster_performance_insights_enabled" {
-  description = "Valid only for Non-Aurora Multi-AZ DB Clusters. Enables Performance Insights for the RDS Cluster"
+  description = "Enables Performance Insights for the RDS Cluster"
   type        = bool
   default     = null
 }
 
 variable "cluster_performance_insights_kms_key_id" {
-  description = "Valid only for Non-Aurora Multi-AZ DB Clusters. Specifies the KMS Key ID to encrypt Performance Insights data. If not specified, the default RDS KMS key will be used (aws/rds)"
+  description = "Specifies the KMS Key ID to encrypt Performance Insights data. If not specified, the default RDS KMS key will be used (aws/rds)"
   type        = string
   default     = null
 }
 
 variable "cluster_performance_insights_retention_period" {
-  description = "Valid only for Non-Aurora Multi-AZ DB Clusters. Specifies the amount of time to retain performance insights data for. Defaults to 7 days if Performance Insights are enabled. Valid values are 7, month * 31 (where month is a number of months from 1-23), and 731"
+  description = "Specifies the amount of time to retain performance insights data for. Defaults to 7 days if Performance Insights are enabled. Valid values are 7, month * 31 (where month is a number of months from 1-23), and 731"
   type        = number
   default     = null
 }
