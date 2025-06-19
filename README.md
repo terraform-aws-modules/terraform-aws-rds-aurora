@@ -15,6 +15,7 @@ Terraform module which creates AWS RDS Aurora resources.
 - Custom endpoints
 - RDS multi-AZ support (not Aurora)
 - Aurora Limitless
+- Aurora DSQL cluster
 
 ## Usage
 
@@ -205,6 +206,33 @@ module "cluster" {
 }
 ```
 
+## DSQL Multi Region Peered Clusters
+```hcl
+module "dsql_cluster_1" {
+  source = "../../modules/dsql"
+
+  witness_region              = "us-west-2"
+  create_cluster_peering      = true
+  clusters                    = [module.dsql_cluster_2.arn]
+
+  tags = { Name = "dsql-1" }
+}
+
+module "dsql_cluster_2" {
+  source = "../../modules/dsql"
+
+  witness_region              = "us-west-2"
+  create_cluster_peering      = true
+  clusters                    = [module.dsql_cluster_1.arn]
+
+  tags = { Name = "dsql-2" }
+
+  providers = {
+    aws = aws.region2
+  }
+}
+```
+
 ## Examples
 
 - [Autoscaling](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
@@ -215,6 +243,7 @@ module "cluster" {
 - [PostgreSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/postgresql): A simple PostgreSQL cluster
 - [S3 Import](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/s3-import): A MySQL cluster created from a Percona Xtrabackup stored in S3
 - [Serverless](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/serverless): Serverless V1 and V2 (PostgreSQL and MySQL)
+- [DSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/dsql): Multi region and single region DSQL clusters
 
 ## Documentation
 
