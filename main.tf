@@ -78,6 +78,8 @@ resource "aws_rds_cluster" "this" {
   manage_master_user_password           = var.global_cluster_identifier == null && var.manage_master_user_password ? var.manage_master_user_password : null
   master_user_secret_kms_key_id         = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
   master_password                       = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
+  master_password_wo                    = var.master_password_wo
+  master_password_wo_version            = var.master_password_wo_version
   master_username                       = var.is_primary_cluster ? var.master_username : null
   monitoring_interval                   = var.cluster_monitoring_interval
   monitoring_role_arn                   = var.create_monitoring_role && var.cluster_monitoring_interval > 0 ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.monitoring_role_arn

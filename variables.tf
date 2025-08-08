@@ -282,6 +282,20 @@ variable "master_password" {
   default     = null
 }
 
+variable "master_password_wo" {
+  description = "Write-only password for the master DB user. Required unless `manage_master_user_password` is set to `true`, or unless `snapshot_identifier` or `replication_source_identifier` is provided, or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database. Unlike `master_password`, this value will not be stored in the Terraform state file"
+  type        = string
+  ephemeral   = true
+  default     = null
+}
+
+variable "master_password_wo_version" {
+  description = "Optional version identifier used to detect changes in `master_password_wo` and force update. Increment to rotate the password."
+  type        = string
+  default     = null
+}
+
+
 variable "master_username" {
   description = "Username for the master DB user. Required unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
