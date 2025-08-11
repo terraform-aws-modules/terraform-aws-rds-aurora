@@ -2,9 +2,14 @@ provider "aws" {
   region = local.region
 }
 
+data "aws_availability_zones" "available" {}
+
 locals {
-  name   = "ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "ex-${basename(path.cwd)}"
   region = "eu-west-1"
+
+  vpc_cidr = "10.0.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
     Example    = local.name
@@ -20,17 +25,20 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name           = local.name
-  engine         = "aurora-mysql"
-  engine_version = "5.7.12"
-  instance_class = "db.r5.large"
-  instances      = { 1 = {} }
+  name            = local.name
+  engine          = "aurora-mysql"
+  engine_version  = "5.7.12"
+  master_username = "root"
+  instance_class  = "db.r5.large"
+  instances       = { 1 = {} }
 
-  vpc_id                 = module.vpc.vpc_id
-  db_subnet_group_name   = module.vpc.database_subnet_group_name
-  create_db_subnet_group = false
-  create_security_group  = true
-  allowed_cidr_blocks    = module.vpc.private_subnets_cidr_blocks
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
+  security_group_rules = {
+    vpc_ingress = {
+      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    }
+  }
 
   iam_roles = {
     s3_import = {
@@ -48,49 +56,26 @@ module "aurora" {
 
   skip_final_snapshot = true
 
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
 
   tags = local.tags
-}
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-57-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-db-57-parameter-group"
-  tags        = local.tags
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-57-cluster-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-57-cluster-parameter-group"
-  tags        = local.tags
 }
 
 ################################################################################
 # Supporting Resources
 ################################################################################
 
-resource "random_pet" "this" {
-  length = 2
-}
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   name = local.name
-  cidr = "10.99.0.0/18"
+  cidr = local.vpc_cidr
 
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
-
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  azs              = local.azs
+  public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
+  database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
   tags = local.tags
 }
@@ -99,7 +84,7 @@ module "import_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket        = "${local.name}-${random_pet.this.id}"
+  bucket_prefix = "${local.name}-"
   acl           = "private"
   force_destroy = true
 
@@ -120,7 +105,7 @@ data "aws_iam_policy_document" "s3_import_assume" {
 }
 
 resource "aws_iam_role" "s3_import" {
-  name                  = "${local.name}-${random_pet.this.id}"
+  name_prefix           = "${local.name}-"
   description           = "IAM role to allow RDS to import MySQL backup from S3"
   assume_role_policy    = data.aws_iam_policy_document.s3_import_assume.json
   force_detach_policies = true
@@ -152,9 +137,9 @@ data "aws_iam_policy_document" "s3_import" {
 }
 
 resource "aws_iam_role_policy" "s3_import" {
-  name   = "${local.name}-${random_pet.this.id}"
-  role   = aws_iam_role.s3_import.id
-  policy = data.aws_iam_policy_document.s3_import.json
+  name_prefix = "${local.name}-"
+  role        = aws_iam_role.s3_import.id
+  policy      = data.aws_iam_policy_document.s3_import.json
 
   # We need the files uploaded before the RDS instance is created, and the instance
   # also needs this role so this is an easy way of ensuring the backup is uploaded before

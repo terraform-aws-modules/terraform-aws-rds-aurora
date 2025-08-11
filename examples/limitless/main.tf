@@ -27,42 +27,24 @@ module "aurora" {
 
   name                        = local.name
   engine                      = "aurora-postgresql"
-  engine_version              = "14.13"
+  engine_version              = "16.6-limitless"
   master_username             = "root"
   storage_type                = "aurora-iopt1"
   cluster_monitoring_interval = 30
+  cluster_scalability_type    = "limitless"
 
-  instances = {
-    1 = {
-      instance_class          = "db.r5.2xlarge"
-      publicly_accessible     = true
-      db_parameter_group_name = "default.aurora-postgresql14"
-    }
-    2 = {
-      identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
-    }
-    3 = {
-      identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
-      promotion_tier = 15
-    }
-  }
+  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/limitless-reqs-limits.html
+  cluster_performance_insights_enabled          = true
+  cluster_performance_insights_retention_period = 31
 
-  endpoints = {
-    static = {
-      identifier     = "static-custom-endpt"
-      type           = "ANY"
-      static_members = ["static-member-1"]
-      tags           = { Endpoint = "static-members" }
-    }
-    excluded = {
-      identifier       = "excluded-custom-endpt"
-      type             = "READER"
-      excluded_members = ["excluded-member-1"]
-      tags             = { Endpoint = "excluded-members" }
-    }
-  }
+  create_shard_group        = true
+  compute_redundancy        = 0
+  db_shard_group_identifier = local.name
+  max_acu                   = 16
+
+  # aurora limitless clusters do not support managed master user password
+  manage_master_user_password = false
+  master_password             = random_password.master.result
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -80,11 +62,9 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  engine_lifecycle_support = "open-source-rds-extended-support-disabled"
-
   create_db_cluster_parameter_group      = true
   db_cluster_parameter_group_name        = local.name
-  db_cluster_parameter_group_family      = "aurora-postgresql14"
+  db_cluster_parameter_group_family      = "aurora-postgresql16"
   db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
   db_cluster_parameter_group_parameters = [
     {
@@ -98,18 +78,6 @@ module "aurora" {
     }
   ]
 
-  create_db_parameter_group      = true
-  db_parameter_group_name        = local.name
-  db_parameter_group_family      = "aurora-postgresql14"
-  db_parameter_group_description = "${local.name} example DB parameter group"
-  db_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-    }
-  ]
-
   enabled_cloudwatch_logs_exports = ["postgresql"]
   create_cloudwatch_log_group     = true
 
@@ -117,16 +85,17 @@ module "aurora" {
     Sensitivity = "high"
   }
 
-  create_db_cluster_activity_stream     = true
-  db_cluster_activity_stream_kms_key_id = module.kms.key_id
-  db_cluster_activity_stream_mode       = "async"
-
   tags = local.tags
 }
 
 ################################################################################
 # Supporting Resources
 ################################################################################
+
+resource "random_password" "master" {
+  length  = 20
+  special = false
+}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"

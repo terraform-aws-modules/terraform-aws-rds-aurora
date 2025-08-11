@@ -14,19 +14,21 @@ $ terraform apply
 
 Note that this example may create resources which cost money. Run `terraform destroy` when you don't need these resources.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.30 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.89 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.30 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.89 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
 ## Modules
 
@@ -36,20 +38,14 @@ Note that this example may create resources which cost money. Run `terraform des
 | <a name="module_aurora_mysql_v2"></a> [aurora\_mysql\_v2](#module\_aurora\_mysql\_v2) | ../../ | n/a |
 | <a name="module_aurora_postgresql"></a> [aurora\_postgresql](#module\_aurora\_postgresql) | ../../ | n/a |
 | <a name="module_aurora_postgresql_v2"></a> [aurora\_postgresql\_v2](#module\_aurora\_postgresql\_v2) | ../../ | n/a |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 5.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [aws_db_parameter_group.example_mysql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_parameter_group) | resource |
-| [aws_db_parameter_group.example_mysql8](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_parameter_group) | resource |
-| [aws_db_parameter_group.example_postgresql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_parameter_group) | resource |
-| [aws_db_parameter_group.example_postgresql13](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_parameter_group) | resource |
-| [aws_rds_cluster_parameter_group.example_mysql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) | resource |
-| [aws_rds_cluster_parameter_group.example_mysql8](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) | resource |
-| [aws_rds_cluster_parameter_group.example_postgresql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) | resource |
-| [aws_rds_cluster_parameter_group.example_postgresql13](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_parameter_group) | resource |
+| [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_rds_engine_version.postgresql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/rds_engine_version) | data source |
 
 ## Inputs
@@ -100,6 +96,7 @@ No inputs.
 | <a name="output_aurora_postgresql_v2_enhanced_monitoring_iam_role_name"></a> [aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_name](#output\_aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
 | <a name="output_aurora_postgresql_v2_enhanced_monitoring_iam_role_unique_id"></a> [aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_unique\_id](#output\_aurora\_postgresql\_v2\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_aurora_postgresql_v2_security_group_id"></a> [aurora\_postgresql\_v2\_security\_group\_id](#output\_aurora\_postgresql\_v2\_security\_group\_id) | The security group ID of the cluster |
+| <a name="output_aurora_postresql_v2_cloudwatch_log_groups"></a> [aurora\_postresql\_v2\_cloudwatch\_log\_groups](#output\_aurora\_postresql\_v2\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_mysql_additional_cluster_endpoints"></a> [mysql\_additional\_cluster\_endpoints](#output\_mysql\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_mysql_cluster_arn"></a> [mysql\_cluster\_arn](#output\_mysql\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
 | <a name="output_mysql_cluster_database_name"></a> [mysql\_cluster\_database\_name](#output\_mysql\_cluster\_database\_name) | Name for an automatically created database on cluster creation |
@@ -140,4 +137,4 @@ No inputs.
 | <a name="output_postgresql_enhanced_monitoring_iam_role_name"></a> [postgresql\_enhanced\_monitoring\_iam\_role\_name](#output\_postgresql\_enhanced\_monitoring\_iam\_role\_name) | The name of the enhanced monitoring role |
 | <a name="output_postgresql_enhanced_monitoring_iam_role_unique_id"></a> [postgresql\_enhanced\_monitoring\_iam\_role\_unique\_id](#output\_postgresql\_enhanced\_monitoring\_iam\_role\_unique\_id) | Stable and unique string identifying the enhanced monitoring role |
 | <a name="output_postgresql_security_group_id"></a> [postgresql\_security\_group\_id](#output\_postgresql\_security\_group\_id) | The security group ID of the cluster |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

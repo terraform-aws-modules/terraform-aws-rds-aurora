@@ -1,3 +1,9 @@
+variable "create" {
+  description = "Whether cluster should be created (affects nearly all resources)"
+  type        = bool
+  default     = true
+}
+
 variable "name" {
   description = "Name used across resources created"
   type        = string
@@ -11,29 +17,13 @@ variable "tags" {
 }
 
 ################################################################################
-# Random Password & Snapshot ID
-################################################################################
-
-variable "create_random_password" {
-  description = "Determines whether to create random password for RDS primary cluster"
-  type        = bool
-  default     = true
-}
-
-variable "random_password_length" {
-  description = "Length of random password to create. Defaults to `10`"
-  type        = number
-  default     = 10
-}
-
-################################################################################
 # DB Subnet Group
 ################################################################################
 
 variable "create_db_subnet_group" {
   description = "Determines whether to create the database subnet group or use existing"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "db_subnet_group_name" {
@@ -48,21 +38,9 @@ variable "subnets" {
   default     = []
 }
 
-variable "network_type" {
-  description = "The type of network stack to use (IPV4 or DUAL)"
-  type        = string
-  default     = null
-}
-
 ################################################################################
 # Cluster
 ################################################################################
-
-variable "create_cluster" {
-  description = "Whether cluster should be created (affects nearly all resources)"
-  type        = bool
-  default     = true
-}
 
 variable "is_primary_cluster" {
   description = "Determines whether cluster is primary cluster with writer instance (set to `false` for global cluster and replica clusters)"
@@ -101,14 +79,20 @@ variable "availability_zones" {
 }
 
 variable "backup_retention_period" {
-  description = "The days to retain backups for. Default `7`"
+  description = "The days to retain backups for"
   type        = number
-  default     = 7
+  default     = null
 }
 
 variable "backtrack_window" {
   description = "The target backtrack window, in seconds. Only available for `aurora` engine currently. To disable backtracking, set this value to 0. Must be between 0 and 259200 (72 hours)"
   type        = number
+  default     = null
+}
+
+variable "cluster_ca_cert_identifier" {
+  description = "The CA certificate identifier to use for the DB cluster's server certificate. Currently only supported for multi-az DB clusters"
+  type        = string
   default     = null
 }
 
@@ -118,9 +102,45 @@ variable "cluster_members" {
   default     = null
 }
 
+variable "cluster_scalability_type" {
+  description = "Specifies the scalability mode of the Aurora DB cluster. When set to limitless, the cluster operates as an Aurora Limitless Database. When set to standard (the default), the cluster uses normal DB instance creation. Valid values: limitless, standard"
+  type        = string
+  default     = null
+}
+
+variable "cluster_performance_insights_enabled" {
+  description = "Enables Performance Insights for the RDS Cluster"
+  type        = bool
+  default     = null
+}
+
+variable "cluster_performance_insights_kms_key_id" {
+  description = "Specifies the KMS Key ID to encrypt Performance Insights data. If not specified, the default RDS KMS key will be used (aws/rds)"
+  type        = string
+  default     = null
+}
+
+variable "cluster_performance_insights_retention_period" {
+  description = "Specifies the amount of time to retain performance insights data for. Defaults to 7 days if Performance Insights are enabled. Valid values are 7, month * 31 (where month is a number of months from 1-23), and 731"
+  type        = number
+  default     = null
+}
+
+variable "cluster_monitoring_interval" {
+  description = "Interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB cluster. To turn off collecting Enhanced Monitoring metrics, specify 0. Valid Values: 0, 1, 5, 10, 15, 30, 60"
+  type        = number
+  default     = 0
+}
+
 variable "copy_tags_to_snapshot" {
   description = "Copy all Cluster `tags` to snapshots"
   type        = bool
+  default     = null
+}
+
+variable "database_insights_mode" {
+  description = "The mode of Database Insights to enable for the DB cluster. Valid values: standard, advanced"
+  type        = string
   default     = null
 }
 
@@ -142,6 +162,12 @@ variable "db_cluster_db_instance_parameter_group_name" {
   default     = null
 }
 
+variable "delete_automated_backups" {
+  description = "Specifies whether to remove automated backups immediately after the DB cluster is deleted"
+  type        = bool
+  default     = null
+}
+
 variable "deletion_protection" {
   description = "If the DB instance should have deletion protection enabled. The database can't be deleted when this value is set to `true`. The default is `false`"
   type        = bool
@@ -150,6 +176,12 @@ variable "deletion_protection" {
 
 variable "enable_global_write_forwarding" {
   description = "Whether cluster should forward writes to an associated global cluster. Applied to secondary clusters to enable them to forward writes to an `aws_rds_global_cluster`'s primary cluster"
+  type        = bool
+  default     = null
+}
+
+variable "enable_local_write_forwarding" {
+  description = "Whether read replicas can forward write operations to the writer DB instance in the DB cluster. By default, write operations aren't allowed on reader DB instances."
   type        = bool
   default     = null
 }
@@ -175,7 +207,7 @@ variable "engine" {
 variable "engine_mode" {
   description = "The database engine mode. Valid values: `global`, `multimaster`, `parallelquery`, `provisioned`, `serverless`. Defaults to: `provisioned`"
   type        = string
-  default     = null
+  default     = "provisioned"
 }
 
 variable "engine_version" {
@@ -184,10 +216,16 @@ variable "engine_version" {
   default     = null
 }
 
-variable "final_snapshot_identifier_prefix" {
-  description = "The prefix name to use when creating a final snapshot on cluster destroy; a 8 random digits are appended to name to ensure it's unique"
+variable "engine_lifecycle_support" {
+  description = "The life cycle type for this DB instance. This setting is valid for cluster types Aurora DB clusters and Multi-AZ DB clusters. Valid values are `open-source-rds-extended-support`, `open-source-rds-extended-support-disabled`. Default value is `open-source-rds-extended-support`."
   type        = string
-  default     = "final"
+  default     = null
+}
+
+variable "final_snapshot_identifier" {
+  description = "The name of your final DB snapshot when this DB cluster is deleted. If omitted, no final snapshot will be made"
+  type        = string
+  default     = null
 }
 
 variable "global_cluster_identifier" {
@@ -199,6 +237,18 @@ variable "global_cluster_identifier" {
 variable "iam_database_authentication_enabled" {
   description = "Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled"
   type        = bool
+  default     = null
+}
+
+variable "domain" {
+  description = "The ID of the Directory Service Active Directory domain to create the instance in"
+  type        = string
+  default     = null
+}
+
+variable "domain_iam_role_name" {
+  description = "(Required if domain is provided) The name of the IAM role to be used when making API calls to the Directory Service"
+  type        = string
   default     = null
 }
 
@@ -214,16 +264,34 @@ variable "kms_key_id" {
   default     = null
 }
 
+variable "manage_master_user_password" {
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager. Cannot be set if `master_password` is provided"
+  type        = bool
+  default     = true
+}
+
+variable "master_user_secret_kms_key_id" {
+  description = "The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key"
+  type        = string
+  default     = null
+}
+
 variable "master_password" {
-  description = "Password for the master DB user. Note - when specifying a value here, 'create_random_password' should be set to `false`"
+  description = "Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
   default     = null
 }
 
 variable "master_username" {
-  description = "Username for the master DB user"
+  description = "Username for the master DB user. Required unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
   type        = string
-  default     = "root"
+  default     = null
+}
+
+variable "network_type" {
+  description = "The type of network stack to use (IPV4 or DUAL)"
+  type        = string
+  default     = null
 }
 
 variable "port" {
@@ -277,7 +345,7 @@ variable "serverlessv2_scaling_configuration" {
 variable "skip_final_snapshot" {
   description = "Determines whether a final snapshot is created before the cluster is deleted. If true is specified, no snapshot is created"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "snapshot_identifier" {
@@ -299,7 +367,7 @@ variable "storage_encrypted" {
 }
 
 variable "storage_type" {
-  description = "Specifies the storage type to be associated with the DB cluster. (This setting is required to create a Multi-AZ DB cluster). Valid values: `io1`, Default: `io1`"
+  description = "Determines the storage type for the DB cluster. Optional for Single-AZ, required for Multi-AZ DB clusters. Valid values for Single-AZ: `aurora`, `\"\"` (default, both refer to Aurora Standard), `aurora-iopt1` (Aurora I/O Optimized). Valid values for Multi-AZ: `io1` (default)."
   type        = string
   default     = null
 }
@@ -311,7 +379,7 @@ variable "cluster_tags" {
 }
 
 variable "vpc_security_group_ids" {
-  description = "List of VPC security groups to associate to the cluster in addition to the SG we create in this module"
+  description = "List of VPC security groups to associate to the cluster in addition to the security group created"
   type        = list(string)
   default     = []
 }
@@ -387,7 +455,7 @@ variable "performance_insights_retention_period" {
 }
 
 variable "publicly_accessible" {
-  description = "Determines whether instances are publicly accessible. Default false"
+  description = "Determines whether instances are publicly accessible. Default `false`"
   type        = bool
   default     = null
 }
@@ -550,8 +618,14 @@ variable "create_security_group" {
   default     = true
 }
 
+variable "security_group_name" {
+  description = "The security group name. Default value is (`var.name`)"
+  type        = string
+  default     = ""
+}
+
 variable "security_group_use_name_prefix" {
-  description = "Determines whether the security group name (`name`) is used as a prefix"
+  description = "Determines whether the security group name (`var.name`) is used as a prefix"
   type        = bool
   default     = true
 }
@@ -568,21 +642,9 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "allowed_security_groups" {
-  description = "A list of Security Group ID's to allow access to"
-  type        = list(string)
-  default     = []
-}
-
-variable "allowed_cidr_blocks" {
-  description = "A list of CIDR blocks which are allowed to access the database"
-  type        = list(string)
-  default     = []
-}
-
-variable "security_group_egress_rules" {
-  description = "A map of security group egress rule definitions to add to the security group created"
-  type        = map(any)
+variable "security_group_rules" {
+  description = "Map of security group rules to add to the cluster security group created"
+  type        = any
   default     = {}
 }
 
@@ -636,7 +698,6 @@ variable "db_cluster_parameter_group_parameters" {
 # DB Parameter Group
 ################################################################################
 
-
 variable "create_db_parameter_group" {
   description = "Determines whether a DB parameter should be created or use existing"
   type        = bool
@@ -671,4 +732,152 @@ variable "putin_khuylo" {
   description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool
   default     = true
+}
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+variable "create_cloudwatch_log_group" {
+  description = "Determines whether a CloudWatch log group is created for each `enabled_cloudwatch_logs_exports`"
+  type        = bool
+  default     = false
+}
+
+variable "cloudwatch_log_group_retention_in_days" {
+  description = "The number of days to retain CloudWatch logs for the DB instance"
+  type        = number
+  default     = 7
+}
+
+variable "cloudwatch_log_group_kms_key_id" {
+  description = "The ARN of the KMS Key to use when encrypting log data"
+  type        = string
+  default     = null
+}
+
+variable "cloudwatch_log_group_skip_destroy" {
+  description = "Set to true if you do not wish the log group (and any logs it may contain) to be deleted at destroy time, and instead just remove the log group from the Terraform state"
+  type        = bool
+  default     = null
+}
+
+variable "cloudwatch_log_group_class" {
+  description = "Specified the log class of the log group. Possible values are: STANDARD or INFREQUENT_ACCESS"
+  type        = string
+  default     = null
+}
+
+variable "cloudwatch_log_group_tags" {
+  description = "Additional tags for the CloudWatch log group(s)"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Cluster Activity Stream
+################################################################################
+
+variable "create_db_cluster_activity_stream" {
+  description = "Determines whether a cluster activity stream is created."
+  type        = bool
+  default     = false
+}
+
+variable "db_cluster_activity_stream_mode" {
+  description = "Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. One of: sync, async"
+  type        = string
+  default     = null
+}
+
+variable "db_cluster_activity_stream_kms_key_id" {
+  description = "The AWS KMS key identifier for encrypting messages in the database activity stream"
+  type        = string
+  default     = null
+}
+
+variable "engine_native_audit_fields_included" {
+  description = "Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included"
+  type        = bool
+  default     = false
+}
+
+################################################################################
+# Managed Secret Rotation
+################################################################################
+
+variable "manage_master_user_password_rotation" {
+  description = "Whether to manage the master user password rotation. By default, false on creation, rotation is managed by RDS. There is not currently a way to disable this on initial creation even when set to false. Setting this value to false after previously having been set to true will disable automatic rotation."
+  type        = bool
+  default     = false
+}
+
+variable "master_user_password_rotate_immediately" {
+  description = "Specifies whether to rotate the secret immediately or wait until the next scheduled rotation window."
+  type        = bool
+  default     = null
+}
+
+variable "master_user_password_rotation_automatically_after_days" {
+  description = "Specifies the number of days between automatic scheduled rotations of the secret. Either `master_user_password_rotation_automatically_after_days` or `master_user_password_rotation_schedule_expression` must be specified"
+  type        = number
+  default     = null
+}
+
+variable "master_user_password_rotation_duration" {
+  description = "The length of the rotation window in hours. For example, 3h for a three hour window."
+  type        = string
+  default     = null
+}
+
+variable "master_user_password_rotation_schedule_expression" {
+  description = "A cron() or rate() expression that defines the schedule for rotating your secret. Either `master_user_password_rotation_automatically_after_days` or `master_user_password_rotation_schedule_expression` must be specified"
+  type        = string
+  default     = null
+}
+
+################################################################################
+# RDS Shard Group
+################################################################################
+
+variable "create_shard_group" {
+  description = "Whether to create a shard group resource"
+  type        = bool
+  default     = false
+}
+
+variable "compute_redundancy" {
+  description = "Specifies whether to create standby DB shard groups for the DB shard group"
+  type        = number
+  default     = null
+}
+
+variable "db_shard_group_identifier" {
+  description = "The name of the DB shard group"
+  type        = string
+  default     = null
+}
+
+variable "max_acu" {
+  description = "The maximum capacity of the DB shard group in Aurora capacity units (ACUs)"
+  type        = number
+  default     = null
+}
+
+variable "min_acu" {
+  description = "The minimum capacity of the DB shard group in Aurora capacity units (ACUs)"
+  type        = number
+  default     = null
+}
+
+variable "shard_group_tags" {
+  description = "Additional tags for the shard group"
+  type        = map(string)
+  default     = {}
+}
+
+variable "shard_group_timeouts" {
+  description = "Create, update, and delete timeout configurations for the shard group"
+  type        = map(string)
+  default     = {}
 }
