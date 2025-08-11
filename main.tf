@@ -160,6 +160,8 @@ resource "aws_rds_cluster" "this" {
       replication_source_identifier,
       # See docs here https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_global_cluster#new-global-cluster-from-existing-db-cluster
       global_cluster_identifier,
+      backup_retention_period,
+      preferred_backup_window
     ]
   }
 }
