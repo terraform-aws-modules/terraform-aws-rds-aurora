@@ -302,6 +302,7 @@ resource "aws_appautoscaling_target" "this" {
   lifecycle {
     ignore_changes = [
       tags_all,
+      tags
     ]
   }
 }
