@@ -99,7 +99,7 @@ resource "random_password" "master" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -114,7 +114,7 @@ module "vpc" {
 
 module "kms" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "~> 2.0"
+  version = "~> 4.0"
 
   deletion_window_in_days = 7
   description             = "KMS key for ${local.name} cluster activity stream."

@@ -20,14 +20,14 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.89 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.12.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.89 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.12.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
 ## Modules
@@ -38,7 +38,7 @@ Note that this example may create resources which cost money. Run `terraform des
 | <a name="module_aurora_mysql_v2"></a> [aurora\_mysql\_v2](#module\_aurora\_mysql\_v2) | ../../ | n/a |
 | <a name="module_aurora_postgresql"></a> [aurora\_postgresql](#module\_aurora\_postgresql) | ../../ | n/a |
 | <a name="module_aurora_postgresql_v2"></a> [aurora\_postgresql\_v2](#module\_aurora\_postgresql\_v2) | ../../ | n/a |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 5.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 6.0 |
 
 ## Resources
 
