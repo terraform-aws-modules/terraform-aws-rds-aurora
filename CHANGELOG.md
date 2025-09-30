@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.16.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.15.0...v9.16.0) (2025-09-30)
+
+
+### Features
+
+* Add wrappers ([#520](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/520)) ([ad0ce14](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/ad0ce14a0eee52e46525dddaca99b3ab79e8cb7e))
+
 ## [9.15.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.14.0...v9.15.0) (2025-06-19)
 
 
