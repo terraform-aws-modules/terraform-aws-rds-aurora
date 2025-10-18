@@ -28,5 +28,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# S3 import example
-backup
+# Zip archive
+*.zip
+builds
+
+.DS_Store
+.idea
