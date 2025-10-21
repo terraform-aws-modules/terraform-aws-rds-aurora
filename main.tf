@@ -25,6 +25,8 @@ locals {
 resource "aws_db_subnet_group" "this" {
   count = local.create && var.create_db_subnet_group ? 1 : 0
 
+  region = var.region
+
   name        = local.internal_db_subnet_group_name
   description = "For Aurora cluster ${var.name}"
   subnet_ids  = var.subnets
@@ -38,6 +40,8 @@ resource "aws_db_subnet_group" "this" {
 
 resource "aws_rds_cluster" "this" {
   count = local.create ? 1 : 0
+
+  region = var.region
 
   allocated_storage                   = var.allocated_storage
   allow_major_version_upgrade         = var.allow_major_version_upgrade
@@ -172,6 +176,8 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   for_each = { for k, v in var.instances : k => v if local.create && !local.is_serverless }
 
+  region = var.region
+
   apply_immediately                     = try(each.value.apply_immediately, var.apply_immediately)
   auto_minor_version_upgrade            = try(each.value.auto_minor_version_upgrade, var.auto_minor_version_upgrade)
   availability_zone                     = try(each.value.availability_zone, null)
@@ -215,6 +221,8 @@ resource "aws_rds_cluster_instance" "this" {
 resource "aws_rds_cluster_endpoint" "this" {
   for_each = { for k, v in var.endpoints : k => v if local.create && !local.is_serverless }
 
+  region = var.region
+
   cluster_endpoint_identifier = each.value.identifier
   cluster_identifier          = aws_rds_cluster.this[0].id
   custom_endpoint_type        = each.value.type
@@ -233,6 +241,8 @@ resource "aws_rds_cluster_endpoint" "this" {
 
 resource "aws_rds_cluster_role_association" "this" {
   for_each = { for k, v in var.iam_roles : k => v if local.create }
+
+  region = var.region
 
   db_cluster_identifier = aws_rds_cluster.this[0].id
   feature_name          = each.value.feature_name
@@ -291,6 +301,8 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 resource "aws_appautoscaling_target" "this" {
   count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
+  region = var.region
+
   max_capacity       = var.autoscaling_max_capacity
   min_capacity       = var.autoscaling_min_capacity
   resource_id        = "cluster:${aws_rds_cluster.this[0].cluster_identifier}"
@@ -308,6 +320,8 @@ resource "aws_appautoscaling_target" "this" {
 
 resource "aws_appautoscaling_policy" "this" {
   count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+
+  region = var.region
 
   name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
@@ -337,6 +351,8 @@ resource "aws_appautoscaling_policy" "this" {
 resource "aws_security_group" "this" {
   count = local.create && var.create_security_group ? 1 : 0
 
+  region = var.region
+
   name        = var.security_group_use_name_prefix ? null : local.security_group_name
   name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
   vpc_id      = var.vpc_id
@@ -351,6 +367,8 @@ resource "aws_security_group" "this" {
 
 resource "aws_security_group_rule" "this" {
   for_each = { for k, v in var.security_group_rules : k => v if local.create && var.create_security_group }
+
+  region = var.region
 
   # required
   type              = try(each.value.type, "ingress")
@@ -374,6 +392,8 @@ resource "aws_security_group_rule" "this" {
 
 resource "aws_rds_cluster_parameter_group" "this" {
   count = local.create && var.create_db_cluster_parameter_group ? 1 : 0
+
+  region = var.region
 
   name        = var.db_cluster_parameter_group_use_name_prefix ? null : local.cluster_parameter_group_name
   name_prefix = var.db_cluster_parameter_group_use_name_prefix ? "${local.cluster_parameter_group_name}-" : null
@@ -403,6 +423,8 @@ resource "aws_rds_cluster_parameter_group" "this" {
 
 resource "aws_db_parameter_group" "this" {
   count = local.create && var.create_db_parameter_group ? 1 : 0
+
+  region = var.region
 
   name        = var.db_parameter_group_use_name_prefix ? null : local.db_parameter_group_name
   name_prefix = var.db_parameter_group_use_name_prefix ? "${local.db_parameter_group_name}-" : null
@@ -434,6 +456,8 @@ resource "aws_db_parameter_group" "this" {
 resource "aws_cloudwatch_log_group" "this" {
   for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create && var.create_cloudwatch_log_group && !var.cluster_use_name_prefix])
 
+  region = var.region
+
   name              = "/aws/rds/cluster/${var.name}/${each.value}"
   retention_in_days = var.cloudwatch_log_group_retention_in_days
   kms_key_id        = var.cloudwatch_log_group_kms_key_id
@@ -449,6 +473,8 @@ resource "aws_cloudwatch_log_group" "this" {
 
 resource "aws_rds_cluster_activity_stream" "this" {
   count = local.create && var.create_db_cluster_activity_stream ? 1 : 0
+
+  region = var.region
 
   resource_arn                        = aws_rds_cluster.this[0].arn
   mode                                = var.db_cluster_activity_stream_mode
@@ -471,6 +497,8 @@ resource "aws_rds_cluster_activity_stream" "this" {
 resource "aws_secretsmanager_secret_rotation" "this" {
   count = local.create && var.manage_master_user_password && var.manage_master_user_password_rotation ? 1 : 0
 
+  region = var.region
+
   secret_id          = aws_rds_cluster.this[0].master_user_secret[0].secret_arn
   rotate_immediately = var.master_user_password_rotate_immediately
 
@@ -487,6 +515,8 @@ resource "aws_secretsmanager_secret_rotation" "this" {
 
 resource "aws_rds_shard_group" "this" {
   count = local.create && var.create_shard_group ? 1 : 0
+
+  region = var.region
 
   compute_redundancy        = var.compute_redundancy
   db_cluster_identifier     = aws_rds_cluster.this[0].id
