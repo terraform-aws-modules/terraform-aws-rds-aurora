@@ -301,15 +301,15 @@ variable "port" {
 }
 
 variable "preferred_backup_window" {
-  description = "The daily time range during which automated backups are created if automated backups are enabled using the `backup_retention_period` parameter. Time in UTC"
+  description = "The daily time range (in UTC) during which automated backups are taken. Example: '09:46-10:16'. Must not overlap with `preferred_maintenance_window`"
   type        = string
-  default     = "02:00-03:00"
+  default     = null
 }
 
 variable "preferred_maintenance_window" {
-  description = "The weekly time range during which system maintenance can occur, in (UTC)"
+  description = "The weekly time range during which system maintenance can occur (in UTC). Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00'"
   type        = string
-  default     = "sun:05:00-sun:06:00"
+  default     = null
 }
 
 variable "replication_source_identifier" {
