@@ -120,6 +120,7 @@ module "wrapper" {
   preferred_maintenance_window                           = try(each.value.preferred_maintenance_window, var.defaults.preferred_maintenance_window, "sun:05:00-sun:06:00")
   publicly_accessible                                    = try(each.value.publicly_accessible, var.defaults.publicly_accessible, null)
   putin_khuylo                                           = try(each.value.putin_khuylo, var.defaults.putin_khuylo, true)
+  region                                                 = try(each.value.region, var.defaults.region, null)
   replication_source_identifier                          = try(each.value.replication_source_identifier, var.defaults.replication_source_identifier, null)
   restore_to_point_in_time                               = try(each.value.restore_to_point_in_time, var.defaults.restore_to_point_in_time, {})
   s3_import                                              = try(each.value.s3_import, var.defaults.s3_import, {})
