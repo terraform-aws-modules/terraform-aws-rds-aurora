@@ -141,7 +141,7 @@ variable "cluster_monitoring_interval" {
 variable "copy_tags_to_snapshot" {
   description = "Copy all Cluster `tags` to snapshots"
   type        = bool
-  default     = null
+  default     = true
 }
 
 variable "database_insights_mode" {
@@ -187,7 +187,7 @@ variable "enable_global_write_forwarding" {
 }
 
 variable "enable_local_write_forwarding" {
-  description = "Whether read replicas can forward write operations to the writer DB instance in the DB cluster. By default, write operations aren't allowed on reader DB instances."
+  description = "Whether read replicas can forward write operations to the writer DB instance in the DB cluster. By default, write operations aren't allowed on reader DB instances"
   type        = bool
   default     = null
 }
@@ -223,7 +223,7 @@ variable "engine_version" {
 }
 
 variable "engine_lifecycle_support" {
-  description = "The life cycle type for this DB instance. This setting is valid for cluster types Aurora DB clusters and Multi-AZ DB clusters. Valid values are `open-source-rds-extended-support`, `open-source-rds-extended-support-disabled`. Default value is `open-source-rds-extended-support`."
+  description = "The life cycle type for this DB instance. This setting is valid for cluster types Aurora DB clusters and Multi-AZ DB clusters. Valid values are `open-source-rds-extended-support`, `open-source-rds-extended-support-disabled`. Default value is `open-source-rds-extended-support`"
   type        = string
   default     = null
 }
@@ -326,26 +326,48 @@ variable "replication_source_identifier" {
 
 variable "restore_to_point_in_time" {
   description = "Map of nested attributes for cloning Aurora cluster"
-  type        = map(string)
-  default     = {}
+  type = object({
+    restore_to_time            = optional(string)
+    restore_type               = optional(string)
+    source_cluster_identifier  = optional(string)
+    source_cluster_resource_id = optional(string)
+    use_latest_restorable_time = optional(bool)
+  })
+  default = null
 }
 
 variable "s3_import" {
   description = "Configuration map used to restore from a Percona Xtrabackup in S3 (only MySQL is supported)"
-  type        = map(string)
-  default     = {}
+  type = object({
+    bucket_name           = string
+    bucket_prefix         = optional(string)
+    ingestion_role        = string
+    source_engine_version = string
+  })
+  default = null
 }
 
 variable "scaling_configuration" {
   description = "Map of nested attributes with scaling properties. Only valid when `engine_mode` is set to `serverless`"
-  type        = map(string)
-  default     = {}
+  type = object({
+    auto_pause               = optional(bool)
+    max_capacity             = optional(number)
+    min_capacity             = optional(number)
+    seconds_before_timeout   = optional(number)
+    seconds_until_auto_pause = optional(number)
+    timeout_action           = optional(string)
+  })
+  default = null
 }
 
 variable "serverlessv2_scaling_configuration" {
   description = "Map of nested attributes with serverless v2 scaling properties. Only valid when `engine_mode` is set to `provisioned`"
-  type        = map(string)
-  default     = {}
+  type = object({
+    max_capacity             = number
+    min_capacity             = optional(number)
+    seconds_until_auto_pause = optional(number)
+  })
+  default = null
 }
 
 variable "skip_final_snapshot" {
@@ -373,7 +395,7 @@ variable "storage_encrypted" {
 }
 
 variable "storage_type" {
-  description = "Determines the storage type for the DB cluster. Optional for Single-AZ, required for Multi-AZ DB clusters. Valid values for Single-AZ: `aurora`, `\"\"` (default, both refer to Aurora Standard), `aurora-iopt1` (Aurora I/O Optimized). Valid values for Multi-AZ: `io1` (default)."
+  description = "Determines the storage type for the DB cluster. Optional for Single-AZ, required for Multi-AZ DB clusters. Valid values for Single-AZ: `aurora`, `\"\"` (default, both refer to Aurora Standard), `aurora-iopt1` (Aurora I/O Optimized). Valid values for Multi-AZ: `io1` (default)"
   type        = string
   default     = null
 }
@@ -392,8 +414,12 @@ variable "vpc_security_group_ids" {
 
 variable "cluster_timeouts" {
   description = "Create, update, and delete timeout configurations for the cluster"
-  type        = map(string)
-  default     = {}
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
 
 ################################################################################
@@ -402,26 +428,30 @@ variable "cluster_timeouts" {
 
 variable "instances" {
   description = "Map of cluster instances and any specific/overriding attributes to be created"
-  type        = any
-  default     = {}
-}
-
-variable "auto_minor_version_upgrade" {
-  description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window. Default `true`"
-  type        = bool
-  default     = null
-}
-
-variable "ca_cert_identifier" {
-  description = "The identifier of the CA certificate for the DB instance"
-  type        = string
-  default     = null
-}
-
-variable "db_parameter_group_name" {
-  description = "The name of the DB parameter group"
-  type        = string
-  default     = null
+  type = map(object({
+    apply_immediately                     = optional(bool)
+    auto_minor_version_upgrade            = optional(bool)
+    availability_zone                     = optional(string)
+    ca_cert_identifier                    = optional(string)
+    copy_tags_to_snapshot                 = optional(bool, true)
+    custom_iam_instance_profile           = optional(string)
+    db_parameter_group_name               = optional(string)
+    db_subnet_group_name                  = optional(string)
+    identifier                            = optional(string)
+    identifier_prefix                     = optional(string)
+    instance_class                        = optional(string)
+    monitoring_interval                   = optional(number)
+    monitoring_role_arn                   = optional(string)
+    performance_insights_enabled          = optional(bool)
+    performance_insights_kms_key_id       = optional(string)
+    performance_insights_retention_period = optional(number)
+    preferred_maintenance_window          = optional(string)
+    promotion_tier                        = optional(number)
+    publicly_accessible                   = optional(bool)
+    tags                                  = optional(map(string), {})
+  }))
+  default  = {}
+  nullable = false
 }
 
 variable "instances_use_identifier_prefix" {
@@ -430,46 +460,14 @@ variable "instances_use_identifier_prefix" {
   default     = false
 }
 
-variable "instance_class" {
-  description = "Instance type to use at master instance. Note: if `autoscaling_enabled` is `true`, this will be the same instance class used on instances created by autoscaling"
-  type        = string
-  default     = ""
-}
-
-variable "monitoring_interval" {
-  description = "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for instances. Set to `0` to disable. Default is `0`"
-  type        = number
-  default     = 0
-}
-
-variable "performance_insights_enabled" {
-  description = "Specifies whether Performance Insights is enabled or not"
-  type        = bool
-  default     = null
-}
-
-variable "performance_insights_kms_key_id" {
-  description = "The ARN for the KMS key to encrypt Performance Insights data"
-  type        = string
-  default     = null
-}
-
-variable "performance_insights_retention_period" {
-  description = "Amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)"
-  type        = number
-  default     = null
-}
-
-variable "publicly_accessible" {
-  description = "Determines whether instances are publicly accessible. Default `false`"
-  type        = bool
-  default     = null
-}
-
 variable "instance_timeouts" {
   description = "Create, update, and delete timeout configurations for the cluster instance(s)"
-  type        = map(string)
-  default     = {}
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
 
 ################################################################################
@@ -478,18 +476,29 @@ variable "instance_timeouts" {
 
 variable "endpoints" {
   description = "Map of additional cluster endpoints and their attributes to be created"
-  type        = any
-  default     = {}
+  type = map(object({
+    cluster_endpoint_identifier = string
+    custom_endpoint_type        = string
+    excluded_members            = optional(list(string))
+    static_members              = optional(list(string))
+    tags                        = optional(map(string), {})
+  }))
+  default  = {}
+  nullable = false
 }
 
 ################################################################################
-# Cluster IAM Roles
+# Cluster IAM Role Association(s)
 ################################################################################
 
-variable "iam_roles" {
+variable "role_associations" {
   description = "Map of IAM roles and supported feature names to associate with the cluster"
-  type        = map(map(string))
-  default     = {}
+  type = map(object({
+    feature_name = optional(string)
+    role_arn     = string
+  }))
+  default  = {}
+  nullable = false
 }
 
 ################################################################################
@@ -532,21 +541,9 @@ variable "iam_role_path" {
   default     = null
 }
 
-variable "iam_role_managed_policy_arns" {
-  description = "Set of exclusive IAM managed policy ARNs to attach to the monitoring role"
-  type        = list(string)
-  default     = null
-}
-
 variable "iam_role_permissions_boundary" {
   description = "The ARN of the policy that is used to set the permissions boundary for the monitoring role"
   type        = string
-  default     = null
-}
-
-variable "iam_role_force_detach_policies" {
-  description = "Whether to force detaching any policies the monitoring role has before destroying it"
-  type        = bool
   default     = null
 }
 
@@ -664,80 +661,46 @@ variable "security_group_tags" {
 # Cluster Parameter Group
 ################################################################################
 
-variable "create_db_cluster_parameter_group" {
-  description = "Determines whether a cluster parameter should be created or use existing"
-  type        = bool
-  default     = false
-}
-
-variable "db_cluster_parameter_group_name" {
-  description = "The name of the DB cluster parameter group"
+variable "cluster_parameter_group_name" {
+  description = "The name of an existing DB cluster parameter group. Required when `cluster_parameter_group` is not provided (`null`)"
   type        = string
   default     = null
 }
 
-variable "db_cluster_parameter_group_use_name_prefix" {
-  description = "Determines whether the DB cluster parameter group name is used as a prefix"
-  type        = bool
-  default     = true
-}
-
-variable "db_cluster_parameter_group_description" {
-  description = "The description of the DB cluster parameter group. Defaults to \"Managed by Terraform\""
-  type        = string
-  default     = null
-}
-
-variable "db_cluster_parameter_group_family" {
-  description = "The family of the DB cluster parameter group"
-  type        = string
-  default     = ""
-}
-
-variable "db_cluster_parameter_group_parameters" {
-  description = "A list of DB cluster parameters to apply. Note that parameters may differ from a family to an other"
-  type        = list(map(string))
-  default     = []
+variable "cluster_parameter_group" {
+  description = "Map of nested arguments for the created DB cluster parameter group"
+  type = object({
+    name            = optional(string)
+    use_name_prefix = optional(bool, true)
+    description     = optional(string)
+    family          = string
+    parameters = optional(list(object({
+      name         = string
+      value        = string
+      apply_method = optional(string, "immediate")
+    })))
+  })
+  default = null
 }
 
 ################################################################################
 # DB Parameter Group
 ################################################################################
 
-variable "create_db_parameter_group" {
-  description = "Determines whether a DB parameter should be created or use existing"
-  type        = bool
-  default     = false
-}
-
-variable "db_parameter_group_use_name_prefix" {
-  description = "Determines whether the DB parameter group name is used as a prefix"
-  type        = bool
-  default     = true
-}
-
-variable "db_parameter_group_description" {
-  description = "The description of the DB parameter group. Defaults to \"Managed by Terraform\""
-  type        = string
-  default     = null
-}
-
-variable "db_parameter_group_family" {
-  description = "The family of the DB parameter group"
-  type        = string
-  default     = ""
-}
-
-variable "db_parameter_group_parameters" {
-  description = "A list of DB parameters to apply. Note that parameters may differ from a family to an other"
-  type        = list(map(string))
-  default     = []
-}
-
-variable "putin_khuylo" {
-  description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
-  type        = bool
-  default     = true
+variable "db_parameter_group" {
+  description = "Map of nested arguments for the created DB parameter group"
+  type = object({
+    name            = optional(string)
+    use_name_prefix = optional(bool, true)
+    description     = optional(string)
+    family          = string
+    parameters = optional(list(object({
+      name         = string
+      value        = string
+      apply_method = optional(string, "immediate")
+    })))
+  })
+  default = null
 }
 
 ################################################################################
@@ -784,28 +747,14 @@ variable "cloudwatch_log_group_tags" {
 # Cluster Activity Stream
 ################################################################################
 
-variable "create_db_cluster_activity_stream" {
-  description = "Determines whether a cluster activity stream is created."
-  type        = bool
-  default     = false
-}
-
-variable "db_cluster_activity_stream_mode" {
-  description = "Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. One of: sync, async"
-  type        = string
-  default     = null
-}
-
-variable "db_cluster_activity_stream_kms_key_id" {
-  description = "The AWS KMS key identifier for encrypting messages in the database activity stream"
-  type        = string
-  default     = null
-}
-
-variable "engine_native_audit_fields_included" {
-  description = "Specifies whether the database activity stream includes engine-native audit fields. This option only applies to an Oracle DB instance. By default, no engine-native audit fields are included"
-  type        = bool
-  default     = false
+variable "cluster_activity_stream" {
+  description = "Map of arguments for the created DB cluster activity stream"
+  type = object({
+    include_audit_fields = optional(bool, false)
+    kms_key_id           = string
+    mode                 = string
+  })
+  default = null
 }
 
 ################################################################################
@@ -813,13 +762,13 @@ variable "engine_native_audit_fields_included" {
 ################################################################################
 
 variable "manage_master_user_password_rotation" {
-  description = "Whether to manage the master user password rotation. By default, false on creation, rotation is managed by RDS. There is not currently a way to disable this on initial creation even when set to false. Setting this value to false after previously having been set to true will disable automatic rotation."
+  description = "Whether to manage the master user password rotation. By default, false on creation, rotation is managed by RDS. There is not currently a way to disable this on initial creation even when set to false. Setting this value to false after previously having been set to true will disable automatic rotation"
   type        = bool
   default     = false
 }
 
 variable "master_user_password_rotate_immediately" {
-  description = "Specifies whether to rotate the secret immediately or wait until the next scheduled rotation window."
+  description = "Specifies whether to rotate the secret immediately or wait until the next scheduled rotation window"
   type        = bool
   default     = null
 }
@@ -831,7 +780,7 @@ variable "master_user_password_rotation_automatically_after_days" {
 }
 
 variable "master_user_password_rotation_duration" {
-  description = "The length of the rotation window in hours. For example, 3h for a three hour window."
+  description = "The length of the rotation window in hours. For example, 3h for a three hour window"
   type        = string
   default     = null
 }
@@ -846,44 +795,26 @@ variable "master_user_password_rotation_schedule_expression" {
 # RDS Shard Group
 ################################################################################
 
-variable "create_shard_group" {
-  description = "Whether to create a shard group resource"
+variable "shard_group" {
+  description = "Arguments for the DB shard group to be created"
+  type = object({
+    compute_redundancy  = optional(number)
+    identifier          = string
+    max_acu             = number
+    min_acu             = optional(number)
+    publicly_accessible = optional(bool)
+    tags                = optional(map(string), {})
+    timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
+    }))
+  })
+  default = null
+}
+
+variable "putin_khuylo" {
+  description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool
-  default     = false
-}
-
-variable "compute_redundancy" {
-  description = "Specifies whether to create standby DB shard groups for the DB shard group"
-  type        = number
-  default     = null
-}
-
-variable "db_shard_group_identifier" {
-  description = "The name of the DB shard group"
-  type        = string
-  default     = null
-}
-
-variable "max_acu" {
-  description = "The maximum capacity of the DB shard group in Aurora capacity units (ACUs)"
-  type        = number
-  default     = null
-}
-
-variable "min_acu" {
-  description = "The minimum capacity of the DB shard group in Aurora capacity units (ACUs)"
-  type        = number
-  default     = null
-}
-
-variable "shard_group_tags" {
-  description = "Additional tags for the shard group"
-  type        = map(string)
-  default     = {}
-}
-
-variable "shard_group_timeouts" {
-  description = "Create, update, and delete timeout configurations for the shard group"
-  type        = map(string)
-  default     = {}
+  default     = true
 }

@@ -25,12 +25,12 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name            = local.name
-  engine          = "aurora-postgresql"
-  engine_version  = "14.5"
-  instance_class  = "db.r6g.large"
-  instances       = { 1 = {} }
-  master_username = "root"
+  name                      = local.name
+  engine                    = "aurora-postgresql"
+  engine_version            = "14.5"
+  db_cluster_instance_class = "db.r6g.large"
+  instances                 = { 1 = {} }
+  master_username           = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -44,7 +44,7 @@ module "aurora" {
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 5
 
-  monitoring_interval           = 60
+  cluster_monitoring_interval   = 60
   iam_role_name                 = "${local.name}-monitor"
   iam_role_use_name_prefix      = true
   iam_role_description          = "${local.name} RDS enhanced monitoring IAM role"
@@ -71,7 +71,7 @@ module "disabled_aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr

@@ -25,24 +25,25 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name                        = local.name
-  engine                      = "aurora-postgresql"
-  engine_version              = "16.6-limitless"
-  master_username             = "root"
-  storage_type                = "aurora-iopt1"
-  cluster_monitoring_interval = 30
-  cluster_scalability_type    = "limitless"
+  name           = local.name
+  engine         = "aurora-postgresql"
+  engine_version = "16.6-limitless"
+  storage_type   = "aurora-iopt1"
 
+  cluster_scalability_type    = "limitless"
+  cluster_monitoring_interval = 30
   # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/limitless-reqs-limits.html
   cluster_performance_insights_enabled          = true
   cluster_performance_insights_retention_period = 31
 
-  create_shard_group        = true
-  compute_redundancy        = 0
-  db_shard_group_identifier = local.name
-  max_acu                   = 16
+  shard_group = {
+    compute_redundancy = 0
+    identifier         = local.name
+    max_acu            = 16
+  }
 
   # aurora limitless clusters do not support managed master user password
+  master_username             = "root"
   manage_master_user_password = false
   master_password             = random_password.master.result
 
@@ -62,28 +63,25 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  create_db_cluster_parameter_group      = true
-  db_cluster_parameter_group_name        = local.name
-  db_cluster_parameter_group_family      = "aurora-postgresql16"
-  db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
-  db_cluster_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-      }, {
-      name         = "rds.force_ssl"
-      value        = 1
-      apply_method = "immediate"
-    }
-  ]
+  cluster_parameter_group = {
+    name        = local.name
+    family      = "aurora-postgresql16"
+    description = "${local.name} example cluster parameter group"
+    parameters = [
+      {
+        name         = "log_min_duration_statement"
+        value        = 4000
+        apply_method = "immediate"
+        }, {
+        name         = "rds.force_ssl"
+        value        = 1
+        apply_method = "immediate"
+      }
+    ]
+  }
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
   create_cloudwatch_log_group     = true
-
-  cloudwatch_log_group_tags = {
-    Sensitivity = "high"
-  }
 
   tags = local.tags
 }
@@ -99,7 +97,7 @@ resource "random_password" "master" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -108,21 +106,6 @@ module "vpc" {
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
-
-  tags = local.tags
-}
-
-module "kms" {
-  source  = "terraform-aws-modules/kms/aws"
-  version = "~> 2.0"
-
-  deletion_window_in_days = 7
-  description             = "KMS key for ${local.name} cluster activity stream."
-  enable_key_rotation     = true
-  is_enabled              = true
-  key_usage               = "ENCRYPT_DECRYPT"
-
-  aliases = [local.name]
 
   tags = local.tags
 }

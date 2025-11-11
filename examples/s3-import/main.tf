@@ -25,12 +25,12 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name            = local.name
-  engine          = "aurora-mysql"
-  engine_version  = "5.7.12"
-  master_username = "root"
-  instance_class  = "db.r5.large"
-  instances       = { 1 = {} }
+  name                      = local.name
+  engine                    = "aurora-mysql"
+  engine_version            = "5.7.12"
+  master_username           = "root"
+  db_cluster_instance_class = "db.r5.large"
+  instances                 = { 1 = {} }
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
@@ -40,10 +40,10 @@ module "aurora" {
     }
   }
 
-  iam_roles = {
-    s3_import = {
-      role_arn     = aws_iam_role.s3_import.arn
-      feature_name = "s3Import"
+  role_associations = {
+    s3Import = {
+      role_arn = aws_iam_role.s3_import.arn
+      # feature_name = "s3Import" # same as setting value to key
     }
   }
 
@@ -67,7 +67,7 @@ module "aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -82,7 +82,7 @@ module "vpc" {
 
 module "import_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   bucket_prefix = "${local.name}-"
   acl           = "private"

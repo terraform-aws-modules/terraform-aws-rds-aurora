@@ -2,15 +2,12 @@ provider "aws" {
   region = local.primary_region
 }
 
-provider "aws" {
-  alias  = "secondary"
-  region = local.secondary_region
-}
-
 data "aws_caller_identity" "current" {}
-data "aws_availability_zones" "primary" {}
+data "aws_availability_zones" "primary" {
+  region = local.primary_region
+}
 data "aws_availability_zones" "secondary" {
-  provider = aws.secondary
+  region = local.secondary_region
 }
 
 locals {
@@ -52,7 +49,7 @@ module "aurora_primary" {
   engine_version            = aws_rds_global_cluster.this.engine_version
   master_username           = "root"
   global_cluster_identifier = aws_rds_global_cluster.this.id
-  instance_class            = "db.r6g.large"
+  db_cluster_instance_class = "db.r6g.large"
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.primary.arn
 
@@ -76,7 +73,7 @@ module "aurora_primary" {
 module "aurora_secondary" {
   source = "../../"
 
-  providers = { aws = aws.secondary }
+  region = local.secondary_region
 
   is_primary_cluster = false
 
@@ -85,7 +82,7 @@ module "aurora_secondary" {
   engine_version            = aws_rds_global_cluster.this.engine_version
   global_cluster_identifier = aws_rds_global_cluster.this.id
   source_region             = local.primary_region
-  instance_class            = "db.r6g.large"
+  db_cluster_instance_class = "db.r6g.large"
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.secondary.arn
 
@@ -120,7 +117,7 @@ resource "random_password" "master" {
 
 module "primary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.primary_vpc_cidr
@@ -136,9 +133,9 @@ module "primary_vpc" {
 
 module "secondary_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
-  providers = { aws = aws.secondary }
+  region = local.secondary_region
 
   name = local.name
   cidr = local.secondary_vpc_cidr
@@ -193,7 +190,7 @@ resource "aws_kms_key" "primary" {
 }
 
 resource "aws_kms_key" "secondary" {
-  provider = aws.secondary
+  region = local.secondary_region
 
   policy = data.aws_iam_policy_document.rds.json
   tags   = local.tags

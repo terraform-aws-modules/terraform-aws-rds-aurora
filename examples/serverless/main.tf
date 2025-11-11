@@ -44,7 +44,7 @@ module "aurora_postgresql" {
   manage_master_user_password = false
   master_password             = random_password.master.result
 
-  monitoring_interval = 60
+  cluster_monitoring_interval = 60
 
   preferred_maintenance_window = local.preferred_maintenance_window
   skip_final_snapshot          = true
@@ -88,7 +88,7 @@ module "aurora_mysql" {
   manage_master_user_password = false
   master_password             = random_password.master.result
 
-  monitoring_interval = 60
+  cluster_monitoring_interval = 60
 
   apply_immediately   = true
   skip_final_snapshot = true
@@ -128,7 +128,7 @@ module "aurora_mysql_v2" {
     }
   }
 
-  monitoring_interval = 60
+  cluster_monitoring_interval = 60
 
   apply_immediately   = true
   skip_final_snapshot = true
@@ -138,7 +138,7 @@ module "aurora_mysql_v2" {
     max_capacity = 10
   }
 
-  instance_class = "db.serverless"
+  db_cluster_instance_class = "db.serverless"
   instances = {
     one = {}
     two = {}
@@ -174,7 +174,7 @@ module "aurora_postgresql_v2" {
     }
   }
 
-  monitoring_interval = 60
+  cluster_monitoring_interval = 60
 
   apply_immediately   = true
   skip_final_snapshot = true
@@ -187,7 +187,7 @@ module "aurora_postgresql_v2" {
     seconds_until_auto_pause = 3600
   }
 
-  instance_class = "db.serverless"
+  db_cluster_instance_class = "db.serverless"
   instances = {
     one = {}
     two = {}
@@ -207,7 +207,7 @@ resource "random_password" "master" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
