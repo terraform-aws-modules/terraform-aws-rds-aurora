@@ -43,9 +43,9 @@ module "aurora" {
   }
 
   # aurora limitless clusters do not support managed master user password
-  master_username             = "root"
-  manage_master_user_password = false
-  master_password             = random_password.master.result
+  master_username            = "root"
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name

@@ -41,8 +41,8 @@ module "aurora_postgresql" {
   }
 
   # Serverless v1 clusters do not support managed master user password
-  manage_master_user_password = false
-  master_password             = random_password.master.result
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
 
   cluster_monitoring_interval = 60
 
@@ -85,8 +85,8 @@ module "aurora_mysql" {
   }
 
   # Serverless v1 clusters do not support managed master user password
-  manage_master_user_password = false
-  master_password             = random_password.master.result
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
 
   cluster_monitoring_interval = 60
 

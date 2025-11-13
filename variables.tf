@@ -271,7 +271,7 @@ variable "kms_key_id" {
 }
 
 variable "manage_master_user_password" {
-  description = "Set to true to allow RDS to manage the master user password in Secrets Manager. Cannot be set if `master_password` is provided"
+  description = "Set to true to allow RDS to manage the master user password in Secrets Manager. Cannot be set if `master_password_wo` is provided"
   type        = bool
   default     = true
 }
@@ -282,8 +282,14 @@ variable "master_user_secret_kms_key_id" {
   default     = null
 }
 
-variable "master_password" {
-  description = "Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Required unless `manage_master_user_password` is set to `true` or unless `snapshot_identifier` or `replication_source_identifier` is provided or unless a `global_cluster_identifier` is provided when the cluster is the secondary cluster of a global database"
+variable "master_password_wo" {
+  description = "Write-Only required unless `manage_master_user_password` is set to `true`, a `snapshot_identifier`, `replication_source_identifier`, or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Password for the master DB user"
+  type        = string
+  default     = null
+}
+
+variable "master_password_wo_version" {
+  description = "Used together with `master_password_wo` to trigger an update. Increment this value when an update to the `master_password_wo` is required"
   type        = string
   default     = null
 }

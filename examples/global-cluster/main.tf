@@ -62,8 +62,8 @@ module "aurora_primary" {
   }
 
   # Global clusters do not support managed master user password
-  manage_master_user_password = false
-  master_password             = random_password.master.result
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
 
   skip_final_snapshot = true
 
@@ -95,7 +95,8 @@ module "aurora_secondary" {
   }
 
   # Global clusters do not support managed master user password
-  master_password = random_password.master.result
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
 
   skip_final_snapshot = true
 

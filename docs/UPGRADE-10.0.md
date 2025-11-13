@@ -8,6 +8,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 - Terraform `v1.11` is now minimum supported version to support write-only (`wo_*`) attributes.
 - AWS provider `v6.18` is now minimum supported version
 - The underlying `aws_security_group_rule` resources has been replaced with `aws_vpc_security_group_ingress_rule` and `aws_vpc_security_group_egress_rule` to allow for more flexibility in defining security group rules.
+- `master_password` is no longer supported and only the write-only equivalent is supported (`master_password_wo` and `master_password_wo_version`).
 
 ## Additional changes
 
@@ -45,6 +46,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
     - `endpoints.cluster_endpoint_identifier` was previously `endpoints.identifier`
     - `endpoints.custom_endpoint_type` was previously `endpoints.type`
     - `role_associations` was previously `iam_roles`
+    - `master_password` replaced with `master_password_wo` and `master_password_wo_version`
     - The variables for DB shard group have been nested under a single, top-level `shard_group` variable:
       - `create_shard_group` removed - set `shard_group` to `null` to disable or provide an object to enable
       - `compute_redundancy` -> `shard_group.compute_redundancy`
