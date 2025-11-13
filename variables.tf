@@ -156,14 +156,14 @@ variable "database_name" {
   default     = null
 }
 
-variable "db_cluster_instance_class" {
-  description = "The compute and memory capacity of each DB instance in the Multi-AZ DB cluster, for example db.m6g.xlarge. Not all DB instance classes are available in all AWS Regions, or for all database engines"
+variable "cluster_instance_class" {
+  description = "The compute and memory capacity of each DB instance in the Multi-AZ DB cluster (not all DB instance classes are available in all AWS Regions, or for all database engines)"
   type        = string
   default     = null
 }
 
-variable "db_cluster_db_instance_parameter_group_name" {
-  description = "Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
+variable "cluster_db_instance_parameter_group_name" {
+  description = "Instance parameter group to associate with all instances of the DB cluster. The `cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade`"
   type        = string
   default     = null
 }
@@ -483,11 +483,11 @@ variable "instance_timeouts" {
 variable "endpoints" {
   description = "Map of additional cluster endpoints and their attributes to be created"
   type = map(object({
-    cluster_endpoint_identifier = string
-    custom_endpoint_type        = string
-    excluded_members            = optional(list(string))
-    static_members              = optional(list(string))
-    tags                        = optional(map(string), {})
+    identifier       = string
+    type             = string
+    excluded_members = optional(list(string))
+    static_members   = optional(list(string))
+    tags             = optional(map(string), {})
   }))
   default  = {}
   nullable = false

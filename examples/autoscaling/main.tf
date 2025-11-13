@@ -25,12 +25,12 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name                      = local.name
-  engine                    = "aurora-postgresql"
-  engine_version            = "17.5"
-  db_cluster_instance_class = "db.r8g.large"
-  instances                 = { 1 = {} }
-  master_username           = "root"
+  name                   = local.name
+  engine                 = "aurora-postgresql"
+  engine_version         = "17.5"
+  cluster_instance_class = "db.r8g.large"
+  instances              = { 1 = {} }
+  master_username        = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name

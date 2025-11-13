@@ -51,16 +51,16 @@ module "aurora" {
 
   endpoints = {
     static = {
-      cluster_endpoint_identifier = "static-custom-endpt"
-      custom_endpoint_type        = "ANY"
-      static_members              = ["static-member-1"]
-      tags                        = { Endpoint = "static-members" }
+      identifier     = "static-custom-endpt"
+      type           = "ANY"
+      static_members = ["static-member-1"]
+      tags           = { Endpoint = "static-members" }
     }
     excluded = {
-      cluster_endpoint_identifier = "excluded-custom-endpt"
-      custom_endpoint_type        = "READER"
-      excluded_members            = ["excluded-member-1"]
-      tags                        = { Endpoint = "excluded-members" }
+      identifier       = "excluded-custom-endpt"
+      type             = "READER"
+      excluded_members = ["excluded-member-1"]
+      tags             = { Endpoint = "excluded-members" }
     }
   }
 
@@ -92,10 +92,11 @@ module "aurora" {
         name         = "log_min_duration_statement"
         value        = 4000
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "rds.force_ssl"
         value        = 1
-        apply_method = "immediate"
+        apply_method = "pending-reboot"
       }
     ]
   }

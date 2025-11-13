@@ -59,9 +59,9 @@ resource "aws_rds_cluster" "this" {
   copy_tags_to_snapshot               = var.copy_tags_to_snapshot
   database_insights_mode              = var.database_insights_mode
   database_name                       = var.is_primary_cluster ? var.database_name : null
-  db_cluster_instance_class           = var.db_cluster_instance_class
+  db_cluster_instance_class           = var.cluster_instance_class
   db_cluster_parameter_group_name     = local.create_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.cluster_parameter_group_name
-  db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
+  db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.cluster_db_instance_parameter_group_name : null
   db_subnet_group_name                = local.db_subnet_group_name
   delete_automated_backups            = var.delete_automated_backups
   deletion_protection                 = var.deletion_protection
@@ -185,12 +185,12 @@ resource "aws_rds_cluster_instance" "this" {
 
   region = var.region
 
-  apply_immediately                     = try(coalesce(each.value.apply_immediately, var.apply_immediately))
+  apply_immediately                     = try(coalesce(each.value.apply_immediately, var.apply_immediately), null)
   auto_minor_version_upgrade            = each.value.auto_minor_version_upgrade
   availability_zone                     = each.value.availability_zone
-  ca_cert_identifier                    = try(coalesce(each.value.ca_cert_identifier, var.cluster_ca_cert_identifier))
+  ca_cert_identifier                    = try(coalesce(each.value.ca_cert_identifier, var.cluster_ca_cert_identifier), null)
   cluster_identifier                    = aws_rds_cluster.this[0].id
-  copy_tags_to_snapshot                 = try(coalesce(each.value.copy_tags_to_snapshot, var.copy_tags_to_snapshot))
+  copy_tags_to_snapshot                 = try(coalesce(each.value.copy_tags_to_snapshot, var.copy_tags_to_snapshot), null)
   custom_iam_instance_profile           = each.value.custom_iam_instance_profile
   db_parameter_group_name               = local.create_db_parameter_group ? aws_db_parameter_group.this[0].id : each.value.db_parameter_group_name
   db_subnet_group_name                  = local.db_subnet_group_name
@@ -198,14 +198,14 @@ resource "aws_rds_cluster_instance" "this" {
   engine_version                        = var.engine_version
   identifier                            = var.instances_use_identifier_prefix ? null : try(coalesce(each.value.identifier, "${var.name}-${each.key}"))
   identifier_prefix                     = var.instances_use_identifier_prefix ? try(coalesce(each.value.identifier_prefix, "${var.name}-${each.key}-")) : null
-  instance_class                        = each.value.instance_class
-  monitoring_interval                   = try(coalesce(each.value.monitoring_interval, var.cluster_monitoring_interval))
+  instance_class                        = try(coalesce(each.value.instance_class, var.cluster_instance_class), null)
+  monitoring_interval                   = try(coalesce(each.value.monitoring_interval, var.cluster_monitoring_interval), null)
   monitoring_role_arn                   = try(aws_iam_role.rds_enhanced_monitoring[0].arn, each.value.monitoring_role_arn)
-  performance_insights_enabled          = try(coalesce(each.value.performance_insights_enabled, var.cluster_performance_insights_enabled))
-  performance_insights_kms_key_id       = try(coalesce(each.value.performance_insights_kms_key_id, var.cluster_performance_insights_kms_key_id))
-  performance_insights_retention_period = try(coalesce(each.value.performance_insights_retention_period, var.cluster_performance_insights_retention_period))
+  performance_insights_enabled          = try(coalesce(each.value.performance_insights_enabled, var.cluster_performance_insights_enabled), null)
+  performance_insights_kms_key_id       = try(coalesce(each.value.performance_insights_kms_key_id, var.cluster_performance_insights_kms_key_id), null)
+  performance_insights_retention_period = try(coalesce(each.value.performance_insights_retention_period, var.cluster_performance_insights_retention_period), null)
   # preferred_backup_window - is set at the cluster level and will error if provided here
-  preferred_maintenance_window = try(coalesce(each.value.preferred_maintenance_window, var.preferred_maintenance_window))
+  preferred_maintenance_window = try(coalesce(each.value.preferred_maintenance_window, var.preferred_maintenance_window), null)
   promotion_tier               = each.value.promotion_tier
   publicly_accessible          = each.value.publicly_accessible
   tags                         = merge(var.tags, each.value.tags)
@@ -234,7 +234,7 @@ resource "aws_rds_cluster_endpoint" "this" {
 
   region = var.region
 
-  cluster_endpoint_identifier = each.value.cluster_endpoint_identifier
+  cluster_endpoint_identifier = each.value.identifier
   cluster_identifier          = aws_rds_cluster.this[0].id
   custom_endpoint_type        = each.value.type
   excluded_members            = each.value.excluded_members
@@ -265,7 +265,7 @@ resource "aws_rds_cluster_role_association" "this" {
 ################################################################################
 
 locals {
-  instances_has_monitoring_enabled = anytrue([for k, v in var.instances : v.monitoring_interval != null && v.monitoring_interval > 0])
+  instances_has_monitoring_enabled = anytrue([for k, v in var.instances : v.monitoring_interval != null && try(coalesce(v.monitoring_interval, 0), 0) > 0])
   create_monitoring_role           = local.create && var.create_monitoring_role && (local.instances_has_monitoring_enabled || var.cluster_monitoring_interval > 0)
 
   iam_role_name = try(coalesce(var.iam_role_name, "${var.name}-monitor"))
@@ -385,6 +385,7 @@ resource "aws_security_group" "this" {
   tags = merge(
     var.tags,
     var.security_group_tags,
+    { "Name" = local.security_group_name }
   )
 
   lifecycle {

@@ -156,7 +156,7 @@ module "aurora_mysql_v2" {
     max_capacity = 10
   }
 
-  db_cluster_instance_class = "db.serverless"
+  cluster_instance_class = "db.serverless"
   instances = {
     one = {}
     two = {}
@@ -211,7 +211,7 @@ module "aurora_postgresql_v2" {
     seconds_until_auto_pause = 3600
   }
 
-  db_cluster_instance_class = "db.serverless"
+  cluster_instance_class = "db.serverless"
   instances = {
     one = {}
     two = {}

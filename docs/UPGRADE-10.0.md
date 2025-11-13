@@ -34,7 +34,6 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 
     - `auto_minor_version_upgrade` -> still available within the `instances` variable definition
     - `ca_cert_identifier` -> available within the `instances` variable definition
-    - `instance_class` -> still available within the `instances` variable definition
     - `monitoring_interval` -> still available within the `instances` variable definition
     - `performance_insights_enabled` -> still available within the `instances` variable definition
     - `performance_insights_kms_key_id` -> still available within the `instances` variable definition
@@ -44,8 +43,8 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 
 2. Renamed variables:
 
-    - `endpoints.cluster_endpoint_identifier` was previously `endpoints.identifier`
-    - `endpoints.custom_endpoint_type` was previously `endpoints.type`
+    - `instance_class` -> `cluster_instance_class`
+    - `db_cluster_db_instance_parameter_group_name` -> `cluster_db_instance_parameter_group_name`
     - `role_associations` was previously `iam_roles`
     - `master_password` replaced with `master_password_wo` and `master_password_wo_version`
     - The variables for DB shard group have been nested under a single, top-level `shard_group` variable:
@@ -80,19 +79,19 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 
 3. Added variables:
 
-    -
+    - `region`
 
 4. Removed outputs:
 
-    -
+    - None
 
 5. Renamed outputs:
 
-    -
+    - None
 
 6. Added outputs:
 
-    -
+    - None
 
 ## Upgrade Migrations
 
@@ -104,7 +103,61 @@ module "cluster" {
   version = "~> 9.0"
 
   # Only the affected attributes are shown
+  instance_class      = "db.r8g.large"
+  monitoring_interval = 60
 
+  security_group_rules = {
+    vpc_ingress = {
+      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    }
+  }
+
+  master_password = random_password.master.result
+
+  # For limitless databases
+  create_shard_group        = true
+  compute_redundancy        = 0
+  db_shard_group_identifier = "example"
+  max_acu                   = 16
+
+  create_db_cluster_parameter_group      = true
+  db_cluster_parameter_group_name        = "example"
+  db_cluster_parameter_group_family      = "aurora-postgresql16"
+  db_cluster_parameter_group_description = "Example cluster parameter group"
+  db_cluster_parameter_group_parameters = [
+    {
+      name         = "log_min_duration_statement"
+      value        = 4000
+      apply_method = "immediate"
+      }, {
+      name         = "rds.force_ssl"
+      value        = 1
+      apply_method = "immediate"
+    }
+  ]
+
+  create_db_parameter_group      = true
+  db_parameter_group_name        = "example"
+  db_parameter_group_family      = "aurora-mysql8.0"
+  db_parameter_group_description = "Example DB parameter group"
+  db_parameter_group_parameters = [
+    {
+      name         = "connect_timeout"
+      value        = 60
+      apply_method = "immediate"
+    },
+  ]
+
+  create_db_cluster_activity_stream     = true
+  db_cluster_activity_stream_kms_key_id = module.kms.key_id
+  db_cluster_activity_stream_mode = "async"
+
+  iam_roles = {
+    s3_import = {
+      role_arn     = aws_iam_role.s3_import.arn
+      feature_name = "s3Import"
+    }
+  }
 
   tags = {
     Environment = "dev"
@@ -121,6 +174,72 @@ module "cluster" {
   version = "~> 10.0"
 
   # Only the affected attributes are shown
+  cluster_instance_class   = "db.r8g.large"
+  cluster_monitoring_interval = 60
+
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
+    }
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
+    }
+  }
+
+  master_password_wo         = random_password.master.result
+  master_password_wo_version = 1
+
+  # For limitless databases
+  shard_group = {
+    compute_redundancy = 0
+    identifier         = "example"
+    max_acu            = 16
+  }
+
+  cluster_parameter_group = {
+    name        = "example"
+    family      = "aurora-postgresql16"
+    description = "Example cluster parameter group"
+    parameters = [
+      {
+        name         = "log_min_duration_statement"
+        value        = 4000
+        apply_method = "immediate"
+        }, {
+        name         = "rds.force_ssl"
+        value        = 1
+        apply_method = "immediate"
+      }
+    ]
+  }
+
+  db_parameter_group = {
+    name        = "example"
+    family      = "aurora-mysql8.0"
+    description = "Example DB parameter group"
+    parameters = [
+      {
+        name         = "connect_timeout"
+        value        = 60
+        apply_method = "immediate"
+      },
+    ]
+  }
+
+  cluster_activity_stream = {
+    kms_key_id = module.kms.key_id
+    mode       = "async"
+  }
+
+  role_associations = {
+    s3Import = {
+      role_arn = aws_iam_role.s3_import.arn
+      # feature_name = "s3Import" # same as setting value to key
+    }
+  }
 
   tags = {
     Environment = "dev"
@@ -130,3 +249,12 @@ module "cluster" {
 ```
 
 ### State Changes
+
+Due to the change from `aws_security_group_rule` to `aws_vpc_security_group_ingress_rule` and `aws_vpc_security_group_egress_rule`, the following reference state changes are required to maintain the current security group rules. (Note: these are different resource types so they cannot be moved with `terraform mv ...`)
+
+```sh
+terraform state rm 'module.aurora.aws_security_group_rule.this["vpc_ingress"]'
+terraform state import 'module.aurora.aws_vpc_security_group_ingress_rule.this["private-az1"]' 'sg-xxx'
+terraform state import 'module.aurora.aws_vpc_security_group_ingress_rule.this["private-az2"]' 'sg-xxx'
+terraform state import 'module.aurora.aws_vpc_security_group_ingress_rule.this["private-az3"]' 'sg-xxx'
+```

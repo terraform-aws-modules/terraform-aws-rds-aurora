@@ -62,124 +62,127 @@ module "cluster" {
 
 There are a couple different configuration methods that can be used to create instances within the cluster:
 
-ℹ️ Only the pertinent attributes are shown for brevity
+  > [!NOTE]
+  > Only the pertinent attributes are shown for brevity
 
-1. Create homogenous cluster of any number of instances
+  1. Create homogenous cluster of any number of instances
 
-- Resources created:
-  - Writer: 1
-  - Reader(s): 2
+  - Resources created:
+    - Writer: 1
+    - Reader(s): 2
 
-```hcl
-  instance_class = "db.r8g.large"
-  instances = {
-    one   = {}
-    two   = {}
-    three = {}
-  }
-```
+  ```hcl
+    cluster_instance_class = "db.r8g.large"
+    instances = {
+      one   = {}
+      two   = {}
+      three = {}
+    }
+  ```
 
 2. Create homogenous cluster of instances w/ autoscaling enabled. This is redundant and we'll show why in the next example.
 
-- Resources created:
-  - Writer: 1
-  - Reader(s):
-    - At least 4 readers (2 created directly, 2 created by appautoscaling)
-    - At most 7 reader instances (2 created directly, 5 created by appautoscaling)
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 4 readers (2 created directly, 2 created by appautoscaling)
+      - At most 7 reader instances (2 created directly, 5 created by appautoscaling)
 
-ℹ️ Autoscaling uses the instance class specified by `instance_class`.
+  > [!NOTE]
+  > Autoscaling uses the instance class specified by `cluster_instance_class`.
 
-```hcl
-  instance_class = "db.r8g.large"
-  instances = {
-    one   = {}
-    two   = {}
-    three = {}
-  }
+  ```hcl
+    cluster_instance_class = "db.r8g.large"
+    instances = {
+      one   = {}
+      two   = {}
+      three = {}
+    }
 
-  autoscaling_enabled      = true
-  autoscaling_min_capacity = 2
-  autoscaling_max_capacity = 5
-```
+    autoscaling_enabled      = true
+    autoscaling_min_capacity = 2
+    autoscaling_max_capacity = 5
+  ```
 
 3. Create homogeneous cluster scaled via autoscaling. At least one instance (writer) is required
 
-- Resources created:
-  - Writer: 1
-  - Reader(s):
-    - At least 1 reader
-    - At most 5 readers
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 1 reader
+      - At most 5 readers
 
-```hcl
-  instance_class = "db.r8g.large"
-  instances = {
-    one = {}
-  }
+  ```hcl
+    cluster_instance_class = "db.r8g.large"
+    instances = {
+      one = {}
+    }
 
-  autoscaling_enabled      = true
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 5
-```
+    autoscaling_enabled      = true
+    autoscaling_min_capacity = 1
+    autoscaling_max_capacity = 5
+  ```
 
 4. Create heterogenous cluster to support mixed-use workloads
 
     It is common in this configuration to independently control the instance `promotion_tier` paired with `endpoints` to create custom endpoints directed at select instances or instance groups.
 
-- Resources created:
-  - Writer: 1
-  - Readers: 2
+  - Resources created:
+    - Writer: 1
+    - Readers: 2
 
-```hcl
-  instance_class = "db.r5.large"
-  instances = {
-    one = {
-      instance_class      = "db.r5.2xlarge"
-      publicly_accessible = true
+  ```hcl
+    cluster_instance_class = "db.r8g.large"
+    instances = {
+      one = {
+        instance_class      = "db.r8g.2xlarge"
+        publicly_accessible = true
+      }
+      two = {
+        identifier     = "static-member-1"
+        instance_class = "db.r8g.2xlarge"
+      }
+      three = {
+        identifier     = "excluded-member-1"
+        instance_class = "db.r8g.large"
+        promotion_tier = 15
+      }
     }
-    two = {
-      identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
-    }
-    three = {
-      identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
-      promotion_tier = 15
-    }
-  }
-```
+  ```
 
 5. Create heterogenous cluster to support mixed-use workloads w/ autoscaling enabled
 
-- Resources created:
-  - Writer: 1
-  - Reader(s):
-    - At least 3 readers (2 created directly, 1 created through appautoscaling)
-    - At most 7 readers (2 created directly, 5 created through appautoscaling)
+  - Resources created:
+    - Writer: 1
+    - Reader(s):
+      - At least 3 readers (2 created directly, 1 created through appautoscaling)
+      - At most 7 readers (2 created directly, 5 created through appautoscaling)
 
-ℹ️ Autoscaling uses the instance class specified by `instance_class`.
+  > [!NOTE]
+  > Autoscaling uses the instance class specified by `cluster_instance_class`.
 
-```hcl
-  instance_class = "db.r5.large"
-  instances = {
-    one = {
-      instance_class      = "db.r5.2xlarge"
-      publicly_accessible = true
+  ```hcl
+    cluster_instance_class = "db.r8g.large"
+    instances = {
+      one = {
+        instance_class      = "db.r8g.2xlarge"
+        publicly_accessible = true
+      }
+      two = {
+        identifier     = "static-member-1"
+        instance_class = "db.r8g.2xlarge"
+      }
+      three = {
+        identifier     = "excluded-member-1"
+        instance_class = "db.r8g.large"
+        promotion_tier = 15
+      }
     }
-    two = {
-      identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
-    }
-    three = {
-      identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
-      promotion_tier = 15
-    }
-  }
 
-  autoscaling_enabled      = true
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 5
-```
+    autoscaling_enabled      = true
+    autoscaling_min_capacity = 1
+    autoscaling_max_capacity = 5
+  ```
 
 ## Conditional Creation
 
@@ -291,6 +294,8 @@ No modules.
 | <a name="input_cloudwatch_log_group_tags"></a> [cloudwatch\_log\_group\_tags](#input\_cloudwatch\_log\_group\_tags) | Additional tags for the CloudWatch log group(s) | `map(string)` | `{}` | no |
 | <a name="input_cluster_activity_stream"></a> [cluster\_activity\_stream](#input\_cluster\_activity\_stream) | Map of arguments for the created DB cluster activity stream | <pre>object({<br/>    include_audit_fields = optional(bool, false)<br/>    kms_key_id           = string<br/>    mode                 = string<br/>  })</pre> | `null` | no |
 | <a name="input_cluster_ca_cert_identifier"></a> [cluster\_ca\_cert\_identifier](#input\_cluster\_ca\_cert\_identifier) | The CA certificate identifier to use for the DB cluster's server certificate. Currently only supported for multi-az DB clusters | `string` | `null` | no |
+| <a name="input_cluster_db_instance_parameter_group_name"></a> [cluster\_db\_instance\_parameter\_group\_name](#input\_cluster\_db\_instance\_parameter\_group\_name) | Instance parameter group to associate with all instances of the DB cluster. The `cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade` | `string` | `null` | no |
+| <a name="input_cluster_instance_class"></a> [cluster\_instance\_class](#input\_cluster\_instance\_class) | The compute and memory capacity of each DB instance in the Multi-AZ DB cluster (not all DB instance classes are available in all AWS Regions, or for all database engines) | `string` | `null` | no |
 | <a name="input_cluster_members"></a> [cluster\_members](#input\_cluster\_members) | List of RDS Instances that are a part of this cluster | `list(string)` | `null` | no |
 | <a name="input_cluster_monitoring_interval"></a> [cluster\_monitoring\_interval](#input\_cluster\_monitoring\_interval) | Interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB cluster. To turn off collecting Enhanced Monitoring metrics, specify 0. Valid Values: 0, 1, 5, 10, 15, 30, 60 | `number` | `0` | no |
 | <a name="input_cluster_parameter_group"></a> [cluster\_parameter\_group](#input\_cluster\_parameter\_group) | Map of nested arguments for the created DB cluster parameter group | <pre>object({<br/>    name            = optional(string)<br/>    use_name_prefix = optional(bool, true)<br/>    description     = optional(string)<br/>    family          = string<br/>    parameters = optional(list(object({<br/>      name         = string<br/>      value        = string<br/>      apply_method = optional(string, "immediate")<br/>    })))<br/>  })</pre> | `null` | no |
@@ -310,8 +315,6 @@ No modules.
 | <a name="input_create_security_group"></a> [create\_security\_group](#input\_create\_security\_group) | Determines whether to create security group for RDS cluster | `bool` | `true` | no |
 | <a name="input_database_insights_mode"></a> [database\_insights\_mode](#input\_database\_insights\_mode) | The mode of Database Insights to enable for the DB cluster. Valid values: standard, advanced | `string` | `null` | no |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Name for an automatically created database on cluster creation | `string` | `null` | no |
-| <a name="input_db_cluster_db_instance_parameter_group_name"></a> [db\_cluster\_db\_instance\_parameter\_group\_name](#input\_db\_cluster\_db\_instance\_parameter\_group\_name) | Instance parameter group to associate with all instances of the DB cluster. The `db_cluster_db_instance_parameter_group_name` is only valid in combination with `allow_major_version_upgrade` | `string` | `null` | no |
-| <a name="input_db_cluster_instance_class"></a> [db\_cluster\_instance\_class](#input\_db\_cluster\_instance\_class) | The compute and memory capacity of each DB instance in the Multi-AZ DB cluster, for example db.m6g.xlarge. Not all DB instance classes are available in all AWS Regions, or for all database engines | `string` | `null` | no |
 | <a name="input_db_parameter_group"></a> [db\_parameter\_group](#input\_db\_parameter\_group) | Map of nested arguments for the created DB parameter group | <pre>object({<br/>    name            = optional(string)<br/>    use_name_prefix = optional(bool, true)<br/>    description     = optional(string)<br/>    family          = string<br/>    parameters = optional(list(object({<br/>      name         = string<br/>      value        = string<br/>      apply_method = optional(string, "immediate")<br/>    })))<br/>  })</pre> | `null` | no |
 | <a name="input_db_subnet_group_name"></a> [db\_subnet\_group\_name](#input\_db\_subnet\_group\_name) | The name of the subnet group name (existing or created) | `string` | `""` | no |
 | <a name="input_delete_automated_backups"></a> [delete\_automated\_backups](#input\_delete\_automated\_backups) | Specifies whether to remove automated backups immediately after the DB cluster is deleted | `bool` | `null` | no |
@@ -322,7 +325,7 @@ No modules.
 | <a name="input_enable_http_endpoint"></a> [enable\_http\_endpoint](#input\_enable\_http\_endpoint) | Enable HTTP endpoint (data API). Only valid when engine\_mode is set to `serverless` | `bool` | `null` | no |
 | <a name="input_enable_local_write_forwarding"></a> [enable\_local\_write\_forwarding](#input\_enable\_local\_write\_forwarding) | Whether read replicas can forward write operations to the writer DB instance in the DB cluster. By default, write operations aren't allowed on reader DB instances | `bool` | `null` | no |
 | <a name="input_enabled_cloudwatch_logs_exports"></a> [enabled\_cloudwatch\_logs\_exports](#input\_enabled\_cloudwatch\_logs\_exports) | Set of log types to export to cloudwatch. If omitted, no logs will be exported. The following log types are supported: `audit`, `error`, `general`, `slowquery`, `postgresql` | `list(string)` | `[]` | no |
-| <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | Map of additional cluster endpoints and their attributes to be created | <pre>map(object({<br/>    cluster_endpoint_identifier = string<br/>    custom_endpoint_type        = string<br/>    excluded_members            = optional(list(string))<br/>    static_members              = optional(list(string))<br/>    tags                        = optional(map(string), {})<br/>  }))</pre> | `{}` | no |
+| <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | Map of additional cluster endpoints and their attributes to be created | <pre>map(object({<br/>    identifier       = string<br/>    type             = string<br/>    excluded_members = optional(list(string))<br/>    static_members   = optional(list(string))<br/>    tags             = optional(map(string), {})<br/>  }))</pre> | `{}` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | The name of the database engine to be used for this DB cluster. Defaults to `aurora`. Valid Values: `aurora`, `aurora-mysql`, `aurora-postgresql` | `string` | `null` | no |
 | <a name="input_engine_lifecycle_support"></a> [engine\_lifecycle\_support](#input\_engine\_lifecycle\_support) | The life cycle type for this DB instance. This setting is valid for cluster types Aurora DB clusters and Multi-AZ DB clusters. Valid values are `open-source-rds-extended-support`, `open-source-rds-extended-support-disabled`. Default value is `open-source-rds-extended-support` | `string` | `null` | no |
 | <a name="input_engine_mode"></a> [engine\_mode](#input\_engine\_mode) | The database engine mode. Valid values: `global`, `multimaster`, `parallelquery`, `provisioned`, `serverless`. Defaults to: `provisioned` | `string` | `"provisioned"` | no |
@@ -433,6 +436,6 @@ Apache 2 Licensed. See [LICENSE](https://github.com/terraform-aws-modules/terraf
 
 ## Additional information for users from Russia and Belarus
 
-- Russia has [illegally annexed Crimea in 2014](https://en.wikipedia.org/wiki/Annexation_of_Crimea_by_the_Russian_Federation) and [brought the war in Donbas](https://en.wikipedia.org/wiki/War_in_Donbas) followed by [full-scale invasion of Ukraine in 2022](https://en.wikipedia.org/wiki/2022_Russian_invasion_of_Ukraine).
-- Russia has brought sorrow and devastations to millions of Ukrainians, killed hundreds of innocent people, damaged thousands of buildings, and forced several million people to flee.
-- [Putin khuylo!](https://en.wikipedia.org/wiki/Putin_khuylo!)
+* Russia has [illegally annexed Crimea in 2014](https://en.wikipedia.org/wiki/Annexation_of_Crimea_by_the_Russian_Federation) and [brought the war in Donbas](https://en.wikipedia.org/wiki/War_in_Donbas) followed by [full-scale invasion of Ukraine in 2022](https://en.wikipedia.org/wiki/2022_Russian_invasion_of_Ukraine).
+* Russia has brought sorrow and devastations to millions of Ukrainians, killed hundreds of innocent people, damaged thousands of buildings, and forced several million people to flee.
+* [Putin khuylo!](https://en.wikipedia.org/wiki/Putin_khuylo!)

@@ -42,11 +42,11 @@ module "aurora" {
   cluster_performance_insights_retention_period = 31
 
   # Multi-AZ
-  availability_zones        = module.vpc.azs
-  allocated_storage         = 256
-  db_cluster_instance_class = "db.r8g.large"
-  iops                      = 2500
-  storage_type              = "io1"
+  availability_zones     = module.vpc.azs
+  allocated_storage      = 256
+  cluster_instance_class = "db.c6gd.large"
+  iops                   = 2500
+  storage_type           = "io1"
 
   cluster_ca_cert_identifier = "rds-ca-rsa4096-g1"
 

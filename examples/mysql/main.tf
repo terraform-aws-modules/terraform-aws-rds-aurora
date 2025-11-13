@@ -31,16 +31,16 @@ module "aurora" {
   master_username = "root"
   instances = {
     1 = {
-      instance_class      = "db.r5.large"
+      instance_class      = "db.r8g.large"
       publicly_accessible = true
     }
     2 = {
       identifier     = "mysql-static-1"
-      instance_class = "db.r5.2xlarge"
+      instance_class = "db.r8g.2xlarge"
     }
     3 = {
       identifier     = "mysql-excluded-1"
-      instance_class = "db.r5.xlarge"
+      instance_class = "db.r8g.xlarge"
       promotion_tier = 15
     }
   }
@@ -77,35 +77,43 @@ module "aurora" {
         name         = "connect_timeout"
         value        = 120
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "innodb_lock_wait_timeout"
         value        = 300
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "log_output"
         value        = "FILE"
-        apply_method = "immediate"
-        }, {
+        apply_method = "pending-reboot"
+      },
+      {
         name         = "max_allowed_packet"
         value        = "67108864"
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "aurora_parallel_query"
-        value        = "OFF"
+        value        = 0
         apply_method = "pending-reboot"
-        }, {
+      },
+      {
         name         = "binlog_format"
         value        = "ROW"
         apply_method = "pending-reboot"
-        }, {
+      },
+      {
         name         = "log_bin_trust_function_creators"
         value        = 1
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "require_secure_transport"
         value        = "ON"
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "tls_version"
         value        = "TLSv1.2"
         apply_method = "pending-reboot"
@@ -122,31 +130,38 @@ module "aurora" {
         name         = "connect_timeout"
         value        = 60
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "general_log"
         value        = 0
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "innodb_lock_wait_timeout"
         value        = 300
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "log_output"
         value        = "FILE"
         apply_method = "pending-reboot"
-        }, {
+      },
+      {
         name         = "long_query_time"
         value        = 5
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "max_connections"
         value        = 2000
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "slow_query_log"
         value        = 1
         apply_method = "immediate"
-        }, {
+      },
+      {
         name         = "log_bin_trust_function_creators"
         value        = 1
         apply_method = "immediate"
