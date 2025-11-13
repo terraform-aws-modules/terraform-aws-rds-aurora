@@ -55,9 +55,15 @@ module "aurora_primary" {
 
   vpc_id               = module.primary_vpc.vpc_id
   db_subnet_group_name = module.primary_vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.primary_vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.primary_vpc.private_subnets_cidr_blocks, 0)
+    }
+    private-az2 = {
+      cidr_ipv4 = element(module.primary_vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.primary_vpc.private_subnets_cidr_blocks, 2)
     }
   }
 
@@ -88,9 +94,15 @@ module "aurora_secondary" {
 
   vpc_id               = module.secondary_vpc.vpc_id
   db_subnet_group_name = module.secondary_vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.secondary_vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.secondary_vpc.private_subnets_cidr_blocks, 0)
+    }
+    private-az2 = {
+      cidr_ipv4 = element(module.secondary_vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.secondary_vpc.private_subnets_cidr_blocks, 2)
     }
   }
 

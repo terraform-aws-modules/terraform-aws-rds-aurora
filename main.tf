@@ -368,11 +368,12 @@ resource "aws_appautoscaling_policy" "this" {
 ################################################################################
 
 locals {
-  security_group_name = try(coalesce(var.security_group_name, var.name), "")
+  create_security_group = local.create && var.create_security_group
+  security_group_name   = try(coalesce(var.security_group_name, var.name), "")
 }
 
 resource "aws_security_group" "this" {
-  count = local.create && var.create_security_group ? 1 : 0
+  count = local.create_security_group ? 1 : 0
 
   region = var.region
 
@@ -391,26 +392,48 @@ resource "aws_security_group" "this" {
   }
 }
 
-resource "aws_security_group_rule" "this" {
-  for_each = { for k, v in var.security_group_rules : k => v if local.create && var.create_security_group }
+resource "aws_vpc_security_group_ingress_rule" "this" {
+  for_each = { for k, v in var.security_group_ingress_rules : k => v if var.security_group_ingress_rules != null && local.create_security_group }
 
   region = var.region
 
-  # required
-  type              = try(each.value.type, "ingress")
-  from_port         = try(each.value.from_port, local.port)
-  to_port           = try(each.value.to_port, local.port)
-  protocol          = try(each.value.protocol, "tcp")
-  security_group_id = aws_security_group.this[0].id
-
-  # optional
-  cidr_blocks              = try(each.value.cidr_blocks, null)
-  description              = try(each.value.description, null)
-  ipv6_cidr_blocks         = try(each.value.ipv6_cidr_blocks, null)
-  prefix_list_ids          = try(each.value.prefix_list_ids, null)
-  source_security_group_id = try(each.value.source_security_group_id, null)
-  self                     = try(each.value.self, null)
+  cidr_ipv4                    = each.value.cidr_ipv4
+  cidr_ipv6                    = each.value.cidr_ipv6
+  description                  = each.value.description
+  from_port                    = try(coalesce(each.value.from_port, local.port), null)
+  ip_protocol                  = each.value.ip_protocol
+  prefix_list_id               = each.value.prefix_list_id
+  referenced_security_group_id = each.value.referenced_security_group_id == "self" ? aws_security_group.this[0].id : each.value.referenced_security_group_id
+  security_group_id            = aws_security_group.this[0].id
+  tags = merge(
+    var.tags,
+    { "Name" = coalesce(each.value.name, "${local.security_group_name}-${each.key}") },
+    each.value.tags
+  )
+  to_port = try(coalesce(each.value.to_port, each.value.from_port, local.port), null)
 }
+
+resource "aws_vpc_security_group_egress_rule" "this" {
+  for_each = { for k, v in var.security_group_egress_rules : k => v if var.security_group_egress_rules != null && local.create_security_group }
+
+  region = var.region
+
+  cidr_ipv4                    = each.value.cidr_ipv4
+  cidr_ipv6                    = each.value.cidr_ipv6
+  description                  = each.value.description
+  from_port                    = try(coalesce(each.value.from_port, each.value.to_port, local.port), null)
+  ip_protocol                  = each.value.ip_protocol
+  prefix_list_id               = each.value.prefix_list_id
+  referenced_security_group_id = each.value.referenced_security_group_id == "self" ? aws_security_group.this[0].id : each.value.referenced_security_group_id
+  security_group_id            = aws_security_group.this[0].id
+  tags = merge(
+    var.tags,
+    { "Name" = coalesce(each.value.name, "${local.security_group_name}-${each.key}") },
+    each.value.tags
+  )
+  to_port = try(coalesce(each.value.to_port, local.port), null)
+}
+
 
 ################################################################################
 # Cluster Parameter Group

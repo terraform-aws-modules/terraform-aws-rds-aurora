@@ -66,14 +66,15 @@ module "aurora" {
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
     }
-    egress_example = {
-      type        = "egress"
-      cidr_blocks = ["10.33.0.0/28"]
-      description = "Egress to corporate printer closet"
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
     }
   }
 

@@ -9,6 +9,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 - AWS provider `v6.18` is now minimum supported version
 - The underlying `aws_security_group_rule` resources has been replaced with `aws_vpc_security_group_ingress_rule` and `aws_vpc_security_group_egress_rule` to allow for more flexibility in defining security group rules.
 - `master_password` is no longer supported and only the write-only equivalent is supported (`master_password_wo` and `master_password_wo_version`) ([#513](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/pull/513))
+- `security_group_rules` has been split into `security_group_ingress_rules` and `security_group_egress_rules` to better match the AWS API and allow for more flexibility in defining security group rules
 
 ## Additional changes
 

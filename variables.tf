@@ -651,10 +651,44 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "security_group_rules" {
-  description = "Map of security group rules to add to the cluster security group created"
-  type        = any
-  default     = {}
+variable "security_group_ingress_rules" {
+  description = "Map of security group ingress rules to add to the security group created"
+  type = map(object({
+    name = optional(string)
+
+    cidr_ipv4                    = optional(string)
+    cidr_ipv6                    = optional(string)
+    description                  = optional(string)
+    from_port                    = optional(number)
+    ip_protocol                  = optional(string, "tcp")
+    prefix_list_id               = optional(string)
+    referenced_security_group_id = optional(string)
+    region                       = optional(string)
+    tags                         = optional(map(string), {})
+    to_port                      = optional(number)
+  }))
+  default  = {}
+  nullable = false
+}
+
+variable "security_group_egress_rules" {
+  description = "Map of security group egress rules to add to the security group created"
+  type = map(object({
+    name = optional(string)
+
+    cidr_ipv4                    = optional(string)
+    cidr_ipv6                    = optional(string)
+    description                  = optional(string)
+    from_port                    = optional(number)
+    ip_protocol                  = optional(string, "tcp")
+    prefix_list_id               = optional(string)
+    referenced_security_group_id = optional(string)
+    region                       = optional(string)
+    tags                         = optional(map(string), {})
+    to_port                      = optional(number)
+  }))
+  default  = {}
+  nullable = false
 }
 
 variable "security_group_tags" {

@@ -47,15 +47,21 @@ module "aurora" {
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
     }
-    kms_vpc_endpoint = {
-      type                     = "egress"
-      from_port                = 443
-      to_port                  = 443
-      source_security_group_id = module.vpc_endpoints.security_group_id
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
+    }
+  }
+  security_group_egress_rules = {
+    kms-vpc-endpoint = {
+      to_port                      = 443
+      referenced_security_group_id = module.vpc_endpoints.security_group_id
     }
   }
 

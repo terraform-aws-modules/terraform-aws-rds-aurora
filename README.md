@@ -29,19 +29,19 @@ module "cluster" {
   instance_class = "db.r6g.large"
   instances = {
     one = {}
-    2 = {
+    two = {
       instance_class = "db.r6g.2xlarge"
     }
   }
 
   vpc_id               = "vpc-12345678"
   db_subnet_group_name = "db-subnet-group"
-  security_group_rules = {
+  security_group_ingress_rules = {
     ex1_ingress = {
-      cidr_blocks = ["10.20.0.0/20"]
+      cidr_ipv4 = "10.20.0.0/20"
     }
     ex1_ingress = {
-      source_security_group_id = "sg-12345678"
+      referenced_security_group_id = "sg-12345678"
     }
   }
 
@@ -288,7 +288,8 @@ No modules.
 | [aws_rds_shard_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_shard_group) | resource |
 | [aws_secretsmanager_secret_rotation.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_rotation) | resource |
 | [aws_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_security_group_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
+| [aws_vpc_security_group_egress_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_egress_rule) | resource |
+| [aws_vpc_security_group_ingress_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule) | resource |
 | [aws_iam_policy_document.monitoring_rds_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_service_principal.monitoring_rds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/service_principal) | data source |
@@ -394,8 +395,9 @@ No modules.
 | <a name="input_s3_import"></a> [s3\_import](#input\_s3\_import) | Configuration map used to restore from a Percona Xtrabackup in S3 (only MySQL is supported) | <pre>object({<br/>    bucket_name           = string<br/>    bucket_prefix         = optional(string)<br/>    ingestion_role        = string<br/>    source_engine_version = string<br/>  })</pre> | `null` | no |
 | <a name="input_scaling_configuration"></a> [scaling\_configuration](#input\_scaling\_configuration) | Map of nested attributes with scaling properties. Only valid when `engine_mode` is set to `serverless` | <pre>object({<br/>    auto_pause               = optional(bool)<br/>    max_capacity             = optional(number)<br/>    min_capacity             = optional(number)<br/>    seconds_before_timeout   = optional(number)<br/>    seconds_until_auto_pause = optional(number)<br/>    timeout_action           = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_security_group_description"></a> [security\_group\_description](#input\_security\_group\_description) | The description of the security group. If value is set to empty string it will contain cluster name in the description | `string` | `null` | no |
+| <a name="input_security_group_egress_rules"></a> [security\_group\_egress\_rules](#input\_security\_group\_egress\_rules) | Map of security group egress rules to add to the security group created | <pre>map(object({<br/>    name = optional(string)<br/><br/>    cidr_ipv4                    = optional(string)<br/>    cidr_ipv6                    = optional(string)<br/>    description                  = optional(string)<br/>    from_port                    = optional(number)<br/>    ip_protocol                  = optional(string, "tcp")<br/>    prefix_list_id               = optional(string)<br/>    referenced_security_group_id = optional(string)<br/>    region                       = optional(string)<br/>    tags                         = optional(map(string), {})<br/>    to_port                      = optional(number)<br/>  }))</pre> | `{}` | no |
+| <a name="input_security_group_ingress_rules"></a> [security\_group\_ingress\_rules](#input\_security\_group\_ingress\_rules) | Map of security group ingress rules to add to the security group created | <pre>map(object({<br/>    name = optional(string)<br/><br/>    cidr_ipv4                    = optional(string)<br/>    cidr_ipv6                    = optional(string)<br/>    description                  = optional(string)<br/>    from_port                    = optional(number)<br/>    ip_protocol                  = optional(string, "tcp")<br/>    prefix_list_id               = optional(string)<br/>    referenced_security_group_id = optional(string)<br/>    region                       = optional(string)<br/>    tags                         = optional(map(string), {})<br/>    to_port                      = optional(number)<br/>  }))</pre> | `{}` | no |
 | <a name="input_security_group_name"></a> [security\_group\_name](#input\_security\_group\_name) | The security group name. Default value is (`var.name`) | `string` | `""` | no |
-| <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | Map of security group rules to add to the cluster security group created | `any` | `{}` | no |
 | <a name="input_security_group_tags"></a> [security\_group\_tags](#input\_security\_group\_tags) | Additional tags for the security group | `map(string)` | `{}` | no |
 | <a name="input_security_group_use_name_prefix"></a> [security\_group\_use\_name\_prefix](#input\_security\_group\_use\_name\_prefix) | Determines whether the security group name (`var.name`) is used as a prefix | `bool` | `true` | no |
 | <a name="input_serverlessv2_scaling_configuration"></a> [serverlessv2\_scaling\_configuration](#input\_serverlessv2\_scaling\_configuration) | Map of nested attributes with serverless v2 scaling properties. Only valid when `engine_mode` is set to `provisioned` | <pre>object({<br/>    max_capacity             = number<br/>    min_capacity             = optional(number)<br/>    seconds_until_auto_pause = optional(number)<br/>  })</pre> | `null` | no |
