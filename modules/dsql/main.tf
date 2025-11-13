@@ -1,3 +1,7 @@
+################################################################################
+# Cluster
+################################################################################
+
 resource "aws_dsql_cluster" "this" {
   count = var.create ? 1 : 0
 
@@ -8,13 +12,21 @@ resource "aws_dsql_cluster" "this" {
 
   dynamic "multi_region_properties" {
     for_each = var.witness_region != null ? [true] : []
+
     content {
       witness_region = var.witness_region
     }
   }
 
-  tags = var.tags
+  tags = merge(
+    var.tags,
+    { for k, v in { Name = var.name } : k => v if v != "" }
+  )
 }
+
+################################################################################
+# Cluster Peering
+################################################################################
 
 resource "aws_dsql_cluster_peering" "this" {
   count = var.create && var.create_cluster_peering ? 1 : 0
@@ -26,6 +38,6 @@ resource "aws_dsql_cluster_peering" "this" {
   witness_region = var.witness_region
 
   timeouts {
-    create = try(var.timeouts.create, null)
+    create = var.timeouts.create
   }
 }

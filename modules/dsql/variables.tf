@@ -10,6 +10,22 @@ variable "region" {
   default     = null
 }
 
+variable "name" {
+  description = "Name used across resources created"
+  type        = string
+  default     = ""
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Cluster
+################################################################################
+
 variable "deletion_protection_enabled" {
   description = "Whether deletion protection is enabled in this cluster"
   type        = bool
@@ -21,6 +37,10 @@ variable "kms_encryption_key" {
   type        = string
   default     = null
 }
+
+################################################################################
+# Cluster Peering
+################################################################################
 
 variable "create_cluster_peering" {
   description = "Whether to create cluster peering"
@@ -41,13 +61,9 @@ variable "witness_region" {
 }
 
 variable "timeouts" {
-  description = "Create timeout configuration for the cluster"
-  type        = any
-  default     = {}
-}
-
-variable "tags" {
-  description = "A map of tags to be associated with the AWS DSQL Cluster resource"
-  type        = map(string)
-  default     = {}
+  description = "Timeout configuration for the cluster"
+  type = object({
+    create = optional(string)
+  })
+  default = null
 }

@@ -1,6 +1,6 @@
-# DSQL Cluster
+# AWS RDS Aurora DSQL Terraform module
 
-Terraform sub-module which creates DSQL cluster and peering resources.
+Terraform sub-module which creates DSQL resources.
 
 ## Usage
 
@@ -10,25 +10,31 @@ See [DSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tre
 module "dsql_cluster_1" {
   source = "../../modules/dsql"
 
-  witness_region              = "us-west-2"
+  name = "dsql-1"
+
+  witness_region              = "us-east-2"
   create_cluster_peering      = true
   clusters                    = [module.dsql_cluster_2.arn]
 
-  tags = { Name = "dsql-1" }
+  tags = {
+    Environment = "production"
+   }
 }
 
 module "dsql_cluster_2" {
   source = "../../modules/dsql"
 
+  region = "us-east-2"
+
+  name = "dsql-2"
+
   witness_region              = "us-west-2"
   create_cluster_peering      = true
   clusters                    = [module.dsql_cluster_1.arn]
 
-  tags = { Name = "dsql-2" }
-
-  providers = {
-    aws = aws.region2
-  }
+  tags = {
+    Environment = "production"
+   }
 }
 ```
 
@@ -66,9 +72,10 @@ No modules.
 | <a name="input_create_cluster_peering"></a> [create\_cluster\_peering](#input\_create\_cluster\_peering) | Whether to create cluster peering | `bool` | `false` | no |
 | <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | Whether deletion protection is enabled in this cluster | `bool` | `null` | no |
 | <a name="input_kms_encryption_key"></a> [kms\_encryption\_key](#input\_kms\_encryption\_key) | The ARN of the AWS KMS key that encrypts data in the DSQL Cluster, or `AWS_OWNED_KMS_KEY` | `string` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name used across resources created | `string` | `""` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where the resource(s) will be managed. Defaults to the Region set in the provider configuration | `string` | `null` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to be associated with the AWS DSQL Cluster resource | `map(string)` | `{}` | no |
-| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Create timeout configuration for the cluster | `any` | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
+| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Timeout configuration for the cluster | <pre>object({<br/>    create = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_witness_region"></a> [witness\_region](#input\_witness\_region) | Witness region for the multi-region clusters. Setting this makes this cluster a multi-region cluster. Changing it recreates the cluster | `string` | `null` | no |
 
 ## Outputs
