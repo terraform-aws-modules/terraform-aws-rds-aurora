@@ -307,15 +307,15 @@ variable "port" {
 }
 
 variable "preferred_backup_window" {
-  description = "The daily time range during which automated backups are created if automated backups are enabled using the `backup_retention_period` parameter. Time in UTC"
+  description = "Daily time range during which automated backups are created if automated backups are enabled using the BackupRetentionPeriod parameter.Time in UTC. Default: A 30-minute window selected at random from an 8-hour block of time per region, e.g. `04:00-09:00`"
   type        = string
-  default     = "02:00-03:00"
+  default     = null
 }
 
 variable "preferred_maintenance_window" {
-  description = "The weekly time range during which system maintenance can occur, in (UTC)"
+  description = "Weekly time range during which system maintenance can occur, in (UTC) e.g., `wed:04:00-wed:04:30`"
   type        = string
-  default     = "sun:05:00-sun:06:00"
+  default     = null
 }
 
 variable "replication_source_identifier" {

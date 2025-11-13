@@ -18,8 +18,9 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 ### Modified
 
 - Variable definitions now contain detailed object types in place of the previously used `any` type
-- `copy_tags_to_snapshot` default value is now `true`
+- `copy_tags_to_snapshot` default value is now `true` ([#521](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/521))
 - `db_cluster_parameter_group_parameters` was previously of type `list(map(...))`, now of type `map(object(...))`with `name` being optional and defaulting to the map key if not provided
+- `preferred_maintenance_window` and `preferred_backup_window` default values are now `null` ([#524](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/pull/524))
 
 ### Removed
 
