@@ -27,7 +27,7 @@ module "aurora" {
 
   name            = local.name
   engine          = "postgres" # This uses RDS engine, not Aurora
-  engine_version  = "15.7"
+  engine_version  = "17.5"
   master_username = "root"
 
   vpc_id               = module.vpc.vpc_id
@@ -44,7 +44,7 @@ module "aurora" {
   # Multi-AZ
   availability_zones        = module.vpc.azs
   allocated_storage         = 256
-  db_cluster_instance_class = "db.r6gd.large"
+  db_cluster_instance_class = "db.r8g.large"
   iops                      = 2500
   storage_type              = "io1"
 

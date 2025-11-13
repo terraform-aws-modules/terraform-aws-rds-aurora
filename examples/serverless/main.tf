@@ -171,7 +171,7 @@ module "aurora_mysql_v2" {
 
 data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
-  version = "14.12"
+  version = "17.5"
 }
 
 module "aurora_postgresql_v2" {

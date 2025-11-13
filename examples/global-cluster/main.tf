@@ -35,7 +35,7 @@ locals {
 resource "aws_rds_global_cluster" "this" {
   global_cluster_identifier = local.name
   engine                    = "aurora-postgresql"
-  engine_version            = "14.5"
+  engine_version            = "17.5"
   database_name             = "example_db"
   storage_encrypted         = true
 }
@@ -49,7 +49,7 @@ module "aurora_primary" {
   engine_version            = aws_rds_global_cluster.this.engine_version
   master_username           = "root"
   global_cluster_identifier = aws_rds_global_cluster.this.id
-  db_cluster_instance_class = "db.r6g.large"
+  db_cluster_instance_class = "db.r8g.large"
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.primary.arn
 
@@ -88,7 +88,7 @@ module "aurora_secondary" {
   engine_version            = aws_rds_global_cluster.this.engine_version
   global_cluster_identifier = aws_rds_global_cluster.this.id
   source_region             = local.primary_region
-  db_cluster_instance_class = "db.r6g.large"
+  db_cluster_instance_class = "db.r8g.large"
   instances                 = { for i in range(2) : i => {} }
   kms_key_id                = aws_kms_key.secondary.arn
 

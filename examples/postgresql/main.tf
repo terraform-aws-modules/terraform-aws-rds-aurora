@@ -27,24 +27,24 @@ module "aurora" {
 
   name                        = local.name
   engine                      = "aurora-postgresql"
-  engine_version              = "14.13"
+  engine_version              = "17.5"
   master_username             = "root"
   storage_type                = "aurora-iopt1"
   cluster_monitoring_interval = 30
 
   instances = {
     1 = {
-      instance_class          = "db.r5.2xlarge"
+      instance_class          = "db.r8g.2xlarge"
       publicly_accessible     = true
       db_parameter_group_name = "default.aurora-postgresql14"
     }
     2 = {
       identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
+      instance_class = "db.r8g.2xlarge"
     }
     3 = {
       identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
+      instance_class = "db.r8g.large"
       promotion_tier = 15
     }
   }
@@ -85,7 +85,7 @@ module "aurora" {
 
   cluster_parameter_group = {
     name        = local.name
-    family      = "aurora-postgresql14"
+    family      = "aurora-postgresql17"
     description = "${local.name} example cluster parameter group"
     parameters = [
       {
@@ -102,7 +102,7 @@ module "aurora" {
 
   db_parameter_group = {
     name        = local.name
-    family      = "aurora-postgresql14"
+    family      = "aurora-postgresql17"
     description = "${local.name} example DB parameter group"
     parameters = [
       {
@@ -153,7 +153,7 @@ module "kms" {
   is_enabled              = true
   key_usage               = "ENCRYPT_DECRYPT"
 
-  aliases = [local.name]
+  aliases = ["rds/${local.name}"]
 
   tags = local.tags
 }

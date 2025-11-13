@@ -25,12 +25,12 @@ module "cluster" {
 
   name           = "test-aurora-db-postgres96"
   engine         = "aurora-postgresql"
-  engine_version = "14.5"
-  instance_class = "db.r6g.large"
+  engine_version = "17.5"
+  instance_class = "db.r8g.large"
   instances = {
     one = {}
     two = {
-      instance_class = "db.r6g.2xlarge"
+      instance_class = "db.r8g.2xlarge"
     }
   }
 
@@ -71,7 +71,7 @@ There are a couple different configuration methods that can be used to create in
   - Reader(s): 2
 
 ```hcl
-  instance_class = "db.r6g.large"
+  instance_class = "db.r8g.large"
   instances = {
     one   = {}
     two   = {}
@@ -90,7 +90,7 @@ There are a couple different configuration methods that can be used to create in
 ℹ️ Autoscaling uses the instance class specified by `instance_class`.
 
 ```hcl
-  instance_class = "db.r6g.large"
+  instance_class = "db.r8g.large"
   instances = {
     one   = {}
     two   = {}
@@ -111,7 +111,7 @@ There are a couple different configuration methods that can be used to create in
     - At most 5 readers
 
 ```hcl
-  instance_class = "db.r6g.large"
+  instance_class = "db.r8g.large"
   instances = {
     one = {}
   }
@@ -181,34 +181,6 @@ There are a couple different configuration methods that can be used to create in
   autoscaling_max_capacity = 5
 ```
 
-## DSQL Multi Region Peered Clusters
-
-```hcl
-module "dsql_cluster_1" {
-  source = "../../modules/dsql"
-
-  witness_region              = "us-west-2"
-  create_cluster_peering      = true
-  clusters                    = [module.dsql_cluster_2.arn]
-
-  tags = { Name = "dsql-1" }
-}
-
-module "dsql_cluster_2" {
-  source = "../../modules/dsql"
-
-  witness_region              = "us-west-2"
-  create_cluster_peering      = true
-  clusters                    = [module.dsql_cluster_1.arn]
-
-  tags = { Name = "dsql-2" }
-
-  providers = {
-    aws = aws.region2
-  }
-}
-```
-
 ## Conditional Creation
 
 The following values are provided to toggle on/off creation of the associated resources as desired:
@@ -237,14 +209,14 @@ module "cluster" {
 ## Examples
 
 - [Autoscaling](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
-- [Limitless](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/limitless): A PostgreSQL Limitless cluster
+- [DSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/dsql): Multi region and single region DSQL clusters
 - [Global Cluster](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/global-cluster): A PostgreSQL global cluster with clusters provisioned in two different region
+- [Limitless](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/limitless): A PostgreSQL Limitless cluster
 - [Multi-AZ](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/multi-az): A multi-AZ RDS cluster (not using Aurora engine)
 - [MySQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/mysql): A simple MySQL cluster
 - [PostgreSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/postgresql): A simple PostgreSQL cluster
 - [S3 Import](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/s3-import): A MySQL cluster created from a Percona Xtrabackup stored in S3
 - [Serverless](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/serverless): Serverless V1 and V2 (PostgreSQL and MySQL)
-- [DSQL](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/tree/master/examples/dsql): Multi region and single region DSQL clusters
 
 ## Documentation
 

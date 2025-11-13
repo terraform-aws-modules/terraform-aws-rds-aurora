@@ -27,7 +27,7 @@ module "aurora" {
 
   name           = local.name
   engine         = "aurora-postgresql"
-  engine_version = "16.6-limitless"
+  engine_version = "16.9-limitless"
   storage_type   = "aurora-iopt1"
 
   cluster_scalability_type    = "limitless"

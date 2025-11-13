@@ -27,8 +27,8 @@ module "aurora" {
 
   name                      = local.name
   engine                    = "aurora-postgresql"
-  engine_version            = "14.5"
-  db_cluster_instance_class = "db.r6g.large"
+  engine_version            = "17.5"
+  db_cluster_instance_class = "db.r8g.large"
   instances                 = { 1 = {} }
   master_username           = "root"
 
