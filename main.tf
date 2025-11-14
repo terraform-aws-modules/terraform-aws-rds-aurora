@@ -584,9 +584,13 @@ resource "aws_rds_shard_group" "this" {
   publicly_accessible       = var.shard_group.publicly_accessible
   tags                      = merge(var.tags, var.shard_group.tags)
 
-  timeouts {
-    create = var.shard_group.timeouts.create
-    update = var.shard_group.timeouts.update
-    delete = var.shard_group.timeouts.delete
+  dynamic "timeouts" {
+    for_each = var.shard_group != null ? [var.shard_group] : []
+
+    content {
+      create = each.value.create
+      update = each.value.update
+      delete = each.value.delete
+    }
   }
 }

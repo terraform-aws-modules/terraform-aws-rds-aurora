@@ -1,10 +1,11 @@
 provider "aws" {
-  region = local.region
+  region = local.region1
 }
 
 locals {
   name           = "ex-${basename(path.cwd)}"
-  region         = "us-east-1"
+  region1        = "us-east-1"
+  region2        = "us-east-2"
   witness_region = "us-west-2"
 
   tags = {
@@ -40,14 +41,14 @@ module "dsql_cluster_1" {
 module "dsql_cluster_2" {
   source = "../../modules/dsql"
 
-  region = local.witness_region
+  region = local.region2
 
   name = "${local.name}-2"
 
   # For example only
   deletion_protection_enabled = false
 
-  witness_region         = local.region
+  witness_region         = local.witness_region
   create_cluster_peering = true
   clusters               = [module.dsql_cluster_1.arn]
 

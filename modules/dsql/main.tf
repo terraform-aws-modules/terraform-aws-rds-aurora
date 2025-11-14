@@ -37,7 +37,11 @@ resource "aws_dsql_cluster_peering" "this" {
   identifier     = aws_dsql_cluster.this[0].identifier
   witness_region = var.witness_region
 
-  timeouts {
-    create = var.timeouts.create
+  dynamic "timeouts" {
+    for_each = var.timeouts != null ? [var.timeouts] : []
+
+    content {
+      create = each.value.create
+    }
   }
 }
