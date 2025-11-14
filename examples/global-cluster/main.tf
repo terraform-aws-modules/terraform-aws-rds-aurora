@@ -3,11 +3,25 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
+
 data "aws_availability_zones" "primary" {
   region = local.primary_region
+
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
 }
+
 data "aws_availability_zones" "secondary" {
   region = local.secondary_region
+
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
 }
 
 locals {
