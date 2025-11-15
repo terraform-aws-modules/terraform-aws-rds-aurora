@@ -2,7 +2,13 @@ provider "aws" {
   region = local.region
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
+}
 
 locals {
   name   = "ex-${basename(path.cwd)}"
@@ -25,25 +31,31 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name            = local.name
-  engine          = "aurora-mysql"
-  engine_version  = "5.7.12"
-  master_username = "root"
-  instance_class  = "db.r5.large"
-  instances       = { 1 = {} }
+  name                   = local.name
+  engine                 = "aurora-mysql"
+  engine_version         = "5.7.12"
+  master_username        = "root"
+  cluster_instance_class = "db.r8g.large"
+  instances              = { 1 = {} }
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
+    }
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
     }
   }
 
-  iam_roles = {
-    s3_import = {
-      role_arn     = aws_iam_role.s3_import.arn
-      feature_name = "s3Import"
+  role_associations = {
+    s3Import = {
+      role_arn = aws_iam_role.s3_import.arn
+      # feature_name = "s3Import" # same as setting value to key
     }
   }
 
@@ -67,7 +79,7 @@ module "aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -82,7 +94,7 @@ module "vpc" {
 
 module "import_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   bucket_prefix = "${local.name}-"
   acl           = "private"

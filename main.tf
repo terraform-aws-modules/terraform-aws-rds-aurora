@@ -5,14 +5,6 @@ locals {
 
   port = coalesce(var.port, (var.engine == "aurora-postgresql" || var.engine == "postgres" ? 5432 : 3306))
 
-  internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
-  db_subnet_group_name          = var.create_db_subnet_group ? try(aws_db_subnet_group.this[0].name, null) : local.internal_db_subnet_group_name
-
-  security_group_name = try(coalesce(var.security_group_name, var.name), "")
-
-  cluster_parameter_group_name = try(coalesce(var.db_cluster_parameter_group_name, var.name), null)
-  db_parameter_group_name      = try(coalesce(var.db_parameter_group_name, var.name), null)
-
   backtrack_window = (var.engine == "aurora-mysql" || var.engine == "aurora") && var.engine_mode != "serverless" ? var.backtrack_window : 0
 
   is_serverless = var.engine_mode == "serverless"
@@ -22,8 +14,15 @@ locals {
 # DB Subnet Group
 ################################################################################
 
+locals {
+  internal_db_subnet_group_name = try(coalesce(var.db_subnet_group_name, var.name), "")
+  db_subnet_group_name          = var.create_db_subnet_group ? try(aws_db_subnet_group.this[0].name, null) : local.internal_db_subnet_group_name
+}
+
 resource "aws_db_subnet_group" "this" {
   count = local.create && var.create_db_subnet_group ? 1 : 0
+
+  region = var.region
 
   name        = local.internal_db_subnet_group_name
   description = "For Aurora cluster ${var.name}"
@@ -36,26 +35,35 @@ resource "aws_db_subnet_group" "this" {
 # Cluster
 ################################################################################
 
+locals {
+  use_master_password         = var.is_primary_cluster && !local.use_managed_master_password
+  use_managed_master_password = var.manage_master_user_password && var.global_cluster_identifier == null
+}
+
 resource "aws_rds_cluster" "this" {
   count = local.create ? 1 : 0
 
-  allocated_storage                   = var.allocated_storage
-  allow_major_version_upgrade         = var.allow_major_version_upgrade
-  apply_immediately                   = var.apply_immediately
-  availability_zones                  = var.availability_zones
-  backup_retention_period             = var.backup_retention_period
-  backtrack_window                    = local.backtrack_window
-  ca_certificate_identifier           = var.cluster_ca_cert_identifier
-  cluster_identifier                  = var.cluster_use_name_prefix ? null : var.name
-  cluster_identifier_prefix           = var.cluster_use_name_prefix ? "${var.name}-" : null
-  cluster_members                     = var.cluster_members
-  cluster_scalability_type            = var.cluster_scalability_type
-  copy_tags_to_snapshot               = var.copy_tags_to_snapshot
-  database_insights_mode              = var.database_insights_mode
-  database_name                       = var.is_primary_cluster ? var.database_name : null
-  db_cluster_instance_class           = var.db_cluster_instance_class
-  db_cluster_parameter_group_name     = var.create_db_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.db_cluster_parameter_group_name
-  db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.db_cluster_db_instance_parameter_group_name : null
+  region = var.region
+
+  allocated_storage           = var.allocated_storage
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+  apply_immediately           = var.apply_immediately
+  availability_zones          = var.availability_zones
+  backup_retention_period     = var.backup_retention_period
+  backtrack_window            = local.backtrack_window
+  ca_certificate_identifier   = var.cluster_ca_cert_identifier
+  cluster_identifier          = var.cluster_use_name_prefix ? null : var.name
+  cluster_identifier_prefix   = var.cluster_use_name_prefix ? "${var.name}-" : null
+  cluster_members             = var.cluster_members
+  cluster_scalability_type    = var.cluster_scalability_type
+  copy_tags_to_snapshot       = var.copy_tags_to_snapshot
+  database_insights_mode      = var.database_insights_mode
+  database_name               = var.is_primary_cluster ? var.database_name : null
+  # We are using `allocated_storage` as a proxy to determine if this is RDS multi-az or not
+  # https://github.com/hashicorp/terraform-provider-aws/issues/30596#issuecomment-1639292427
+  db_cluster_instance_class           = var.allocated_storage != null ? var.cluster_instance_class : null
+  db_cluster_parameter_group_name     = local.create_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.cluster_parameter_group_name
+  db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.cluster_db_instance_parameter_group_name : null
   db_subnet_group_name                = local.db_subnet_group_name
   delete_automated_backups            = var.delete_automated_backups
   deletion_protection                 = var.deletion_protection
@@ -75,9 +83,10 @@ resource "aws_rds_cluster" "this" {
   # iam_roles has been removed from this resource and instead will be used with aws_rds_cluster_role_association below to avoid conflicts per docs
   iops                                  = var.iops
   kms_key_id                            = var.kms_key_id
-  manage_master_user_password           = var.global_cluster_identifier == null && var.manage_master_user_password ? var.manage_master_user_password : null
-  master_user_secret_kms_key_id         = var.global_cluster_identifier == null && var.manage_master_user_password ? var.master_user_secret_kms_key_id : null
-  master_password                       = var.is_primary_cluster && !var.manage_master_user_password ? var.master_password : null
+  manage_master_user_password           = local.use_managed_master_password ? var.manage_master_user_password : null
+  master_user_secret_kms_key_id         = local.use_managed_master_password ? var.master_user_secret_kms_key_id : null
+  master_password_wo                    = local.use_master_password ? var.master_password_wo : null
+  master_password_wo_version            = local.use_master_password ? var.master_password_wo_version : null
   master_username                       = var.is_primary_cluster ? var.master_username : null
   monitoring_interval                   = var.cluster_monitoring_interval
   monitoring_role_arn                   = var.create_monitoring_role && var.cluster_monitoring_interval > 0 ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.monitoring_role_arn
@@ -91,23 +100,23 @@ resource "aws_rds_cluster" "this" {
   replication_source_identifier         = var.replication_source_identifier
 
   dynamic "restore_to_point_in_time" {
-    for_each = length(var.restore_to_point_in_time) > 0 ? [var.restore_to_point_in_time] : []
+    for_each = var.restore_to_point_in_time != null ? [var.restore_to_point_in_time] : []
 
     content {
-      restore_to_time            = try(restore_to_point_in_time.value.restore_to_time, null)
-      restore_type               = try(restore_to_point_in_time.value.restore_type, null)
-      source_cluster_identifier  = try(restore_to_point_in_time.value.source_cluster_identifier, null)
-      source_cluster_resource_id = try(restore_to_point_in_time.value.source_cluster_resource_id, null)
-      use_latest_restorable_time = try(restore_to_point_in_time.value.use_latest_restorable_time, null)
+      restore_to_time            = restore_to_point_in_time.value.restore_to_time
+      restore_type               = restore_to_point_in_time.value.restore_type
+      source_cluster_identifier  = restore_to_point_in_time.value.source_cluster_identifier
+      source_cluster_resource_id = restore_to_point_in_time.value.source_cluster_resource_id
+      use_latest_restorable_time = restore_to_point_in_time.value.use_latest_restorable_time
     }
   }
 
   dynamic "s3_import" {
-    for_each = length(var.s3_import) > 0 && !local.is_serverless ? [var.s3_import] : []
+    for_each = var.s3_import != null && !local.is_serverless ? [var.s3_import] : []
 
     content {
       bucket_name           = s3_import.value.bucket_name
-      bucket_prefix         = try(s3_import.value.bucket_prefix, null)
+      bucket_prefix         = s3_import.value.bucket_prefix
       ingestion_role        = s3_import.value.ingestion_role
       source_engine         = "mysql"
       source_engine_version = s3_import.value.source_engine_version
@@ -115,25 +124,25 @@ resource "aws_rds_cluster" "this" {
   }
 
   dynamic "scaling_configuration" {
-    for_each = length(var.scaling_configuration) > 0 && local.is_serverless ? [var.scaling_configuration] : []
+    for_each = var.scaling_configuration != null && local.is_serverless ? [var.scaling_configuration] : []
 
     content {
-      auto_pause               = try(scaling_configuration.value.auto_pause, null)
-      max_capacity             = try(scaling_configuration.value.max_capacity, null)
-      min_capacity             = try(scaling_configuration.value.min_capacity, null)
-      seconds_until_auto_pause = try(scaling_configuration.value.seconds_until_auto_pause, null)
-      seconds_before_timeout   = try(scaling_configuration.value.seconds_before_timeout, null)
-      timeout_action           = try(scaling_configuration.value.timeout_action, null)
+      auto_pause               = scaling_configuration.value.auto_pause
+      max_capacity             = scaling_configuration.value.max_capacity
+      min_capacity             = scaling_configuration.value.min_capacity
+      seconds_before_timeout   = scaling_configuration.value.seconds_before_timeout
+      seconds_until_auto_pause = scaling_configuration.value.seconds_until_auto_pause
+      timeout_action           = scaling_configuration.value.timeout_action
     }
   }
 
   dynamic "serverlessv2_scaling_configuration" {
-    for_each = length(var.serverlessv2_scaling_configuration) > 0 && var.engine_mode == "provisioned" ? [var.serverlessv2_scaling_configuration] : []
+    for_each = var.serverlessv2_scaling_configuration != null && var.engine_mode == "provisioned" ? [var.serverlessv2_scaling_configuration] : []
 
     content {
       max_capacity             = serverlessv2_scaling_configuration.value.max_capacity
       min_capacity             = serverlessv2_scaling_configuration.value.min_capacity
-      seconds_until_auto_pause = try(serverlessv2_scaling_configuration.value.seconds_until_auto_pause, null)
+      seconds_until_auto_pause = serverlessv2_scaling_configuration.value.seconds_until_auto_pause
     }
   }
 
@@ -143,12 +152,16 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted      = var.storage_encrypted
   storage_type           = var.storage_type
   tags                   = merge(var.tags, var.cluster_tags)
-  vpc_security_group_ids = compact(concat([try(aws_security_group.this[0].id, "")], var.vpc_security_group_ids))
+  vpc_security_group_ids = compact(concat(aws_security_group.this[*].id, var.vpc_security_group_ids))
 
-  timeouts {
-    create = try(var.cluster_timeouts.create, null)
-    update = try(var.cluster_timeouts.update, null)
-    delete = try(var.cluster_timeouts.delete, null)
+  dynamic "timeouts" {
+    for_each = var.cluster_timeouts != null ? [var.cluster_timeouts] : []
+
+    content {
+      create = each.value.create
+      update = each.value.update
+      delete = each.value.delete
+    }
   }
 
   lifecycle {
@@ -172,40 +185,46 @@ resource "aws_rds_cluster" "this" {
 resource "aws_rds_cluster_instance" "this" {
   for_each = { for k, v in var.instances : k => v if local.create && !local.is_serverless }
 
-  apply_immediately                     = try(each.value.apply_immediately, var.apply_immediately)
-  auto_minor_version_upgrade            = try(each.value.auto_minor_version_upgrade, var.auto_minor_version_upgrade)
-  availability_zone                     = try(each.value.availability_zone, null)
-  ca_cert_identifier                    = var.ca_cert_identifier
+  region = var.region
+
+  apply_immediately                     = try(coalesce(each.value.apply_immediately, var.apply_immediately), null)
+  auto_minor_version_upgrade            = each.value.auto_minor_version_upgrade
+  availability_zone                     = each.value.availability_zone
+  ca_cert_identifier                    = try(coalesce(each.value.ca_cert_identifier, var.cluster_ca_cert_identifier), null)
   cluster_identifier                    = aws_rds_cluster.this[0].id
-  copy_tags_to_snapshot                 = try(each.value.copy_tags_to_snapshot, var.copy_tags_to_snapshot)
-  db_parameter_group_name               = var.create_db_parameter_group ? aws_db_parameter_group.this[0].id : try(each.value.db_parameter_group_name, var.db_parameter_group_name)
+  copy_tags_to_snapshot                 = try(coalesce(each.value.copy_tags_to_snapshot, var.copy_tags_to_snapshot), null)
+  custom_iam_instance_profile           = each.value.custom_iam_instance_profile
+  db_parameter_group_name               = local.create_db_parameter_group ? aws_db_parameter_group.this[0].id : each.value.db_parameter_group_name
   db_subnet_group_name                  = local.db_subnet_group_name
   engine                                = var.engine
   engine_version                        = var.engine_version
-  identifier                            = var.instances_use_identifier_prefix ? null : try(each.value.identifier, "${var.name}-${each.key}")
-  identifier_prefix                     = var.instances_use_identifier_prefix ? try(each.value.identifier_prefix, "${var.name}-${each.key}-") : null
-  instance_class                        = try(each.value.instance_class, var.instance_class)
-  monitoring_interval                   = var.cluster_monitoring_interval > 0 ? var.cluster_monitoring_interval : try(each.value.monitoring_interval, var.monitoring_interval)
-  monitoring_role_arn                   = var.create_monitoring_role ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.monitoring_role_arn
-  performance_insights_enabled          = try(each.value.performance_insights_enabled, var.performance_insights_enabled)
-  performance_insights_kms_key_id       = try(each.value.performance_insights_kms_key_id, var.performance_insights_kms_key_id)
-  performance_insights_retention_period = try(each.value.performance_insights_retention_period, var.performance_insights_retention_period)
+  identifier                            = var.instances_use_identifier_prefix ? null : try(coalesce(each.value.identifier, "${var.name}-${each.key}"))
+  identifier_prefix                     = var.instances_use_identifier_prefix ? try(coalesce(each.value.identifier_prefix, "${var.name}-${each.key}-")) : null
+  instance_class                        = try(coalesce(each.value.instance_class, var.cluster_instance_class), null)
+  monitoring_interval                   = try(coalesce(each.value.monitoring_interval, var.cluster_monitoring_interval), null)
+  monitoring_role_arn                   = try(aws_iam_role.rds_enhanced_monitoring[0].arn, each.value.monitoring_role_arn)
+  performance_insights_enabled          = try(coalesce(each.value.performance_insights_enabled, var.cluster_performance_insights_enabled), null)
+  performance_insights_kms_key_id       = try(coalesce(each.value.performance_insights_kms_key_id, var.cluster_performance_insights_kms_key_id), null)
+  performance_insights_retention_period = try(coalesce(each.value.performance_insights_retention_period, var.cluster_performance_insights_retention_period), null)
   # preferred_backup_window - is set at the cluster level and will error if provided here
-  preferred_maintenance_window = try(each.value.preferred_maintenance_window, var.preferred_maintenance_window)
-  promotion_tier               = try(each.value.promotion_tier, null)
-  publicly_accessible          = try(each.value.publicly_accessible, var.publicly_accessible)
-  tags                         = merge(var.tags, try(each.value.tags, {}))
+  preferred_maintenance_window = try(coalesce(each.value.preferred_maintenance_window, var.preferred_maintenance_window), null)
+  promotion_tier               = each.value.promotion_tier
+  publicly_accessible          = each.value.publicly_accessible
+  tags                         = merge(var.tags, each.value.tags)
 
-  timeouts {
-    create = try(var.instance_timeouts.create, null)
-    update = try(var.instance_timeouts.update, null)
-    delete = try(var.instance_timeouts.delete, null)
+  dynamic "timeouts" {
+    for_each = var.instance_timeouts != null ? [var.instance_timeouts] : []
+
+    content {
+      create = each.value.create
+      update = each.value.update
+      delete = each.value.delete
+    }
   }
 
   lifecycle {
     create_before_destroy = true
   }
-
 }
 
 ################################################################################
@@ -215,12 +234,14 @@ resource "aws_rds_cluster_instance" "this" {
 resource "aws_rds_cluster_endpoint" "this" {
   for_each = { for k, v in var.endpoints : k => v if local.create && !local.is_serverless }
 
+  region = var.region
+
   cluster_endpoint_identifier = each.value.identifier
   cluster_identifier          = aws_rds_cluster.this[0].id
   custom_endpoint_type        = each.value.type
-  excluded_members            = try(each.value.excluded_members, null)
-  static_members              = try(each.value.static_members, null)
-  tags                        = merge(var.tags, try(each.value.tags, {}))
+  excluded_members            = each.value.excluded_members
+  static_members              = each.value.static_members
+  tags                        = merge(var.tags, each.value.tags)
 
   depends_on = [
     aws_rds_cluster_instance.this
@@ -232,10 +253,12 @@ resource "aws_rds_cluster_endpoint" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_role_association" "this" {
-  for_each = { for k, v in var.iam_roles : k => v if local.create }
+  for_each = { for k, v in var.role_associations : k => v if local.create }
+
+  region = var.region
 
   db_cluster_identifier = aws_rds_cluster.this[0].id
-  feature_name          = each.value.feature_name
+  feature_name          = try(coalesce(each.value.feature_name, each.key))
   role_arn              = each.value.role_arn
 }
 
@@ -244,7 +267,16 @@ resource "aws_rds_cluster_role_association" "this" {
 ################################################################################
 
 locals {
-  create_monitoring_role = local.create && var.create_monitoring_role && (var.monitoring_interval > 0 || var.cluster_monitoring_interval > 0)
+  instances_has_monitoring_enabled = anytrue([for k, v in var.instances : v.monitoring_interval != null && try(coalesce(v.monitoring_interval, 0), 0) > 0])
+  create_monitoring_role           = local.create && var.create_monitoring_role && (local.instances_has_monitoring_enabled || var.cluster_monitoring_interval > 0)
+
+  iam_role_name = try(coalesce(var.iam_role_name, "${var.name}-monitor"))
+}
+
+data "aws_service_principal" "monitoring_rds" {
+  count = local.create_monitoring_role ? 1 : 0
+
+  service_name = "monitoring.rds"
 }
 
 data "aws_iam_policy_document" "monitoring_rds_assume_role" {
@@ -255,7 +287,7 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 
     principals {
       type        = "Service"
-      identifiers = ["monitoring.rds.amazonaws.com"]
+      identifiers = [data.aws_service_principal.monitoring_rds[0].name]
     }
   }
 }
@@ -263,15 +295,14 @@ data "aws_iam_policy_document" "monitoring_rds_assume_role" {
 resource "aws_iam_role" "rds_enhanced_monitoring" {
   count = local.create_monitoring_role ? 1 : 0
 
-  name        = var.iam_role_use_name_prefix ? null : var.iam_role_name
-  name_prefix = var.iam_role_use_name_prefix ? "${var.iam_role_name}-" : null
+  name        = var.iam_role_use_name_prefix ? null : local.iam_role_name
+  name_prefix = var.iam_role_use_name_prefix ? "${local.iam_role_name}-" : null
   description = var.iam_role_description
   path        = var.iam_role_path
 
   assume_role_policy    = data.aws_iam_policy_document.monitoring_rds_assume_role[0].json
-  managed_policy_arns   = var.iam_role_managed_policy_arns
   permissions_boundary  = var.iam_role_permissions_boundary
-  force_detach_policies = var.iam_role_force_detach_policies
+  force_detach_policies = true
   max_session_duration  = var.iam_role_max_session_duration
 
   tags = var.tags
@@ -291,6 +322,8 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
 resource "aws_appautoscaling_target" "this" {
   count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
 
+  region = var.region
+
   max_capacity       = var.autoscaling_max_capacity
   min_capacity       = var.autoscaling_min_capacity
   resource_id        = "cluster:${aws_rds_cluster.this[0].cluster_identifier}"
@@ -308,6 +341,8 @@ resource "aws_appautoscaling_target" "this" {
 
 resource "aws_appautoscaling_policy" "this" {
   count = local.create && var.autoscaling_enabled && !local.is_serverless ? 1 : 0
+
+  region = var.region
 
   name               = var.autoscaling_policy_name
   policy_type        = "TargetTrackingScaling"
@@ -334,59 +369,100 @@ resource "aws_appautoscaling_policy" "this" {
 # Security Group
 ################################################################################
 
+locals {
+  create_security_group = local.create && var.create_security_group
+  security_group_name   = try(coalesce(var.security_group_name, var.name), "")
+}
+
 resource "aws_security_group" "this" {
-  count = local.create && var.create_security_group ? 1 : 0
+  count = local.create_security_group ? 1 : 0
+
+  region = var.region
 
   name        = var.security_group_use_name_prefix ? null : local.security_group_name
   name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
   vpc_id      = var.vpc_id
-  description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
+  description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${local.create_security_group}")
 
-  tags = merge(var.tags, var.security_group_tags, { Name = local.security_group_name })
+  tags = merge(
+    var.tags,
+    var.security_group_tags,
+    { "Name" = local.security_group_name }
+  )
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_security_group_rule" "this" {
-  for_each = { for k, v in var.security_group_rules : k => v if local.create && var.create_security_group }
+resource "aws_vpc_security_group_ingress_rule" "this" {
+  for_each = { for k, v in var.security_group_ingress_rules : k => v if var.security_group_ingress_rules != null && local.create_security_group }
 
-  # required
-  type              = try(each.value.type, "ingress")
-  from_port         = try(each.value.from_port, local.port)
-  to_port           = try(each.value.to_port, local.port)
-  protocol          = try(each.value.protocol, "tcp")
-  security_group_id = aws_security_group.this[0].id
+  region = var.region
 
-  # optional
-  cidr_blocks              = try(each.value.cidr_blocks, null)
-  description              = try(each.value.description, null)
-  ipv6_cidr_blocks         = try(each.value.ipv6_cidr_blocks, null)
-  prefix_list_ids          = try(each.value.prefix_list_ids, null)
-  source_security_group_id = try(each.value.source_security_group_id, null)
-  self                     = try(each.value.self, null)
+  cidr_ipv4                    = each.value.cidr_ipv4
+  cidr_ipv6                    = each.value.cidr_ipv6
+  description                  = each.value.description
+  from_port                    = try(coalesce(each.value.from_port, local.port), null)
+  ip_protocol                  = each.value.ip_protocol
+  prefix_list_id               = each.value.prefix_list_id
+  referenced_security_group_id = each.value.referenced_security_group_id == "self" ? aws_security_group.this[0].id : each.value.referenced_security_group_id
+  security_group_id            = aws_security_group.this[0].id
+  tags = merge(
+    var.tags,
+    { "Name" = coalesce(each.value.name, "${local.security_group_name}-${each.key}") },
+    each.value.tags
+  )
+  to_port = try(coalesce(each.value.to_port, each.value.from_port, local.port), null)
 }
+
+resource "aws_vpc_security_group_egress_rule" "this" {
+  for_each = { for k, v in var.security_group_egress_rules : k => v if var.security_group_egress_rules != null && local.create_security_group }
+
+  region = var.region
+
+  cidr_ipv4                    = each.value.cidr_ipv4
+  cidr_ipv6                    = each.value.cidr_ipv6
+  description                  = each.value.description
+  from_port                    = try(coalesce(each.value.from_port, each.value.to_port, local.port), null)
+  ip_protocol                  = each.value.ip_protocol
+  prefix_list_id               = each.value.prefix_list_id
+  referenced_security_group_id = each.value.referenced_security_group_id == "self" ? aws_security_group.this[0].id : each.value.referenced_security_group_id
+  security_group_id            = aws_security_group.this[0].id
+  tags = merge(
+    var.tags,
+    { "Name" = coalesce(each.value.name, "${local.security_group_name}-${each.key}") },
+    each.value.tags
+  )
+  to_port = try(coalesce(each.value.to_port, local.port), null)
+}
+
 
 ################################################################################
 # Cluster Parameter Group
 ################################################################################
 
-resource "aws_rds_cluster_parameter_group" "this" {
-  count = local.create && var.create_db_cluster_parameter_group ? 1 : 0
+locals {
+  create_cluster_parameter_group = local.create && var.cluster_parameter_group != null
+}
 
-  name        = var.db_cluster_parameter_group_use_name_prefix ? null : local.cluster_parameter_group_name
-  name_prefix = var.db_cluster_parameter_group_use_name_prefix ? "${local.cluster_parameter_group_name}-" : null
-  description = var.db_cluster_parameter_group_description
-  family      = var.db_cluster_parameter_group_family
+resource "aws_rds_cluster_parameter_group" "this" {
+  count = local.create_cluster_parameter_group ? 1 : 0
+
+  region = var.region
+
+  name        = var.cluster_parameter_group.use_name_prefix ? null : try(coalesce(var.cluster_parameter_group.name, var.name), "")
+  name_prefix = var.cluster_parameter_group.use_name_prefix ? "${try(coalesce(var.cluster_parameter_group.name, var.name), "")}-" : null
+  description = coalesce(var.cluster_parameter_group.description, "${var.cluster_parameter_group.family} for Aurora cluster ${var.name}")
+  family      = var.cluster_parameter_group.family
 
   dynamic "parameter" {
-    for_each = var.db_cluster_parameter_group_parameters
+    for_each = var.cluster_parameter_group.parameters != null ? var.cluster_parameter_group.parameters : []
 
     content {
-      name         = parameter.value.name
+      name         = try(coalesce(parameter.value.name, parameter.key))
       value        = parameter.value.value
-      apply_method = try(parameter.value.apply_method, "immediate")
+      apply_method = parameter.value.apply_method
     }
   }
 
@@ -401,21 +477,27 @@ resource "aws_rds_cluster_parameter_group" "this" {
 # DB Parameter Group
 ################################################################################
 
-resource "aws_db_parameter_group" "this" {
-  count = local.create && var.create_db_parameter_group ? 1 : 0
+locals {
+  create_db_parameter_group = local.create && var.db_parameter_group != null
+}
 
-  name        = var.db_parameter_group_use_name_prefix ? null : local.db_parameter_group_name
-  name_prefix = var.db_parameter_group_use_name_prefix ? "${local.db_parameter_group_name}-" : null
-  description = var.db_parameter_group_description
-  family      = var.db_parameter_group_family
+resource "aws_db_parameter_group" "this" {
+  count = local.create_db_parameter_group ? 1 : 0
+
+  region = var.region
+
+  name        = var.db_parameter_group.use_name_prefix ? null : try(coalesce(var.db_parameter_group.name, var.name), "")
+  name_prefix = var.db_parameter_group.use_name_prefix ? "${try(coalesce(var.db_parameter_group.name, var.name), "")}-" : null
+  description = coalesce(var.db_parameter_group.description, "${var.db_parameter_group.family} for Aurora cluster ${var.name}")
+  family      = var.db_parameter_group.family
 
   dynamic "parameter" {
-    for_each = var.db_parameter_group_parameters
+    for_each = var.db_parameter_group.parameters != null ? var.db_parameter_group.parameters : []
 
     content {
-      name         = parameter.value.name
+      name         = try(coalesce(parameter.value.name, parameter.key))
       value        = parameter.value.value
-      apply_method = try(parameter.value.apply_method, "immediate")
+      apply_method = parameter.value.apply_method
     }
   }
 
@@ -434,6 +516,8 @@ resource "aws_db_parameter_group" "this" {
 resource "aws_cloudwatch_log_group" "this" {
   for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if local.create && var.create_cloudwatch_log_group && !var.cluster_use_name_prefix])
 
+  region = var.region
+
   name              = "/aws/rds/cluster/${var.name}/${each.value}"
   retention_in_days = var.cloudwatch_log_group_retention_in_days
   kms_key_id        = var.cloudwatch_log_group_kms_key_id
@@ -448,12 +532,14 @@ resource "aws_cloudwatch_log_group" "this" {
 ################################################################################
 
 resource "aws_rds_cluster_activity_stream" "this" {
-  count = local.create && var.create_db_cluster_activity_stream ? 1 : 0
+  count = local.create && var.cluster_activity_stream != null ? 1 : 0
 
+  region = var.region
+
+  engine_native_audit_fields_included = var.cluster_activity_stream.include_audit_fields
+  kms_key_id                          = var.cluster_activity_stream.kms_key_id
+  mode                                = var.cluster_activity_stream.mode
   resource_arn                        = aws_rds_cluster.this[0].arn
-  mode                                = var.db_cluster_activity_stream_mode
-  kms_key_id                          = var.db_cluster_activity_stream_kms_key_id
-  engine_native_audit_fields_included = var.engine_native_audit_fields_included
 
   depends_on = [aws_rds_cluster_instance.this]
 }
@@ -471,6 +557,8 @@ resource "aws_rds_cluster_activity_stream" "this" {
 resource "aws_secretsmanager_secret_rotation" "this" {
   count = local.create && var.manage_master_user_password && var.manage_master_user_password_rotation ? 1 : 0
 
+  region = var.region
+
   secret_id          = aws_rds_cluster.this[0].master_user_secret[0].secret_arn
   rotate_immediately = var.master_user_password_rotate_immediately
 
@@ -486,19 +574,25 @@ resource "aws_secretsmanager_secret_rotation" "this" {
 ################################################################################
 
 resource "aws_rds_shard_group" "this" {
-  count = local.create && var.create_shard_group ? 1 : 0
+  count = local.create && var.shard_group != null ? 1 : 0
 
-  compute_redundancy        = var.compute_redundancy
+  region = var.region
+
+  compute_redundancy        = var.shard_group.compute_redundancy
   db_cluster_identifier     = aws_rds_cluster.this[0].id
-  db_shard_group_identifier = var.db_shard_group_identifier
-  max_acu                   = var.max_acu
-  min_acu                   = var.min_acu
-  publicly_accessible       = var.publicly_accessible
-  tags                      = merge(var.tags, var.shard_group_tags)
+  db_shard_group_identifier = var.shard_group.identifier
+  max_acu                   = var.shard_group.max_acu
+  min_acu                   = var.shard_group.min_acu
+  publicly_accessible       = var.shard_group.publicly_accessible
+  tags                      = merge(var.tags, var.shard_group.tags)
 
-  timeouts {
-    create = try(var.shard_group_timeouts.create, null)
-    update = try(var.shard_group_timeouts.update, null)
-    delete = try(var.shard_group_timeouts.delete, null)
+  dynamic "timeouts" {
+    for_each = var.shard_group.timeouts != null ? [var.shard_group.timeouts] : []
+
+    content {
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
+    }
   }
 }

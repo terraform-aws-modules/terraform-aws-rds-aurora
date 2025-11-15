@@ -2,7 +2,13 @@ provider "aws" {
   region = local.region
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
+}
 
 locals {
   name   = "ex-${basename(path.cwd)}"
@@ -27,24 +33,24 @@ module "aurora" {
 
   name                        = local.name
   engine                      = "aurora-postgresql"
-  engine_version              = "14.13"
+  engine_version              = "17.5"
   master_username             = "root"
   storage_type                = "aurora-iopt1"
   cluster_monitoring_interval = 30
 
   instances = {
     1 = {
-      instance_class          = "db.r5.2xlarge"
+      instance_class          = "db.r8g.2xlarge"
       publicly_accessible     = true
       db_parameter_group_name = "default.aurora-postgresql14"
     }
     2 = {
       identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
+      instance_class = "db.r8g.2xlarge"
     }
     3 = {
       identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
+      instance_class = "db.r8g.large"
       promotion_tier = 15
     }
   }
@@ -66,14 +72,15 @@ module "aurora" {
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
     }
-    egress_example = {
-      type        = "egress"
-      cidr_blocks = ["10.33.0.0/28"]
-      description = "Egress to corporate printer closet"
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
     }
   }
 
@@ -82,44 +89,44 @@ module "aurora" {
 
   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
 
-  create_db_cluster_parameter_group      = true
-  db_cluster_parameter_group_name        = local.name
-  db_cluster_parameter_group_family      = "aurora-postgresql14"
-  db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
-  db_cluster_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-      }, {
-      name         = "rds.force_ssl"
-      value        = 1
-      apply_method = "immediate"
-    }
-  ]
+  cluster_parameter_group = {
+    name        = local.name
+    family      = "aurora-postgresql17"
+    description = "${local.name} example cluster parameter group"
+    parameters = [
+      {
+        name         = "log_min_duration_statement"
+        value        = 4000
+        apply_method = "immediate"
+      },
+      {
+        name         = "rds.force_ssl"
+        value        = 1
+        apply_method = "pending-reboot"
+      }
+    ]
+  }
 
-  create_db_parameter_group      = true
-  db_parameter_group_name        = local.name
-  db_parameter_group_family      = "aurora-postgresql14"
-  db_parameter_group_description = "${local.name} example DB parameter group"
-  db_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-    }
-  ]
+  db_parameter_group = {
+    name        = local.name
+    family      = "aurora-postgresql17"
+    description = "${local.name} example DB parameter group"
+    parameters = [
+      {
+        name         = "log_min_duration_statement"
+        value        = 4000
+        apply_method = "immediate"
+      }
+    ]
+  }
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
   create_cloudwatch_log_group     = true
 
-  cloudwatch_log_group_tags = {
-    Sensitivity = "high"
+  cluster_activity_stream = {
+    kms_key_id = module.kms.key_id
+    mode       = "async"
   }
-
-  create_db_cluster_activity_stream     = true
-  db_cluster_activity_stream_kms_key_id = module.kms.key_id
-  db_cluster_activity_stream_mode       = "async"
 
   tags = local.tags
 }
@@ -130,7 +137,7 @@ module "aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -145,15 +152,15 @@ module "vpc" {
 
 module "kms" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "~> 2.0"
+  version = "~> 4.0"
 
   deletion_window_in_days = 7
-  description             = "KMS key for ${local.name} cluster activity stream."
+  description             = "KMS key for ${local.name} cluster activity stream"
   enable_key_rotation     = true
   is_enabled              = true
   key_usage               = "ENCRYPT_DECRYPT"
 
-  aliases = [local.name]
+  aliases = ["rds/${local.name}"]
 
   tags = local.tags
 }

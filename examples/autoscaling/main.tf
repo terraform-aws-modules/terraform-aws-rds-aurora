@@ -2,7 +2,13 @@ provider "aws" {
   region = local.region
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
+}
 
 locals {
   name   = "ex-${basename(path.cwd)}"
@@ -25,18 +31,24 @@ locals {
 module "aurora" {
   source = "../../"
 
-  name            = local.name
-  engine          = "aurora-postgresql"
-  engine_version  = "14.5"
-  instance_class  = "db.r6g.large"
-  instances       = { 1 = {} }
-  master_username = "root"
+  name                   = local.name
+  engine                 = "aurora-postgresql"
+  engine_version         = "17.5"
+  cluster_instance_class = "db.r8g.large"
+  instances              = { 1 = {} }
+  master_username        = "root"
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  security_group_ingress_rules = {
+    private-az1 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
+    }
+    private-az2 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
+    }
+    private-az3 = {
+      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
     }
   }
 
@@ -44,7 +56,7 @@ module "aurora" {
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 5
 
-  monitoring_interval           = 60
+  cluster_monitoring_interval   = 60
   iam_role_name                 = "${local.name}-monitor"
   iam_role_use_name_prefix      = true
   iam_role_description          = "${local.name} RDS enhanced monitoring IAM role"
@@ -71,7 +83,7 @@ module "disabled_aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr

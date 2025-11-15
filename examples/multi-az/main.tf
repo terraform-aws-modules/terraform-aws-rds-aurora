@@ -2,7 +2,13 @@ provider "aws" {
   region = local.region
 }
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  # Exclude local zones
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
+}
 
 locals {
   name   = "ex-${basename(path.cwd)}"
@@ -27,7 +33,7 @@ module "aurora" {
 
   name            = local.name
   engine          = "postgres" # This uses RDS engine, not Aurora
-  engine_version  = "15.7"
+  engine_version  = "17.5"
   master_username = "root"
 
   vpc_id               = module.vpc.vpc_id
@@ -42,11 +48,11 @@ module "aurora" {
   cluster_performance_insights_retention_period = 31
 
   # Multi-AZ
-  availability_zones        = module.vpc.azs
-  allocated_storage         = 256
-  db_cluster_instance_class = "db.r6gd.large"
-  iops                      = 2500
-  storage_type              = "io1"
+  availability_zones     = module.vpc.azs
+  allocated_storage      = 256
+  cluster_instance_class = "db.c6gd.large"
+  iops                   = 2500
+  storage_type           = "io1"
 
   cluster_ca_cert_identifier = "rds-ca-rsa4096-g1"
 
@@ -61,7 +67,7 @@ module "aurora" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = local.name
   cidr = local.vpc_cidr
