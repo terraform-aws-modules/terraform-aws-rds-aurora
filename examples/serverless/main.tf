@@ -14,9 +14,8 @@ locals {
   name   = "ex-${basename(path.cwd)}"
   region = "eu-west-1"
 
-  vpc_cidr                     = "10.0.0.0/16"
-  azs                          = slice(data.aws_availability_zones.available.names, 0, 3)
-  preferred_maintenance_window = "sun:05:00-sun:06:00"
+  vpc_cidr = "10.0.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
     Example    = local.name
@@ -26,109 +25,10 @@ locals {
 }
 
 ################################################################################
-# PostgreSQL Serverless v1
-################################################################################
-
-module "aurora_postgresql" {
-  source = "../../"
-
-  name              = "${local.name}-postgresql"
-  engine            = "aurora-postgresql"
-  engine_mode       = "serverless"
-  storage_encrypted = true
-  master_username   = "root"
-
-  vpc_id               = module.vpc.vpc_id
-  db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_ingress_rules = {
-    private-az1 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
-    }
-    private-az2 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
-    }
-    private-az3 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
-    }
-  }
-
-  # Serverless v1 clusters do not support managed master user password
-  master_password_wo         = random_password.master.result
-  master_password_wo_version = 1
-
-  cluster_monitoring_interval = 60
-
-  preferred_maintenance_window = local.preferred_maintenance_window
-  skip_final_snapshot          = true
-
-  # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
-
-  scaling_configuration = {
-    auto_pause               = true
-    min_capacity             = 2
-    max_capacity             = 16
-    seconds_until_auto_pause = 300
-    seconds_before_timeout   = 600
-    timeout_action           = "ForceApplyCapacityChange"
-  }
-
-  tags = local.tags
-}
-
-################################################################################
-# MySQL Serverless v1
-################################################################################
-
-module "aurora_mysql" {
-  source = "../../"
-
-  name              = "${local.name}-mysql"
-  engine            = "aurora-mysql"
-  engine_mode       = "serverless"
-  storage_encrypted = true
-  master_username   = "root"
-
-  vpc_id               = module.vpc.vpc_id
-  db_subnet_group_name = module.vpc.database_subnet_group_name
-  security_group_ingress_rules = {
-    private-az1 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 0)
-    }
-    private-az2 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 1)
-    }
-    private-az3 = {
-      cidr_ipv4 = element(module.vpc.private_subnets_cidr_blocks, 2)
-    }
-  }
-
-  # Serverless v1 clusters do not support managed master user password
-  master_password_wo         = random_password.master.result
-  master_password_wo_version = 1
-
-  cluster_monitoring_interval = 60
-
-  apply_immediately   = true
-  skip_final_snapshot = true
-
-  # enabled_cloudwatch_logs_exports = # NOT SUPPORTED
-
-  scaling_configuration = {
-    auto_pause               = true
-    min_capacity             = 2
-    max_capacity             = 16
-    seconds_until_auto_pause = 300
-    timeout_action           = "ForceApplyCapacityChange"
-  }
-
-  tags = local.tags
-}
-
-################################################################################
 # MySQL Serverless v2
 ################################################################################
 
-module "aurora_mysql_v2" {
+module "aurora_mysql" {
   source = "../../"
 
   name              = "${local.name}-mysqlv2"
@@ -180,7 +80,7 @@ data "aws_rds_engine_version" "postgresql" {
   version = "17.5"
 }
 
-module "aurora_postgresql_v2" {
+module "aurora_postgresql" {
   source = "../../"
 
   name              = "${local.name}-postgresqlv2"

@@ -45,21 +45,23 @@ resource "aws_rds_cluster" "this" {
 
   region = var.region
 
-  allocated_storage                   = var.allocated_storage
-  allow_major_version_upgrade         = var.allow_major_version_upgrade
-  apply_immediately                   = var.apply_immediately
-  availability_zones                  = var.availability_zones
-  backup_retention_period             = var.backup_retention_period
-  backtrack_window                    = local.backtrack_window
-  ca_certificate_identifier           = var.cluster_ca_cert_identifier
-  cluster_identifier                  = var.cluster_use_name_prefix ? null : var.name
-  cluster_identifier_prefix           = var.cluster_use_name_prefix ? "${var.name}-" : null
-  cluster_members                     = var.cluster_members
-  cluster_scalability_type            = var.cluster_scalability_type
-  copy_tags_to_snapshot               = var.copy_tags_to_snapshot
-  database_insights_mode              = var.database_insights_mode
-  database_name                       = var.is_primary_cluster ? var.database_name : null
-  db_cluster_instance_class           = var.cluster_instance_class
+  allocated_storage           = var.allocated_storage
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+  apply_immediately           = var.apply_immediately
+  availability_zones          = var.availability_zones
+  backup_retention_period     = var.backup_retention_period
+  backtrack_window            = local.backtrack_window
+  ca_certificate_identifier   = var.cluster_ca_cert_identifier
+  cluster_identifier          = var.cluster_use_name_prefix ? null : var.name
+  cluster_identifier_prefix   = var.cluster_use_name_prefix ? "${var.name}-" : null
+  cluster_members             = var.cluster_members
+  cluster_scalability_type    = var.cluster_scalability_type
+  copy_tags_to_snapshot       = var.copy_tags_to_snapshot
+  database_insights_mode      = var.database_insights_mode
+  database_name               = var.is_primary_cluster ? var.database_name : null
+  # We are using `allocated_storage` as a proxy to determine if this is RDS multi-az or not
+  # https://github.com/hashicorp/terraform-provider-aws/issues/30596#issuecomment-1639292427
+  db_cluster_instance_class           = var.allocated_storage != null ? var.cluster_instance_class : null
   db_cluster_parameter_group_name     = local.create_cluster_parameter_group ? aws_rds_cluster_parameter_group.this[0].id : var.cluster_parameter_group_name
   db_instance_parameter_group_name    = var.allow_major_version_upgrade ? var.cluster_db_instance_parameter_group_name : null
   db_subnet_group_name                = local.db_subnet_group_name
