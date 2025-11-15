@@ -41,7 +41,7 @@ resource "aws_dsql_cluster_peering" "this" {
     for_each = var.timeouts != null ? [var.timeouts] : []
 
     content {
-      create = each.value.create
+      create = timeouts.value.create
     }
   }
 }

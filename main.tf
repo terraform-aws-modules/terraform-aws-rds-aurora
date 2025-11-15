@@ -36,7 +36,7 @@ resource "aws_db_subnet_group" "this" {
 ################################################################################
 
 locals {
-  use_master_password         = var.is_primary_cluster && !var.manage_master_user_password && var.global_cluster_identifier == null
+  use_master_password         = var.is_primary_cluster && !local.use_managed_master_password
   use_managed_master_password = var.manage_master_user_password && var.global_cluster_identifier == null
 }
 
@@ -585,12 +585,12 @@ resource "aws_rds_shard_group" "this" {
   tags                      = merge(var.tags, var.shard_group.tags)
 
   dynamic "timeouts" {
-    for_each = var.shard_group != null ? [var.shard_group] : []
+    for_each = var.shard_group.timeouts != null ? [var.shard_group.timeouts] : []
 
     content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 }
