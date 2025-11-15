@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.16.1...v10.0.0) (2025-11-15)
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade AWS provider and min required Terraform version to `6.18` and `1.11` respectively (#525)
+
+### Features
+
+* Upgrade AWS provider and min required Terraform version to `6.18` and `1.11` respectively ([#525](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/525)) ([2bf4622](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/2bf462260b78f23761eb6d3e8f1135d9cc3207bd))
+
 ## [9.16.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.16.0...v9.16.1) (2025-10-21)
 
 ### Bug Fixes
