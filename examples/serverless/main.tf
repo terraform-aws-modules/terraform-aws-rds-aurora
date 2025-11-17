@@ -118,9 +118,16 @@ module "aurora_postgresql" {
   }
 
   cluster_instance_class = "db.serverless"
+  cluster_timeouts = {
+    delete = "30m"
+  }
+
   instances = {
     one = {}
     two = {}
+  }
+  instance_timeouts = {
+    delete = "30m"
   }
 
   tags = local.tags
