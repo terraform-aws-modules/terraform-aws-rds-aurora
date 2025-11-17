@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.1...v10.0.2) (2025-11-17)
+
+### Bug Fixes
+
+* Set correct security group description ([#527](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/527)) ([ce34e26](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/ce34e26b7252c1c5d02361e9a3aa3b5337f2dca1))
+
 ## [10.0.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.0...v10.0.1) (2025-11-17)
 
 ### Bug Fixes
