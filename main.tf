@@ -158,9 +158,9 @@ resource "aws_rds_cluster" "this" {
     for_each = var.cluster_timeouts != null ? [var.cluster_timeouts] : []
 
     content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 
@@ -216,9 +216,9 @@ resource "aws_rds_cluster_instance" "this" {
     for_each = var.instance_timeouts != null ? [var.instance_timeouts] : []
 
     content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 
