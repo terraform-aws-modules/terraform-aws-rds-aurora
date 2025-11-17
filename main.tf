@@ -382,7 +382,7 @@ resource "aws_security_group" "this" {
   name        = var.security_group_use_name_prefix ? null : local.security_group_name
   name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
   vpc_id      = var.vpc_id
-  description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${local.create_security_group}")
+  description = coalesce(var.security_group_description, "Control traffic to/from RDS Aurora ${var.name}")
 
   tags = merge(
     var.tags,
