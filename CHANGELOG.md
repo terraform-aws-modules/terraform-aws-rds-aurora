@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.0.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.0...v10.0.1) (2025-11-17)
+
+### Bug Fixes
+
+* Correct iterator name in dynamic timeouts blocks ([#526](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/526)) ([9acb2b7](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/9acb2b78d80226ea7330a2ee22f7b2875284916a))
+
 ## [10.0.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v9.16.1...v10.0.0) (2025-11-15)
 
 ### ⚠ BREAKING CHANGES
