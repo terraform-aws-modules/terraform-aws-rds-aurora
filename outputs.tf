@@ -89,6 +89,16 @@ output "cluster_ca_certificate_valid_till" {
   value       = try(aws_rds_cluster.this[0].ca_certificate_valid_till, null)
 }
 
+output "cluster_tags" {
+  description = "The map of tags assigned to the cluster"
+  value       = try(aws_rds_cluster.this[0].tags, null)
+}
+
+output "cluster_tags_all" {
+  description = "The map of tags assigned to the cluster"
+  value       = try(aws_rds_cluster.this[0].tags_all, null)
+}
+
 ################################################################################
 # Cluster Instance(s)
 ################################################################################
