@@ -26,7 +26,8 @@ module "cluster" {
   name           = "test-aurora-db-postgres96"
   engine         = "aurora-postgresql"
   engine_version = "17.5"
-  instance_class = "db.r8g.large"
+
+  cluster_instance_class = "db.r8g.large"
   instances = {
     one = {}
     two = {
