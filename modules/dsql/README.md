@@ -44,13 +44,13 @@ module "dsql_cluster_2" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.18 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.27 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.18 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.27 |
 
 ## Modules
 
