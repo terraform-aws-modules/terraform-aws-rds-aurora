@@ -285,12 +285,14 @@ variable "master_user_secret_kms_key_id" {
 variable "master_password_wo" {
   description = "Write-Only required unless `manage_master_user_password` is set to `true`, a `snapshot_identifier`, `replication_source_identifier`, or unless a `global_cluster_identifier` is provided when the cluster is the \"secondary\" cluster of a global database) Password for the master DB user"
   type        = string
+  sensitive   = true
+  ephemeral   = true
   default     = null
 }
 
 variable "master_password_wo_version" {
   description = "Used together with `master_password_wo` to trigger an update. Increment this value when an update to the `master_password_wo` is required"
-  type        = string
+  type        = number
   default     = null
 }
 

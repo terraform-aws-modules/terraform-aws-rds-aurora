@@ -66,6 +66,11 @@ output "cluster_hosted_zone_id" {
   value       = module.aurora.cluster_hosted_zone_id
 }
 
+output "cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora.cluster_upgrade_rollout_order
+}
+
 ################################################################################
 # Cluster Instance(s)
 ################################################################################

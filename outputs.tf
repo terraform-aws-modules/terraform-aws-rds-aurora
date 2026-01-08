@@ -57,12 +57,6 @@ output "cluster_port" {
   value       = try(aws_rds_cluster.this[0].port, null)
 }
 
-output "cluster_master_password" {
-  description = "The database master password"
-  value       = try(aws_rds_cluster.this[0].master_password, null)
-  sensitive   = true
-}
-
 output "cluster_master_username" {
   description = "The database master username"
   value       = try(aws_rds_cluster.this[0].master_username, null)
@@ -87,6 +81,11 @@ output "cluster_ca_certificate_identifier" {
 output "cluster_ca_certificate_valid_till" {
   description = "Expiration date of the DB instance’s server certificate"
   value       = try(aws_rds_cluster.this[0].ca_certificate_valid_till, null)
+}
+
+output "cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = try(aws_rds_cluster.this[0].upgrade_rollout_order, null)
 }
 
 ################################################################################

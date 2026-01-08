@@ -9,6 +9,7 @@ resource "aws_dsql_cluster" "this" {
 
   deletion_protection_enabled = var.deletion_protection_enabled
   kms_encryption_key          = var.kms_encryption_key
+  force_destroy               = var.force_destroy
 
   dynamic "multi_region_properties" {
     for_each = var.witness_region != null ? [true] : []

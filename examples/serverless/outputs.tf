@@ -55,12 +55,6 @@ output "aurora_mysql_cluster_port" {
   value       = module.aurora_mysql.cluster_port
 }
 
-output "aurora_mysql_cluster_master_password" {
-  description = "The database master password"
-  value       = module.aurora_mysql.cluster_master_password
-  sensitive   = true
-}
-
 output "aurora_mysql_cluster_master_username" {
   description = "The database master username"
   value       = module.aurora_mysql.cluster_master_username
@@ -70,6 +64,11 @@ output "aurora_mysql_cluster_master_username" {
 output "aurora_mysql_cluster_hosted_zone_id" {
   description = "The Route53 Hosted Zone ID of the endpoint"
   value       = module.aurora_mysql.cluster_hosted_zone_id
+}
+
+output "aurora_mysql_cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora_mysql.cluster_upgrade_rollout_order
 }
 
 # aws_rds_cluster_instances
@@ -169,12 +168,6 @@ output "aurora_postgresql_cluster_port" {
   value       = module.aurora_postgresql.cluster_port
 }
 
-output "aurora_postgresql_cluster_master_password" {
-  description = "The database master password"
-  value       = module.aurora_postgresql.cluster_master_password
-  sensitive   = true
-}
-
 output "aurora_postgresql_cluster_master_username" {
   description = "The database master username"
   value       = module.aurora_postgresql.cluster_master_username
@@ -184,6 +177,11 @@ output "aurora_postgresql_cluster_master_username" {
 output "aurora_postgresql_cluster_hosted_zone_id" {
   description = "The Route53 Hosted Zone ID of the endpoint"
   value       = module.aurora_postgresql.cluster_hosted_zone_id
+}
+
+output "aurora_postgresql_cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora_postgresql.cluster_upgrade_rollout_order
 }
 
 # aws_rds_cluster_instances

@@ -38,6 +38,12 @@ variable "kms_encryption_key" {
   default     = null
 }
 
+variable "force_destroy" {
+  description = "Destroys cluster even if deletion_protection_enabled is set to true. Default value is false"
+  type        = bool
+  default     = null
+}
+
 ################################################################################
 # Cluster Peering
 ################################################################################

@@ -19,15 +19,15 @@ Note that this example may create resources which cost money. Run `terraform des
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.18 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.26 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.18 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.26 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
 ## Modules
@@ -77,6 +77,7 @@ No inputs.
 | <a name="output_primary_db_cluster_cloudwatch_log_groups"></a> [primary\_db\_cluster\_cloudwatch\_log\_groups](#output\_primary\_db\_cluster\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_primary_db_cluster_parameter_group_arn"></a> [primary\_db\_cluster\_parameter\_group\_arn](#output\_primary\_db\_cluster\_parameter\_group\_arn) | The ARN of the DB cluster parameter group created |
 | <a name="output_primary_db_cluster_parameter_group_id"></a> [primary\_db\_cluster\_parameter\_group\_id](#output\_primary\_db\_cluster\_parameter\_group\_id) | The ID of the DB cluster parameter group created |
+| <a name="output_primary_db_cluster_upgrade_rollout_order"></a> [primary\_db\_cluster\_upgrade\_rollout\_order](#output\_primary\_db\_cluster\_upgrade\_rollout\_order) | Order in which the clusters are upgraded (first, second, last) |
 | <a name="output_primary_db_parameter_group_arn"></a> [primary\_db\_parameter\_group\_arn](#output\_primary\_db\_parameter\_group\_arn) | The ARN of the DB parameter group created |
 | <a name="output_primary_db_parameter_group_id"></a> [primary\_db\_parameter\_group\_id](#output\_primary\_db\_parameter\_group\_id) | The ID of the DB parameter group created |
 | <a name="output_primary_db_subnet_group_name"></a> [primary\_db\_subnet\_group\_name](#output\_primary\_db\_subnet\_group\_name) | The db subnet group name |
@@ -101,6 +102,7 @@ No inputs.
 | <a name="output_secondary_db_cluster_cloudwatch_log_groups"></a> [secondary\_db\_cluster\_cloudwatch\_log\_groups](#output\_secondary\_db\_cluster\_cloudwatch\_log\_groups) | Map of CloudWatch log groups created and their attributes |
 | <a name="output_secondary_db_cluster_parameter_group_arn"></a> [secondary\_db\_cluster\_parameter\_group\_arn](#output\_secondary\_db\_cluster\_parameter\_group\_arn) | The ARN of the DB cluster parameter group created |
 | <a name="output_secondary_db_cluster_parameter_group_id"></a> [secondary\_db\_cluster\_parameter\_group\_id](#output\_secondary\_db\_cluster\_parameter\_group\_id) | The ID of the DB cluster parameter group created |
+| <a name="output_secondary_db_cluster_upgrade_rollout_order"></a> [secondary\_db\_cluster\_upgrade\_rollout\_order](#output\_secondary\_db\_cluster\_upgrade\_rollout\_order) | Order in which the clusters are upgraded (first, second, last) |
 | <a name="output_secondary_db_parameter_group_arn"></a> [secondary\_db\_parameter\_group\_arn](#output\_secondary\_db\_parameter\_group\_arn) | The ARN of the DB parameter group created |
 | <a name="output_secondary_db_parameter_group_id"></a> [secondary\_db\_parameter\_group\_id](#output\_secondary\_db\_parameter\_group\_id) | The ID of the DB parameter group created |
 | <a name="output_secondary_db_subnet_group_name"></a> [secondary\_db\_subnet\_group\_name](#output\_secondary\_db\_subnet\_group\_name) | The db subnet group name |
