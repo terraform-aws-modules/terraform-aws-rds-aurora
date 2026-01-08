@@ -76,6 +76,11 @@ output "cluster_ca_certificate_valid_till" {
   value       = module.aurora.cluster_ca_certificate_valid_till
 }
 
+output "cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora.cluster_upgrade_rollout_order
+}
+
 ################################################################################
 # Cluster Instance(s)
 ################################################################################

@@ -43,14 +43,14 @@ module "dsql_cluster_2" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.18 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.26 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.18 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.26 |
 
 ## Modules
 
@@ -71,6 +71,7 @@ No modules.
 | <a name="input_create"></a> [create](#input\_create) | Whether cluster should be created (affects all resources) | `bool` | `true` | no |
 | <a name="input_create_cluster_peering"></a> [create\_cluster\_peering](#input\_create\_cluster\_peering) | Whether to create cluster peering | `bool` | `false` | no |
 | <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | Whether deletion protection is enabled in this cluster | `bool` | `null` | no |
+| <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Destroys cluster even if deletion\_protection\_enabled is set to true. Default value is false | `bool` | `null` | no |
 | <a name="input_kms_encryption_key"></a> [kms\_encryption\_key](#input\_kms\_encryption\_key) | The ARN of the AWS KMS key that encrypts data in the DSQL Cluster, or `AWS_OWNED_KMS_KEY` | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name used across resources created | `string` | `""` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where the resource(s) will be managed. Defaults to the Region set in the provider configuration | `string` | `null` | no |

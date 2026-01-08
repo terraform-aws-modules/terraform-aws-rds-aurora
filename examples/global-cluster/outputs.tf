@@ -122,6 +122,11 @@ output "primary_db_cluster_cloudwatch_log_groups" {
   value       = module.aurora_primary.db_cluster_cloudwatch_log_groups
 }
 
+output "primary_db_cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora_primary.cluster_upgrade_rollout_order
+}
+
 ################################################################################
 # RDS Aurora Module - Secondary
 ################################################################################
@@ -244,4 +249,9 @@ output "secondary_db_parameter_group_id" {
 output "secondary_db_cluster_cloudwatch_log_groups" {
   description = "Map of CloudWatch log groups created and their attributes"
   value       = module.aurora_secondary.db_cluster_cloudwatch_log_groups
+}
+
+output "secondary_db_cluster_upgrade_rollout_order" {
+  description = "Order in which the clusters are upgraded (first, second, last)"
+  value       = module.aurora_secondary.cluster_upgrade_rollout_order
 }
