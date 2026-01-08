@@ -5,7 +5,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 
 ## List of backwards incompatible changes
 
-- Terraform `v1.11` is now minimum supported version to support write-only (`wo_*`) attributes.
+- Terraform `v1.11.1` is now minimum supported version to support write-only (`wo_*`) attributes.
 - AWS provider `v6.18` is now minimum supported version
 - The underlying `aws_security_group_rule` resources has been replaced with `aws_vpc_security_group_ingress_rule` and `aws_vpc_security_group_egress_rule` to allow for more flexibility in defining security group rules.
 - `master_password` is no longer supported and only the write-only equivalent is supported (`master_password_wo` and `master_password_wo_version`) ([#513](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/pull/513))
@@ -83,7 +83,7 @@ If you find a bug, please open an issue with supporting configuration to reprodu
 
 4. Removed outputs:
 
-    - None
+    - `cluster_master_password`
 
 5. Renamed outputs:
 
