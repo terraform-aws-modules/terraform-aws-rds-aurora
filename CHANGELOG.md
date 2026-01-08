@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.2...v10.1.0) (2026-01-08)
+
+### Features
+
+* Add `upgrade_rollout_order` for RDS cluster, `force_destroy` for DSQL cluster, and `master_password_wo` variable adjustments ([#536](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/536)) ([cc11f09](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/cc11f099ba3f2ac247fab83941ba41e8480b0f0e))
+
 ## [10.0.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.1...v10.0.2) (2025-11-17)
 
 ### Bug Fixes
