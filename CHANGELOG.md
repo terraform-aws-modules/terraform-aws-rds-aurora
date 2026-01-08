@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.2.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.1.0...v10.2.0) (2026-01-08)
+
+### Features
+
+* Add provider meta user-agent ([#535](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/535)) ([b77f667](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/b77f667db086c023139773180100232110811147))
+
 ## [10.1.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.0.2...v10.1.0) (2026-01-08)
 
 ### Features
