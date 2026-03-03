@@ -241,7 +241,7 @@ variable "global_cluster_identifier" {
 }
 
 variable "iam_database_authentication_enabled" {
-  description = "Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled"
+  description = "Specifies whether or not mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled"
   type        = bool
   default     = null
 }
