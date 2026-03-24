@@ -48,7 +48,7 @@ output "cluster_engine_version_actual" {
 
 # database_name is not set on `aws_rds_cluster` resource if it was not specified, so can't be used in output
 output "cluster_database_name" {
-  description = "Name for an automatically created database on cluster creation"
+  description = "Name for an automatically created database on cluster creation; `null` if input `database_name` is not provided / `null`"
   value       = var.database_name
 }
 
