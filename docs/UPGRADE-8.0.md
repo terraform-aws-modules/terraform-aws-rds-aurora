@@ -54,7 +54,7 @@ module "cluster_before" {
   version = "~> 7.0"
 
   # Only the affected attributes are shown
-  creat_cluster = true
+  create_cluster = true
 
   master_username        = "admin"
   create_random_password = true
@@ -127,5 +127,5 @@ module "cluster_after" {
 To upgrade to v8.x, you will need to migrate your security group rules to the new `security_group_rules` variable and data structure. There are three potential avenues to accomplish this:
 
 1. Perform Terraform state moves `terraform state mv ...`. This has the downside of requiring manual intervention via the Terraform CLI but is still one possiblity.
-2. Applying the changes as they are which will result in the old security group ruls being removed and the new rules being added. This has the downside of causing a brief interruption in service which may or may not be tolerable; this is left up to users to decided.
+2. Applying the changes as they are which will result in the old security group rules being removed and the new rules being added. This has the downside of causing a brief interruption in service which may or may not be tolerable; this is left up to users to decided.
 3. In addition to option 2, users can create a new, temporary security group that contains all of the same network access (or more) as the current v6.x security group. Before upgrading your cluster, add this security group to the cluster via the `vpc_security_group_ids` argument which "shadows" the same level of network access while upgrading. Once this security group has been added, you can now safely upgrade from v7.x to v8.x without any network disruption. Once the upgrade is complete, you can remove the temporary security group from the cluster and delete.

@@ -172,6 +172,10 @@ resource "aws_rds_cluster" "this" {
       # See docs here https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_global_cluster#new-global-cluster-from-existing-db-cluster
       global_cluster_identifier,
       snapshot_identifier,
+      # restore_to_point_in_time is a create-only argument used for cloning. Once the cluster
+      # is created, removing the clone inputs should not force replacement of the cluster.
+      # See https://github.com/hashicorp/terraform-provider-aws/issues/17652
+      restore_to_point_in_time,
     ]
   }
 
