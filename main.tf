@@ -258,7 +258,7 @@ resource "aws_rds_cluster_role_association" "this" {
   region = var.region
 
   db_cluster_identifier = aws_rds_cluster.this[0].id
-  feature_name          = try(coalesce(each.value.feature_name, each.key))
+  feature_name          = each.value.feature_name != null ? each.value.feature_name : each.key
   role_arn              = each.value.role_arn
 }
 
