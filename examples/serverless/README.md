@@ -18,7 +18,7 @@ Note that this example may create resources which cost money. Run `terraform des
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.28 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5 |
@@ -26,14 +26,14 @@ Note that this example may create resources which cost money. Run `terraform des
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.28 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.5 |
 
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_aurora_mysql"></a> [aurora\_mysql](#module\_aurora\_mysql) | ../../ | n/a |
 | <a name="module_aurora_postgresql"></a> [aurora\_postgresql](#module\_aurora\_postgresql) | ../../ | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 6.0 |
@@ -41,7 +41,7 @@ Note that this example may create resources which cost money. Run `terraform des
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_rds_engine_version.postgresql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/rds_engine_version) | data source |
@@ -53,7 +53,7 @@ No inputs.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_aurora_mysql_additional_cluster_endpoints"></a> [aurora\_mysql\_additional\_cluster\_endpoints](#output\_aurora\_mysql\_additional\_cluster\_endpoints) | A map of additional cluster endpoints and their attributes |
 | <a name="output_aurora_mysql_cluster_arn"></a> [aurora\_mysql\_cluster\_arn](#output\_aurora\_mysql\_cluster\_arn) | Amazon Resource Name (ARN) of cluster |
 | <a name="output_aurora_mysql_cluster_database_name"></a> [aurora\_mysql\_cluster\_database\_name](#output\_aurora\_mysql\_cluster\_database\_name) | Name for an automatically created database on cluster creation |

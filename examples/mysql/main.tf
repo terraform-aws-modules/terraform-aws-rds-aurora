@@ -185,6 +185,20 @@ module "aurora" {
   manage_master_user_password_rotation              = true
   master_user_password_rotation_schedule_expression = "rate(15 days)"
 
+  role_associations = {
+    # Named feature: Aurora MySQL S3 export integration
+    s3Export = {
+      feature_name = "s3Export"
+      role_arn     = aws_iam_role.s3_export.arn
+    }
+    # Empty feature_name: Aurora MySQL Lambda invoke integration does not require a feature name.
+    # Setting feature_name = "" is supported as of issue #539.
+    lambda_invoke = {
+      feature_name = ""
+      role_arn     = aws_iam_role.lambda_invoke.arn
+    }
+  }
+
   tags = local.tags
 }
 
@@ -248,4 +262,78 @@ module "vpc_endpoints" {
   }
 
   tags = local.tags
+}
+
+################################################################################
+# Cluster IAM Roles
+################################################################################
+
+data "aws_iam_policy_document" "rds_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["rds.amazonaws.com"]
+    }
+  }
+}
+
+# S3 export role - uses a named feature_name
+resource "aws_iam_role" "s3_export" {
+  name_prefix           = "${local.name}-s3-export-"
+  description           = "IAM role to allow Aurora MySQL to export data to S3"
+  assume_role_policy    = data.aws_iam_policy_document.rds_assume.json
+  force_detach_policies = true
+
+  tags = local.tags
+}
+
+resource "aws_iam_role_policy" "s3_export" {
+  name_prefix = "${local.name}-s3-export-"
+  role        = aws_iam_role.s3_export.id
+  policy      = data.aws_iam_policy_document.s3_export.json
+}
+
+data "aws_iam_policy_document" "s3_export" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
+
+    resources = ["arn:aws:s3:::*"]
+  }
+
+  statement {
+    actions = [
+      "s3:PutObject",
+      "s3:AbortMultipartUpload",
+    ]
+
+    resources = ["arn:aws:s3:::*/*"]
+  }
+}
+
+# Lambda invoke role - no feature_name required (feature_name = "")
+resource "aws_iam_role" "lambda_invoke" {
+  name_prefix           = "${local.name}-lambda-"
+  description           = "IAM role to allow Aurora MySQL to invoke Lambda functions"
+  assume_role_policy    = data.aws_iam_policy_document.rds_assume.json
+  force_detach_policies = true
+
+  tags = local.tags
+}
+
+resource "aws_iam_role_policy" "lambda_invoke" {
+  name_prefix = "${local.name}-lambda-"
+  role        = aws_iam_role.lambda_invoke.id
+  policy      = data.aws_iam_policy_document.lambda_invoke.json
+}
+
+data "aws_iam_policy_document" "lambda_invoke" {
+  statement {
+    actions   = ["lambda:InvokeFunction"]
+    resources = ["*"]
+  }
 }
