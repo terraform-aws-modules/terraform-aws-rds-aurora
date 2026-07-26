@@ -851,3 +851,21 @@ variable "putin_khuylo" {
   type        = bool
   default     = true
 }
+
+variable "master_password_secret_kms_key_id" {
+  description = "KMS key used to store the master secret"
+  default     = null
+  type        = string
+}
+
+variable "store_master_password_to_ssm" {
+  description = "If using an auto-generated password, store it to SSM"
+  type        = bool
+  default     = true
+}
+
+variable "master_password_ssm_param_name" {
+  description = "Custom name used for the master password SSM param"
+  type        = string
+  default     = ""
+}
