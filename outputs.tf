@@ -216,3 +216,8 @@ output "db_shard_group_endpoint" {
   description = "The connection endpoint for the DB shard group"
   value       = try(aws_rds_shard_group.this[0].endpoint, null)
 }
+
+output "master_credentials_ssm_arn" {
+  description = "The SSM parameter where the master secret is stored"
+  value       = one([for x in aws_ssm_parameter.master_password : x.arn])
+}
