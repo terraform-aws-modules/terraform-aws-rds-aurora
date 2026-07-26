@@ -40,6 +40,16 @@ locals {
   use_managed_master_password = var.manage_master_user_password && var.global_cluster_identifier == null
 }
 
+ephemeral "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "$%&*:?"
+}
+
+resource "time_static" "password" {
+  count = local.use_master_password ? 1 : 0
+}
+
 resource "aws_rds_cluster" "this" {
   count = local.create ? 1 : 0
 
@@ -86,8 +96,8 @@ resource "aws_rds_cluster" "this" {
   kms_key_id                            = var.kms_key_id
   manage_master_user_password           = local.use_managed_master_password ? var.manage_master_user_password : null
   master_user_secret_kms_key_id         = local.use_managed_master_password ? var.master_user_secret_kms_key_id : null
-  master_password_wo                    = local.use_master_password ? var.master_password_wo : null
-  master_password_wo_version            = local.use_master_password ? var.master_password_wo_version : null
+  master_password_wo                    = local.use_master_password ? ephemeral.random_password.password.result : null
+  master_password_wo_version            = local.use_master_password ? time_static.password[0].unix : null
   master_username                       = var.is_primary_cluster ? var.master_username : null
   monitoring_interval                   = var.cluster_monitoring_interval
   monitoring_role_arn                   = var.create_monitoring_role && var.cluster_monitoring_interval > 0 ? try(aws_iam_role.rds_enhanced_monitoring[0].arn, null) : var.monitoring_role_arn
