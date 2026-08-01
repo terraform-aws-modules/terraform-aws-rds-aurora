@@ -18,7 +18,7 @@ Note that this example may create resources which cost money. Run `terraform des
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.54 |
 
@@ -29,7 +29,7 @@ No providers.
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_dsql_cluster_1"></a> [dsql\_cluster\_1](#module\_dsql\_cluster\_1) | ../../modules/dsql | n/a |
 | <a name="module_dsql_cluster_2"></a> [dsql\_cluster\_2](#module\_dsql\_cluster\_2) | ../../modules/dsql | n/a |
 | <a name="module_dsql_single_region"></a> [dsql\_single\_region](#module\_dsql\_single\_region) | ../../modules/dsql | n/a |
@@ -45,7 +45,7 @@ No inputs.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_dsql_cluster_1_arn"></a> [dsql\_cluster\_1\_arn](#output\_dsql\_cluster\_1\_arn) | ARN of the cluster |
 | <a name="output_dsql_cluster_1_encryption_details"></a> [dsql\_cluster\_1\_encryption\_details](#output\_dsql\_cluster\_1\_encryption\_details) | Encryption configuration details for the DSQL cluster |
 | <a name="output_dsql_cluster_1_identifier"></a> [dsql\_cluster\_1\_identifier](#output\_dsql\_cluster\_1\_identifier) | Cluster identifier |
