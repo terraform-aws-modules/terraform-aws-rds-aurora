@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.4.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.3.1...v10.4.0) (2026-09-06)
+
+### Features
+
+* DSQL Cluster Policy ([#552](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/552)) ([d054054](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/d054054c6fcb0662b13c0b2272e734a426dce740))
+
 ## [10.3.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.3.0...v10.3.1) (2026-08-06)
 
 ### Bug Fixes
