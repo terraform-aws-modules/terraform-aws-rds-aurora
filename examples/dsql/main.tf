@@ -38,8 +38,7 @@ module "dsql_cluster_1" {
   }
 
   create_cluster_policy = true
-  create_iam_policy     = true
-  iam_policy_statements = [
+  cluster_policy_statements = [
     {
       sid       = "AllowDSQLAccess"
       effect    = "Allow"

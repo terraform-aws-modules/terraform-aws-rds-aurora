@@ -57,7 +57,7 @@ resource "aws_dsql_cluster_policy" "this" {
   region = var.region
 
   identifier                         = aws_dsql_cluster.this[0].identifier
-  policy                             = var.cluster_policy != null ? var.cluster_policy : data.aws_iam_policy_document.dsql_policy[0].json
+  policy                             = local.create_policy_document ? data.aws_iam_policy_document.dsql_policy[0].json : var.cluster_policy
   bypass_policy_lockout_safety_check = var.cluster_policy_bypass_lockout_safety_check
 
   dynamic "timeouts" {
@@ -72,23 +72,30 @@ resource "aws_dsql_cluster_policy" "this" {
 }
 
 ################################################################################
-# IAM Policy Document
+# Cluster Policy Document
 ################################################################################
 
+locals {
+  create_policy_document = var.create && var.create_cluster_policy && (length(var.cluster_policy_statements) > 0 || length(var.cluster_policy_source_policy_documents) > 0 || length(var.cluster_policy_override_policy_documents) > 0)
+}
+
 data "aws_iam_policy_document" "dsql_policy" {
-  count = var.create && var.create_iam_policy ? 1 : 0
+  count = local.create_policy_document ? 1 : 0
+
+  source_policy_documents   = var.cluster_policy_source_policy_documents
+  override_policy_documents = var.cluster_policy_override_policy_documents
 
   dynamic "statement" {
-    for_each = var.iam_policy_statements
+    for_each = var.cluster_policy_statements
 
     content {
       sid       = statement.value.sid
-      effect    = statement.value.effect
       actions   = statement.value.actions
+      effect    = statement.value.effect
       resources = statement.value.resources
 
       dynamic "principals" {
-        for_each = statement.value.principals
+        for_each = statement.value.principals != null ? statement.value.principals : []
 
         content {
           type        = principals.value.type
@@ -97,12 +104,12 @@ data "aws_iam_policy_document" "dsql_policy" {
       }
 
       dynamic "condition" {
-        for_each = statement.value.conditions
+        for_each = statement.value.conditions != null ? statement.value.conditions : []
 
         content {
           test     = condition.value.test
-          variable = condition.value.variable
           values   = condition.value.values
+          variable = condition.value.variable
         }
       }
     }

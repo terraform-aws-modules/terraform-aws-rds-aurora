@@ -23,6 +23,16 @@ output "dsql_cluster_1_vpc_endpoint_service_name" {
   value       = module.dsql_cluster_1.vpc_endpoint_service_name
 }
 
+output "dsql_cluster_1_cluster_policy" {
+  description = "The Aurora DSQL cluster resource-based policy document"
+  value       = module.dsql_cluster_1.cluster_policy
+}
+
+output "dsql_cluster_1_cluster_policy_version" {
+  description = "The version of the Aurora DSQL cluster resource-based policy document"
+  value       = module.dsql_cluster_1.cluster_policy_version
+}
+
 output "dsql_cluster_2_arn" {
   description = "ARN of the cluster"
   value       = module.dsql_cluster_2.arn

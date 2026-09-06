@@ -51,6 +51,8 @@ No inputs.
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_dsql_cluster_1_arn"></a> [dsql\_cluster\_1\_arn](#output\_dsql\_cluster\_1\_arn) | ARN of the cluster |
+| <a name="output_dsql_cluster_1_cluster_policy"></a> [dsql\_cluster\_1\_cluster\_policy](#output\_dsql\_cluster\_1\_cluster\_policy) | The Aurora DSQL cluster resource-based policy document |
+| <a name="output_dsql_cluster_1_cluster_policy_version"></a> [dsql\_cluster\_1\_cluster\_policy\_version](#output\_dsql\_cluster\_1\_cluster\_policy\_version) | The version of the Aurora DSQL cluster resource-based policy document |
 | <a name="output_dsql_cluster_1_encryption_details"></a> [dsql\_cluster\_1\_encryption\_details](#output\_dsql\_cluster\_1\_encryption\_details) | Encryption configuration details for the DSQL cluster |
 | <a name="output_dsql_cluster_1_identifier"></a> [dsql\_cluster\_1\_identifier](#output\_dsql\_cluster\_1\_identifier) | Cluster identifier |
 | <a name="output_dsql_cluster_1_multi_region_properties"></a> [dsql\_cluster\_1\_multi\_region\_properties](#output\_dsql\_cluster\_1\_multi\_region\_properties) | Multi-region properties of the DSQL cluster |

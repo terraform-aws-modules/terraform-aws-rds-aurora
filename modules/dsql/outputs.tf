@@ -40,12 +40,3 @@ output "cluster_policy_version" {
   description = "The version of the Aurora DSQL cluster resource-based policy document"
   value       = try(aws_dsql_cluster_policy.this[0].policy_version, null)
 }
-
-################################################################################
-# IAM Policy
-################################################################################
-
-output "iam_policy_document" {
-  description = "IAM policy document for DSQL cluster access"
-  value       = try(data.aws_iam_policy_document.dsql_policy[0].json, null)
-}
