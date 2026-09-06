@@ -15,6 +15,8 @@ locals {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 ################################################################################
 # RDS Aurora Module
 ################################################################################
@@ -34,6 +36,30 @@ module "dsql_cluster_1" {
   timeouts = {
     create = "1h"
   }
+
+  create_cluster_policy = true
+  create_iam_policy     = true
+  iam_policy_statements = [
+    {
+      sid       = "AllowDSQLAccess"
+      effect    = "Allow"
+      actions   = ["rds:Connect"]
+      resources = ["*"]
+      principals = [
+        {
+          type        = "AWS"
+          identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+        }
+      ]
+      conditions = [
+        {
+          test     = "Null"
+          variable = "aws:SourceVpc"
+          values   = ["true"]
+        }
+      ]
+    }
+  ]
 
   tags = local.tags
 }

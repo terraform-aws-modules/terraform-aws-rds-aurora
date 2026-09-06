@@ -20,11 +20,13 @@ Note that this example may create resources which cost money. Run `terraform des
 | Name | Version |
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.54 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.61 |
 
 ## Providers
 
-No providers.
+| Name | Version |
+| ---- | ------- |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.61 |
 
 ## Modules
 
@@ -36,7 +38,9 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+| ---- | ---- |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 
 ## Inputs
 

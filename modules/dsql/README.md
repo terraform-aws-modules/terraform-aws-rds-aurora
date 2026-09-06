@@ -44,13 +44,13 @@ module "dsql_cluster_2" {
 | Name | Version |
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.54 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.61 |
 
 ## Providers
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.54 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.61 |
 
 ## Modules
 
@@ -62,16 +62,24 @@ No modules.
 | ---- | ---- |
 | [aws_dsql_cluster.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dsql_cluster) | resource |
 | [aws_dsql_cluster_peering.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dsql_cluster_peering) | resource |
+| [aws_dsql_cluster_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dsql_cluster_policy) | resource |
+| [aws_iam_policy_document.dsql_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_cluster_policy"></a> [cluster\_policy](#input\_cluster\_policy) | The Aurora DSQL cluster resource-based policy document as a JSON string | `string` | `null` | no |
+| <a name="input_cluster_policy_bypass_lockout_safety_check"></a> [cluster\_policy\_bypass\_lockout\_safety\_check](#input\_cluster\_policy\_bypass\_lockout\_safety\_check) | Whether to bypass the policy lockout safety check when applying the policy. Use with caution, as the policy may lock you out of the cluster | `bool` | `null` | no |
+| <a name="input_cluster_policy_timeouts"></a> [cluster\_policy\_timeouts](#input\_cluster\_policy\_timeouts) | Timeout configuration for the DSQL cluster resource-based policy | <pre>object({<br/>    create = optional(string)<br/>    update = optional(string)<br/>    delete = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_clusters"></a> [clusters](#input\_clusters) | List of DSQL Cluster ARNs to be peered to this cluster | `list(string)` | `null` | no |
 | <a name="input_create"></a> [create](#input\_create) | Whether cluster should be created (affects all resources) | `bool` | `true` | no |
 | <a name="input_create_cluster_peering"></a> [create\_cluster\_peering](#input\_create\_cluster\_peering) | Whether to create cluster peering | `bool` | `false` | no |
+| <a name="input_create_cluster_policy"></a> [create\_cluster\_policy](#input\_create\_cluster\_policy) | Whether to create the DSQL cluster resource-based policy | `bool` | `false` | no |
+| <a name="input_create_iam_policy"></a> [create\_iam\_policy](#input\_create\_iam\_policy) | Whether to create an IAM policy document for DSQL access | `bool` | `true` | no |
 | <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | Whether deletion protection is enabled in this cluster | `bool` | `null` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Destroys cluster even if deletion\_protection\_enabled is set to true. Default value is false | `bool` | `null` | no |
+| <a name="input_iam_policy_statements"></a> [iam\_policy\_statements](#input\_iam\_policy\_statements) | List of IAM policy statements to include. Each statement should have: sid, effect, actions, resources, and conditions. | <pre>list(object({<br/>    sid       = string<br/>    effect    = string<br/>    actions   = list(string)<br/>    resources = list(string)<br/>    principals = list(object({<br/>      type        = string<br/>      identifiers = list(string)<br/>    }))<br/>    conditions = list(object({<br/>      test     = string<br/>      variable = string<br/>      values   = list(string)<br/>    }))<br/>  }))</pre> | `[]` | no |
 | <a name="input_kms_encryption_key"></a> [kms\_encryption\_key](#input\_kms\_encryption\_key) | The ARN of the AWS KMS key that encrypts data in the DSQL Cluster, or `AWS_OWNED_KMS_KEY` | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name used across resources created | `string` | `""` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where the resource(s) will be managed. Defaults to the Region set in the provider configuration | `string` | `null` | no |
@@ -84,7 +92,10 @@ No modules.
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_arn"></a> [arn](#output\_arn) | ARN of the cluster |
+| <a name="output_cluster_policy"></a> [cluster\_policy](#output\_cluster\_policy) | The Aurora DSQL cluster resource-based policy document |
+| <a name="output_cluster_policy_version"></a> [cluster\_policy\_version](#output\_cluster\_policy\_version) | The version of the Aurora DSQL cluster resource-based policy document |
 | <a name="output_encryption_details"></a> [encryption\_details](#output\_encryption\_details) | Encryption configuration details for the DSQL cluster |
+| <a name="output_iam_policy_document"></a> [iam\_policy\_document](#output\_iam\_policy\_document) | IAM policy document for DSQL cluster access |
 | <a name="output_identifier"></a> [identifier](#output\_identifier) | Cluster identifier |
 | <a name="output_multi_region_properties"></a> [multi\_region\_properties](#output\_multi\_region\_properties) | Multi-region properties of the DSQL cluster |
 | <a name="output_vpc_endpoint_service_name"></a> [vpc\_endpoint\_service\_name](#output\_vpc\_endpoint\_service\_name) | The DSQL cluster's VPC endpoint service name |

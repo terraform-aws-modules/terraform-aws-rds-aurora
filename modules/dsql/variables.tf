@@ -73,3 +73,65 @@ variable "timeouts" {
   })
   default = null
 }
+
+################################################################################
+# Cluster Policy
+################################################################################
+
+variable "create_cluster_policy" {
+  description = "Whether to create the DSQL cluster resource-based policy"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_policy" {
+  description = "The Aurora DSQL cluster resource-based policy document as a JSON string"
+  type        = string
+  default     = null
+}
+
+variable "cluster_policy_bypass_lockout_safety_check" {
+  description = "Whether to bypass the policy lockout safety check when applying the policy. Use with caution, as the policy may lock you out of the cluster"
+  type        = bool
+  default     = null
+}
+
+variable "cluster_policy_timeouts" {
+  description = "Timeout configuration for the DSQL cluster resource-based policy"
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
+}
+
+################################################################################
+# IAM Policy
+################################################################################
+
+variable "create_iam_policy" {
+  description = "Whether to create an IAM policy document for DSQL access"
+  type        = bool
+  default     = true
+}
+
+variable "iam_policy_statements" {
+  description = "List of IAM policy statements to include. Each statement should have: sid, effect, actions, resources, and conditions."
+  type = list(object({
+    sid       = string
+    effect    = string
+    actions   = list(string)
+    resources = list(string)
+    principals = list(object({
+      type        = string
+      identifiers = list(string)
+    }))
+    conditions = list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    }))
+  }))
+  default = []
+}
