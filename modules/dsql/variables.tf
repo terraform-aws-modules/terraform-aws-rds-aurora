@@ -73,3 +73,67 @@ variable "timeouts" {
   })
   default = null
 }
+
+################################################################################
+# Cluster Policy
+################################################################################
+
+variable "create_cluster_policy" {
+  description = "Whether to create the DSQL cluster resource-based policy"
+  type        = bool
+  default     = false
+}
+
+variable "cluster_policy" {
+  description = "The Aurora DSQL cluster resource-based policy document as a JSON string. Ignored if cluster_policy_statements, cluster_policy_source_policy_documents, or cluster_policy_override_policy_documents are set."
+  type        = string
+  default     = null
+}
+
+variable "cluster_policy_statements" {
+  description = "List of IAM policy statement objects to include in the DSQL cluster resource-based policy. Each statement should have: sid, actions, effect, principals, not_principals, resources, conditions."
+  type = list(object({
+    sid       = optional(string)
+    effect    = optional(string)
+    actions   = optional(list(string))
+    resources = optional(list(string))
+    principals = optional(list(object({
+      type        = string
+      identifiers = list(string)
+    })))
+    conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  }))
+  default = []
+}
+
+variable "cluster_policy_source_policy_documents" {
+  description = "List of policy documents to include in the DSQL cluster resource-based policy. Merged with the inline policy."
+  type        = list(string)
+  default     = []
+}
+
+variable "cluster_policy_override_policy_documents" {
+  description = "List of policy documents to override the DSQL cluster resource-based policy. These policies completely replace the inline policy."
+  type        = list(string)
+  default     = []
+}
+
+variable "cluster_policy_bypass_lockout_safety_check" {
+  description = "Whether to bypass the policy lockout safety check when applying the policy. Use with caution, as the policy may lock you out of the cluster"
+  type        = bool
+  default     = null
+}
+
+variable "cluster_policy_timeouts" {
+  description = "Timeout configuration for the DSQL cluster resource-based policy"
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
+}
