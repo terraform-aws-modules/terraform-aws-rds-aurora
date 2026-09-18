@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.4.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.4.0...v10.4.1) (2026-09-18)
+
+### Bug Fixes
+
+* Document known Terraform/OpenTofu limitations in README ([#553](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/553)) ([bfd603c](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/bfd603c1fb9a0e58a30cdc2f05ae1c025c609ee1))
+
 ## [10.4.0](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.3.1...v10.4.0) (2026-09-06)
 
 ### Features
