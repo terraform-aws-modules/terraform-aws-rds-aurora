@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [10.4.2](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.4.1...v10.4.2) (2026-11-02)
+
+### Bug Fixes
+
+* Keep security group changes visible in plan when a group id is unknown ([#556](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/issues/556)) ([e928910](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/commit/e9289109bd5c418e755be56543841d2140aa8de6))
+
 ## [10.4.1](https://github.com/terraform-aws-modules/terraform-aws-rds-aurora/compare/v10.4.0...v10.4.1) (2026-09-18)
 
 ### Bug Fixes
