@@ -153,7 +153,7 @@ resource "aws_rds_cluster" "this" {
   storage_encrypted      = var.storage_encrypted
   storage_type           = var.storage_type
   tags                   = merge(var.tags, var.cluster_tags)
-  vpc_security_group_ids = compact(concat(aws_security_group.this[*].id, var.vpc_security_group_ids))
+  vpc_security_group_ids = concat(aws_security_group.this[*].id, var.vpc_security_group_ids)
 
   dynamic "timeouts" {
     for_each = var.cluster_timeouts != null ? [var.cluster_timeouts] : []
