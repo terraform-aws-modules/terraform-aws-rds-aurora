@@ -2,12 +2,12 @@
 
 If you have any questions regarding this upgrade process, please consult the `examples` directory:
 
-- [Autoscaling](examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
-- [Global Cluster](examples/global_cluster): A PostgreSQL global cluster with clusters provisioned in two different region
-- [MySQL](examples/mysql): A simple MySQL cluster
-- [PostgreSQL](examples/postgresql): A simple PostgreSQL cluster
-- [S3 Import](examples/s3_import): A MySQL cluster created from a Percona Xtrabackup stored in S3
-- [Serverless](examples/serverless): Serverless PostgreSQL and MySQL clusters
+- [Autoscaling](../examples/autoscaling): A PostgreSQL cluster with enhanced monitoring and autoscaling enabled
+- [Global Cluster](../examples/global-cluster): A PostgreSQL global cluster with clusters provisioned in two different region
+- [MySQL](../examples/mysql): A simple MySQL cluster
+- [PostgreSQL](../examples/postgresql): A simple PostgreSQL cluster
+- [S3 Import](../examples/s3-import): A MySQL cluster created from a Percona Xtrabackup stored in S3
+- [Serverless](../examples/serverless): Serverless PostgreSQL and MySQL clusters
 
 If you find a bug, please open an issue with supporting configuration to reproduce.
 
