@@ -55,7 +55,6 @@ resource "aws_rds_cluster" "this" {
   ca_certificate_identifier   = var.cluster_ca_cert_identifier
   cluster_identifier          = var.cluster_use_name_prefix ? null : var.name
   cluster_identifier_prefix   = var.cluster_use_name_prefix ? "${var.name}-" : null
-  cluster_members             = var.cluster_members
   cluster_scalability_type    = var.cluster_scalability_type
   copy_tags_to_snapshot       = var.copy_tags_to_snapshot
   database_insights_mode      = var.database_insights_mode

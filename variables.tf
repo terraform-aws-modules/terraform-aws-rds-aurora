@@ -108,7 +108,7 @@ variable "cluster_ca_cert_identifier" {
 }
 
 variable "cluster_members" {
-  description = "List of RDS Instances that are a part of this cluster"
+  description = "Deprecated, has no effect. The AWS provider ignores a configured `cluster_members` on `aws_rds_cluster`. Use the `cluster_members` output to read the cluster's members"
   type        = list(string)
   default     = null
 }
